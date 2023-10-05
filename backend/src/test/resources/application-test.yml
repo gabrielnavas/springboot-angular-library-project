@@ -1,0 +1,13 @@
+server:
+  port: 8888
+  
+spring:
+  jpa:
+    hibernate:
+      #      ddl-auto: update
+      ddl-auto: none
+    show-sql: true
+
+spring-doc:
+  swagger-ui:
+    use-root-path: true # http://localhost:8080/swagger-ui/index.html
