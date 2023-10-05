@@ -2,6 +2,7 @@ package com.library.api.publishing_company;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,10 @@ public class PublishingCompanyController {
 
     private final PublishingCompanyService publishingCompanyService;
 
-    @PostMapping
+    @PostMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
     @Operation(
             summary = "Create Publishing Company",
             description = "Endpoint to Create an Publishing Company",
@@ -30,7 +34,7 @@ public class PublishingCompanyController {
                     @ApiResponse(
                             description = "Success",
                             responseCode = "201",
-                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)
+                            content = @Content(schema = @Schema(implementation = PublishingCompany.class))
                     ),
                     @ApiResponse(
                             description = "BadRequest",
