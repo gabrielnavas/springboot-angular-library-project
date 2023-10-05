@@ -25,5 +25,6 @@ public class PublishingCompany {
 
     @NotNull
     @Size(min = 1, max = 50)
+    @Column(nullable = false, unique = true)
     private String name;
 }
