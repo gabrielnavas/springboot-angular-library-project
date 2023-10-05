@@ -18,6 +18,8 @@
         <springdoc.version>2.2.0</springdoc.version>
         <fasterxmldataformat.version>2.15.0</fasterxmldataformat.version>
         <hibernatevalidator.version>8.0.1.Final</hibernatevalidator.version>
+        <testcontainers.version>1.19.1</testcontainers.version>
+        <restassured.version>5.3.2</restassured.version>
     </properties>
     <dependencies>
         <dependency>
@@ -36,6 +38,19 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${restassured.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
