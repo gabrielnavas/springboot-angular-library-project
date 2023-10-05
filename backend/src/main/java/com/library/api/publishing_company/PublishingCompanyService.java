@@ -1,8 +1,10 @@
 package com.library.api.publishing_company;
 
+import com.library.api.exceptions.ObjectAlreadyExistsWith;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -12,6 +14,10 @@ public class PublishingCompanyService {
     private final PublishingCompanyRepository publishingCompanyRepository;
 
     public PublishingCompany createPublishingCompany(PublishingCompanyRequest data) {
+        Optional<PublishingCompany> optionalPublishingCompany = publishingCompanyRepository.findByName(data.name());
+        if (optionalPublishingCompany.isPresent()) {
+            throw new ObjectAlreadyExistsWith("publishing company", data.name());
+        }
         var publishingCompany = PublishingCompany.builder()
                 .id(UUID.randomUUID())
                 .name(data.name())
