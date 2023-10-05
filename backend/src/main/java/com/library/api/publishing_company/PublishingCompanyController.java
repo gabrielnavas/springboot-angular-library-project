@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping(value = "/api/v1/publishing_company")
 @AllArgsConstructor
@@ -54,9 +57,11 @@ public class PublishingCompanyController {
     ) {
         PublishingCompany publishingCompany = publishingCompanyService.createPublishingCompany(requestBody);
         PublishingCompanyResponse responseBody = PublishingCompanyResponse.builder()
-                .id(publishingCompany.getId())
+                .key(publishingCompany.getId())
                 .name(publishingCompany.getName())
                 .build();
+        responseBody.add(linkTo(methodOn(PublishingCompanyController.class)
+                .createPublishingCompany(requestBody)).withSelfRel());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }
 }
