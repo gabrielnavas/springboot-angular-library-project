@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5435/postgres
+    username: postgres
+    password: postgres123
+  jpa:
+    hibernate:
+      #      ddl-auto: update
+      ddl-auto: none
+    show-sql: true
+
+spring-doc:
+  swagger-ui:
+    use-root-path: true # http://localhost:8080/swagger-ui/index.html
