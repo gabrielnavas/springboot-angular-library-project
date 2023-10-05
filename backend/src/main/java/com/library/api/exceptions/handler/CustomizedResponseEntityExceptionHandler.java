@@ -17,7 +17,7 @@ import java.util.Date;
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<ExceptionResponse> handleAllAllInternalServerErrorExceptions(Exception ex, WebRequest request) {
+    public final ResponseEntity<ExceptionResponse> handleAllExceptions(Exception ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(
                         ExceptionResponse.builder()
@@ -29,7 +29,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     }
 
     @ExceptionHandler(ObjectAlreadyExistsWith.class)
-    public final ResponseEntity<ExceptionResponse> handleAllBadRequestsExceptions(ObjectAlreadyExistsWith ex, WebRequest request) {
+    public final ResponseEntity<ExceptionResponse> handleObjectAlreadyExistsWithExceptions(ObjectAlreadyExistsWith ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(
                         ExceptionResponse.builder()

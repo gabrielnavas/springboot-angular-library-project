@@ -17,11 +17,16 @@
         <java.version>17</java.version>
         <springdoc.version>2.2.0</springdoc.version>
         <fasterxmldataformat.version>2.15.0</fasterxmldataformat.version>
+        <hibernatevalidator.version>8.0.1.Final</hibernatevalidator.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -65,6 +70,7 @@
             <artifactId>jackson-dataformat-xml</artifactId>
             <version>${fasterxmldataformat.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>

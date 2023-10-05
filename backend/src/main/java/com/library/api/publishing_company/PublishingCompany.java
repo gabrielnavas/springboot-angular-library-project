@@ -2,10 +2,12 @@ package com.library.api.publishing_company;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.UUID;
 
@@ -21,6 +23,8 @@ public class PublishingCompany {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @NotBlank
+    @Length(max = 25)
+    @Column(unique = true)
     private String name;
 }
