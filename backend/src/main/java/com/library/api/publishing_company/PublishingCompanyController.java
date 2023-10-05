@@ -53,15 +53,13 @@ public class PublishingCompanyController {
             }
     )
     public ResponseEntity<Object> createPublishingCompany(
-            @RequestBody @Valid PublishingCompanyRequest requestBody
+            @RequestBody @Valid PublishingCompanyRequest request
     ) {
-        PublishingCompany publishingCompany = publishingCompanyService.createPublishingCompany(requestBody);
-        PublishingCompanyResponse responseBody = PublishingCompanyResponse.builder()
-                .key(publishingCompany.getId())
-                .name(publishingCompany.getName())
-                .build();
-        responseBody.add(linkTo(methodOn(PublishingCompanyController.class)
-                .createPublishingCompany(requestBody)).withSelfRel());
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
+        PublishingCompanyResponse response = publishingCompanyService.createPublishingCompany(request);
+
+        response.add(linkTo(methodOn(PublishingCompanyController.class)
+                .createPublishingCompany(request)).withSelfRel());
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

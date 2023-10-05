@@ -6,6 +6,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PublishingCompanyRepository extends JpaRepository<PublishingCompany, UUID> {
-
     Optional<PublishingCompany> findByName(String name);
 }

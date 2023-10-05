@@ -13,7 +13,7 @@ public class PublishingCompanyService {
 
     private final PublishingCompanyRepository publishingCompanyRepository;
 
-    public PublishingCompany createPublishingCompany(PublishingCompanyRequest data) {
+    public PublishingCompanyResponse createPublishingCompany(PublishingCompanyRequest data) {
         Optional<PublishingCompany> optionalPublishingCompany = publishingCompanyRepository.findByName(data.name());
         if (optionalPublishingCompany.isPresent()) {
             throw new ObjectAlreadyExistsWith("publishing company", data.name());
@@ -22,6 +22,11 @@ public class PublishingCompanyService {
                 .id(UUID.randomUUID())
                 .name(data.name())
                 .build();
-        return publishingCompanyRepository.save(publishingCompany);
+        publishingCompany = publishingCompanyRepository.save(publishingCompany);
+        return PublishingCompanyResponse.builder()
+                .key(publishingCompany.getId())
+                .name(publishingCompany.getName())
+                .build();
+
     }
 }
