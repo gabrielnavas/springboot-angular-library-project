@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PublisherCompanyReadComponent } from './views/publisher-company/publisher-company-read/publisher-company-read.component';
+import { PublisherCompanyReadComponent } from './components/publisher-company/publisher-company-read/publisher-company-read.component';
 
 const routes: Routes = [{
   path: "publisher-company",
