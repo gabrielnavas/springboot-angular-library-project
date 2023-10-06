@@ -8,6 +8,8 @@ import { MatInputModule } from "@angular/material/input";
 
 import { FormsModule } from "@angular/forms"
 
+import { HttpClientModule } from "@angular/common/http"
+
 import { PublisherCompanyReadComponent } from './components/publisher-company-read/publisher-company-read.component';
 import { PublisherCompanyComponent } from './publisher-company.component';
 import { PublisherCompanyCreateComponent } from './components/publisher-company-create/publisher-company-create.component';
@@ -26,7 +28,8 @@ import { PublisherCompanyCreateComponent } from './components/publisher-company-
     MatCardModule,
     FormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    HttpClientModule,
   ]
 })
 export class PublisherCompanyModule { }
