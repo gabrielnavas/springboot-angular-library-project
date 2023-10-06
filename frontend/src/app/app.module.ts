@@ -5,6 +5,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TemplateModule } from './template/template.module';
 
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 @NgModule({
   declarations: [
     AppComponent
@@ -12,7 +16,10 @@ import { TemplateModule } from './template/template.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    TemplateModule
+    BrowserAnimationsModule,
+    TemplateModule,
+    MatToolbarModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]
