@@ -13,6 +13,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,7 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Order(1)
     public void testCreatePublishingCompany() throws IOException {
         publishingCompanyRequest = createMockPublishingCompanyRequest();
 
@@ -70,11 +72,34 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
         Assertions.assertNotNull(publishingCompanyResponse.getName());
 
         Assertions.assertEquals(publishingCompanyResponse.getName(), publishingCompanyRequest.name());
+    }
 
+    @Test
+    @Order(2)
+    public void testCreatePublishingCompanyWithWrongOrigin() throws IOException {
+        publishingCompanyRequest = createMockPublishingCompanyRequest();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setBasePath("/api/v1/publishing-company")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(publishingCompanyRequest)
+                .when()
+                .post()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
     }
 
     private PublishingCompanyRequest createMockPublishingCompanyRequest() {
         return new PublishingCompanyRequest(Faker.instance().book().publisher());
     }
-
 }
