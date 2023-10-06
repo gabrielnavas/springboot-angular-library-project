@@ -13,6 +13,6 @@ export class PublisherCompanyComponent {
   ) {}
 
   navigateToPublisherCompanyCreate(): void {
-    this.router.navigateByUrl("")
+    this.router.navigateByUrl("publisher-company/create")
   }
 }

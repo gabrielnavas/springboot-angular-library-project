@@ -5,6 +5,7 @@ import { MatButtonModule } from "@angular/material/button"
 
 import { PublisherCompanyReadComponent } from './components/publisher-company-read/publisher-company-read.component';
 import { PublisherCompanyComponent } from './publisher-company.component';
+import { PublisherCompanyCreateComponent } from './components/publisher-company-create/publisher-company-create.component';
 
 
 
@@ -12,6 +13,7 @@ import { PublisherCompanyComponent } from './publisher-company.component';
   declarations: [
     PublisherCompanyReadComponent,
     PublisherCompanyComponent,
+    PublisherCompanyCreateComponent,
   ],
   imports: [
     CommonModule,
