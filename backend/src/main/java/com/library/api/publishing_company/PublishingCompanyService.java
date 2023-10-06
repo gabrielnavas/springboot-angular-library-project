@@ -2,8 +2,11 @@ package com.library.api.publishing_company;
 
 import com.library.api.exceptions.ObjectAlreadyExistsWith;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -17,7 +20,7 @@ public class PublishingCompanyService {
     private final Logger logger = Logger.getLogger(PublishingCompanyService.class.getName());
 
     public PublishingCompanyResponse createPublishingCompany(PublishingCompanyRequest data) {
-        logger.info("create post Publishing Company Service");
+        logger.info("create Publishing Company Service");
 
         Optional<PublishingCompany> optionalPublishingCompany = publishingCompanyRepository.findByName(data.name());
         if (optionalPublishingCompany.isPresent()) {
@@ -33,5 +36,17 @@ public class PublishingCompanyService {
                 .name(publishingCompany.getName())
                 .build();
 
+    }
+
+    public List<PublishingCompanyResponse> getAllPublishingCompany(Pageable pageable) {
+        logger.info("get all Publishing Company Service");
+
+        Page<PublishingCompany> publishingCompanies = publishingCompanyRepository.findAll(pageable);
+
+        return publishingCompanies.stream().map(publishingCompany -> PublishingCompanyResponse.builder()
+                        .key(publishingCompany.getId())
+                        .name(publishingCompany.getName())
+                        .build())
+                .toList();
     }
 }

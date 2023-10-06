@@ -101,6 +101,42 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
     }
 
+
+    @Test
+    @Order(3)
+    public void testGetAllPublishingCompany() throws IOException {
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath("/api/v1/publishing-company")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+
+        PublishingCompanyResponse[] publishingCompanyResponses = objectMapper.readValue(response.body().asString(), PublishingCompanyResponse[].class);
+
+        Assertions.assertNotNull(publishingCompanyResponses);
+        Assertions.assertEquals(1, publishingCompanyResponses.length);
+
+        for (var pc : publishingCompanyResponses) {
+            System.out.println(pc.getName());
+            Assertions.assertNotNull(pc.getKey());
+            Assertions.assertNotNull(pc.getName());
+            Assertions.assertTrue(pc.getName().length() > 0);
+        }
+    }
+
+
     private PublishingCompanyRequest createMockPublishingCompanyRequest() {
         return new PublishingCompanyRequest(Faker.instance().book().publisher());
     }
