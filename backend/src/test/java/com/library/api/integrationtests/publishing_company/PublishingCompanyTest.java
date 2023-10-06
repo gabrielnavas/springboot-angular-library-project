@@ -57,6 +57,7 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
         Response response = given().spec(specification)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
                 .body(publishingCompanyRequest)
                 .when()
                 .post()
@@ -89,6 +90,7 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
         Response response = given().spec(specification)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
                 .body(publishingCompanyRequest)
                 .when()
                 .post()
