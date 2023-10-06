@@ -1,1 +1,29 @@
-<p>publisher-company-create works!</p>
+<mat-card class="add-publisher-company container">
+  <mat-card-title class="title">Adicionar uma Editora de Livros</mat-card-title>
+
+  <form>
+      <mat-form-field>
+        <input 
+          matInput
+          type="text"
+          name="name"
+          placeholder="Nome">
+      </mat-form-field>
+  </form>
+
+  <div>
+    <button 
+      mat-raised-button
+      color="primary"
+      (click)="createPublisherCompany()">
+      <i class="material-icons">note_add</i>
+      Adicionar
+    </button>
+    <button 
+      mat-raised-button
+      (click)="cancel()">
+      <i class="material-icons">cancel</i>
+      Cancelar
+    </button>
+  </div>
+</mat-card>

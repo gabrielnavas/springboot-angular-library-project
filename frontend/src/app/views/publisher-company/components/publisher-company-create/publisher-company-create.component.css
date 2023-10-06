@@ -1,0 +1,20 @@
+.container {
+  padding: .8rem;
+}
+
+.title {
+  margin-bottom: .9rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  margin-right: .9rem;
+}
+
+button i {
+  margin-right: .8rem;
+}
