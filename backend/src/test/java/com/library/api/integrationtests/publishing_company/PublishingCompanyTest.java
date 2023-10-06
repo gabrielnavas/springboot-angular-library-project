@@ -137,6 +137,29 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
     }
 
 
+    @Test
+    @Order(4)
+    public void testGetAllPublishingCompanyWithWrongCors() throws IOException {
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setBasePath("/api/v1/publishing-company")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
+
     private PublishingCompanyRequest createMockPublishingCompanyRequest() {
         return new PublishingCompanyRequest(Faker.instance().book().publisher());
     }
