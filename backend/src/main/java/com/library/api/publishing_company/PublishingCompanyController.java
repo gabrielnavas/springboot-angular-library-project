@@ -15,16 +15,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.logging.Logger;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(value = "/api/v1/publishing_company")
+@RequestMapping(value = PublishingCompanyController.REQUEST_MAPPING_PATH)
 @AllArgsConstructor
 @Tag(name = "PublishingCompany", description = "Endpoints to Managing the Publishing Company")
 public class PublishingCompanyController {
 
+    public static final String REQUEST_MAPPING_PATH = "/api/v1/publishing-company";
+
     private final PublishingCompanyService publishingCompanyService;
+    private final Logger logger = Logger.getLogger(PublishingCompanyController.class.getName());
 
     @PostMapping(
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
@@ -55,11 +60,12 @@ public class PublishingCompanyController {
     public ResponseEntity<Object> createPublishingCompany(
             @RequestBody @Valid PublishingCompanyRequest request
     ) {
+        logger.info(String.format("HTTP POST %s", PublishingCompanyController.REQUEST_MAPPING_PATH));
         PublishingCompanyResponse response = publishingCompanyService.createPublishingCompany(request);
 
         response.add(linkTo(methodOn(PublishingCompanyController.class)
                 .createPublishingCompany(request)).withSelfRel());
-        
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

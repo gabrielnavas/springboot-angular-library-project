@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @Service
 @AllArgsConstructor
@@ -13,7 +14,11 @@ public class PublishingCompanyService {
 
     private final PublishingCompanyRepository publishingCompanyRepository;
 
+    private final Logger logger = Logger.getLogger(PublishingCompanyService.class.getName());
+
     public PublishingCompanyResponse createPublishingCompany(PublishingCompanyRequest data) {
+        logger.info("create post Publishing Company Service");
+
         Optional<PublishingCompany> optionalPublishingCompany = publishingCompanyRepository.findByName(data.name());
         if (optionalPublishingCompany.isPresent()) {
             throw new ObjectAlreadyExistsWith("publishing company", data.name());
