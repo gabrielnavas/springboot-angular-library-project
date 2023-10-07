@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PublisherCompany } from '../publisher-company.model';
+import { PublisherCompany } from '../../publisher-company.model';
 import { Router } from '@angular/router';
 import { PublisherCompanyService } from '../../publisher-company.service';
 import { MatSnackBar } from '@angular/material/snack-bar';

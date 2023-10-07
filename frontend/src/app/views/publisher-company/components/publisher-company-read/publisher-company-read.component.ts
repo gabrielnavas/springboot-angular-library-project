@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { PublisherCompany } from '../publisher-company.model';
+import { PublisherCompany } from '../../publisher-company.model';
 import { PublisherCompanyService } from '../../publisher-company.service';
 
 type TypeMessage = 'message-success' | 'message-failed'
