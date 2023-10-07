@@ -17,4 +17,8 @@ export class PublisherCompanyService {
   createPublisherCompany(publisherCompany: PublisherCompany): Observable<PublisherCompany> {
     return this.httpClient.post<PublisherCompany>(this.baseUrl, publisherCompany)
   }
+
+  findAll(): Observable<PublisherCompany[]> {
+    return this.httpClient.get<PublisherCompany[]>(this.baseUrl)
+  }
 }

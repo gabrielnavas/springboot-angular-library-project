@@ -6,6 +6,7 @@ import { MatCardModule } from "@angular/material/card"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatTableModule } from '@angular/material/table';
 
 import { FormsModule } from "@angular/forms"
 
@@ -32,6 +33,7 @@ import { PublisherCompanyCreateComponent } from './components/publisher-company-
     MatInputModule,
     HttpClientModule,
     MatSnackBarModule,
+    MatTableModule,
   ]
 })
 export class PublisherCompanyModule { }
