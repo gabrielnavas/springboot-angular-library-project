@@ -11,22 +11,22 @@ import { ShowMessagesService } from '../../show-messages.service';
   templateUrl: './publisher-company-create.component.html',
   styleUrls: ['./publisher-company-create.component.css']
 })
-export class PublisherCompanyCreateComponent implements OnInit  {
-  publisherCompany: PublisherCompany  = {
-    name: ""
-  }
+export class PublisherCompanyCreateComponent {
+  publisherCompany: PublisherCompany = new PublisherCompany();
 
   constructor(
     private readonly router: Router,
     private readonly publisherCompanyService: PublisherCompanyService,
     private showMessagesService: ShowMessagesService
-  ) {}
-
-  ngOnInit(): void {
-    this.initPublisherCompanyModel();
-  }
+  ) { }
 
   createPublisherCompany(): void {
+    const error = this.publisherCompany.validate();
+    if (error != null) {
+      this.showMessagesService.showMessageFailed(error.message);
+      return;
+    }
+
     this.publisherCompanyService.createPublisherCompany(this.publisherCompany)
       .subscribe({
         complete: () => this.showMessagesService.showMessageSuccess("Editora de livros adicionada"),
@@ -47,8 +47,6 @@ export class PublisherCompanyCreateComponent implements OnInit  {
   }
 
   private initPublisherCompanyModel(): void {
-    this.publisherCompany = {
-      name: ""
-    }
+    this.publisherCompany = new PublisherCompany();
   }
 }

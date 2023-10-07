@@ -32,11 +32,5 @@ export class PublisherCompanyReadComponent implements OnInit {
         },
         error: err => this.showMessagesService.showMessageFailed("Problemas no servidor, tente novamente mais tarde")
       })
-
-    this.publisherCompanyService.createPublisherCompany({} as PublisherCompany)
-      .subscribe({
-        complete: () => this.showMessagesService.showMessageSuccess("Editora de livros adicionada"),
-        error: err => this.showMessagesService.showMessageFailed("Problemas no servidor, tente novamente mais tarde")
-      })
   }
 }
