@@ -3,8 +3,8 @@ import { PublisherCompany } from '../../publisher-company.model';
 import { Router } from '@angular/router';
 import { PublisherCompanyService } from '../../publisher-company.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ShowMessagesService } from '../../show-messages.service';
 
-type TypeMessage = 'message-success' | 'message-failed'
 
 @Component({
   selector: 'app-publisher-company-create',
@@ -19,7 +19,7 @@ export class PublisherCompanyCreateComponent implements OnInit  {
   constructor(
     private readonly router: Router,
     private readonly publisherCompanyService: PublisherCompanyService,
-    private readonly snackBar: MatSnackBar
+    private showMessagesService: ShowMessagesService
   ) {}
 
   ngOnInit(): void {
@@ -29,8 +29,8 @@ export class PublisherCompanyCreateComponent implements OnInit  {
   createPublisherCompany(): void {
     this.publisherCompanyService.createPublisherCompany(this.publisherCompany)
       .subscribe({
-        complete: () => this.showMessage("Editora de livros adicionada", "message-success"),
-        error: err => this.showMessage("tente novamente mais tarde", "message-failed")
+        complete: () => this.showMessagesService.showMessageSuccess("Editora de livros adicionada"),
+        error: err => this.showMessagesService.showMessageFailed("Problemas no servidor, tente novamente mais tarde")
       })
     this.initPublisherCompanyModel();
   }
@@ -44,15 +44,6 @@ export class PublisherCompanyCreateComponent implements OnInit  {
     if(event.key === "Enter") {
       this.createPublisherCompany();
     }
-}
-
-  private showMessage(message: string, typeMessage: TypeMessage): void {
-    this.snackBar.open(message, 'x', {
-      duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-      panelClass: [typeMessage],
-    })
   }
 
   private initPublisherCompanyModel(): void {
