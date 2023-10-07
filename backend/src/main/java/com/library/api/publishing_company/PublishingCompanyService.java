@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -38,15 +39,28 @@ public class PublishingCompanyService {
 
     }
 
-    public List<PublishingCompanyResponse> getAllPublishingCompany(Pageable pageable) {
+    public List<PublishingCompanyResponse> getAllPublishingCompany(Map<String, String> filters, Pageable pageable) {
         logger.info("get all Publishing Company Service");
 
-        Page<PublishingCompany> publishingCompanies = publishingCompanyRepository.findAll(pageable);
-
-        return publishingCompanies.stream().map(publishingCompany -> PublishingCompanyResponse.builder()
-                        .key(publishingCompany.getId())
-                        .name(publishingCompany.getName())
-                        .build())
-                .toList();
+        if (filters.get("name").length() > 0) {
+            var resp = publishingCompanyRepository
+                    .findAllByName(
+                            filters.get("name"),
+                            pageable
+                    );
+            return resp.stream().map(publishingCompany -> PublishingCompanyResponse.builder()
+                            .key(publishingCompany.getId())
+                            .name(publishingCompany.getName())
+                            .build())
+                    .toList();
+        } else {
+            Page<PublishingCompany> publishingCompanies = publishingCompanyRepository
+                    .findAll(pageable);
+            return publishingCompanies.stream().map(publishingCompany -> PublishingCompanyResponse.builder()
+                            .key(publishingCompany.getId())
+                            .name(publishingCompany.getName())
+                            .build())
+                    .toList();
+        }
     }
 }

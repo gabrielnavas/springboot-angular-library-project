@@ -22,6 +22,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.DeserializationF
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.function.BiFunction;
 
 import static io.restassured.RestAssured.given;
 
@@ -67,7 +68,8 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
         Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
 
-        publishingCompanyResponse = objectMapper.readValue(response.body().asString(), PublishingCompanyResponse.class);
+        publishingCompanyResponse = objectMapper
+                .readValue(response.body().asString(), PublishingCompanyResponse.class);
 
         Assertions.assertNotNull(publishingCompanyResponse.getKey());
         Assertions.assertNotNull(publishingCompanyResponse.getName());
@@ -123,6 +125,64 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
         Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
 
+        PublishingCompanyResponse[] publishingCompanyResponses = objectMapper
+                .readValue(response.body().asString(), PublishingCompanyResponse[].class);
+
+        Assertions.assertNotNull(publishingCompanyResponses);
+        Assertions.assertEquals(1, publishingCompanyResponses.length);
+
+        for (var pc : publishingCompanyResponses) {
+            System.out.println(pc.getName());
+            Assertions.assertNotNull(pc.getKey());
+            Assertions.assertNotNull(pc.getName());
+            Assertions.assertTrue(pc.getName().length() > 0);
+        }
+    }
+
+    @Test
+    @Order(4)
+    public void testGetAllPublishingCompanyByName() throws IOException {
+        BiFunction<String, Integer, String> getSubString = (s, length) -> s.substring(0, 2);
+        BiFunction<String, Integer, String> upperLower = (s, length) -> {
+            StringBuilder sb = new StringBuilder();
+            int index = 0;
+            while (index < s.length() && index < length) {
+                if (length % 2 == 0) {
+                    sb.append((s.charAt(index) + "").toLowerCase());
+                } else {
+                    sb.append((s.charAt(index) + "").toUpperCase());
+                }
+                index++;
+            }
+            return sb.toString();
+        };
+
+        int substringLength = 2;
+        String url = String.format(
+                "/api/v1/publishing-company?name=%s",
+                upperLower.apply(
+                        getSubString.apply(publishingCompanyResponse.getName(), substringLength),
+                        substringLength
+                )
+        );
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(url)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+
         PublishingCompanyResponse[] publishingCompanyResponses = objectMapper.readValue(response.body().asString(), PublishingCompanyResponse[].class);
 
         Assertions.assertNotNull(publishingCompanyResponses);
@@ -136,9 +196,8 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
         }
     }
 
-
     @Test
-    @Order(4)
+    @Order(5)
     public void testGetAllPublishingCompanyWithWrongCors() throws IOException {
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)

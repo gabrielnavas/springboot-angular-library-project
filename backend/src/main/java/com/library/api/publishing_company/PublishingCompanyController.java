@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -97,17 +98,23 @@ public class PublishingCompanyController {
             }
     )
     public ResponseEntity<Object> getAllPublishingCompany(
-            Pageable pageable
+            Pageable pageable,
+            @RequestParam(value = "name", required = false, defaultValue = "") String name
     ) {
         logger.info(String.format("HTTP GET %s", PublishingCompanyController.REQUEST_MAPPING_PATH));
-        List<PublishingCompanyResponse> publishingCompanyResponses = publishingCompanyService.getAllPublishingCompany(pageable);
+
+        List<PublishingCompanyResponse> publishingCompanyResponses = publishingCompanyService
+                .getAllPublishingCompany(new HashMap<>() {{
+                    put("name", name);
+                }}, pageable);
+            
 
         publishingCompanyResponses.forEach(publishingCompanyResponse -> {
             publishingCompanyResponse.add(linkTo(methodOn(PublishingCompanyController.class)
                     .createPublishingCompany(new PublishingCompanyRequest(""))).withRel("create new publishing company"));
 
             publishingCompanyResponse.add(linkTo(methodOn(PublishingCompanyController.class)
-                    .getAllPublishingCompany(pageable)).withSelfRel());
+                    .getAllPublishingCompany(pageable, name)).withSelfRel());
         });
 
         return ResponseEntity.status(HttpStatus.OK).body(publishingCompanyResponses);
