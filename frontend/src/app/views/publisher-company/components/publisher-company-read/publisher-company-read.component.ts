@@ -17,7 +17,7 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
   searchInputField: string = ""
 
   pageApi: number = 0;
-  pageSizeApi: number = 5;
+  pageSizeApi: Readonly<number> = 7;
 
   noMoreDataFromApi: boolean = false;
   anyDataFromApi: boolean = false;
