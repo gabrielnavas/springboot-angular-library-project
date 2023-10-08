@@ -2,9 +2,9 @@ export class PublisherCompany {
   id?: string
   name: string
 
-  constructor() {
-    this.id = "";
-    this.name = "";
+  constructor(id: string="", name: string="") {
+    this.id = id;
+    this.name = name;
   }
 
   validate(): Error | null {
