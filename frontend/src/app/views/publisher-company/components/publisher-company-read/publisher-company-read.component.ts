@@ -18,7 +18,6 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<PublisherCompany>;
   dataSource!: PublisherCompanyReadDataSource
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['name', 'actions'];
 
   pageIndex = 0;
@@ -38,41 +37,42 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.updateDataTable()
+    this.initDataSourceAndTable()
   }
 
   changePage(event: PageEvent) {
-    const finalPage = (~~(event.length / event.pageSize)) -1 ===  event.pageIndex
-    console.log(finalPage, event.length, this.pageSizeApi);
-    
-    if(finalPage && event.length >= this.pageSizeApi) {
+    const pageNow = (~~(event.length / event.pageSize)) -1;
+    const finalPage = pageNow ===  event.pageIndex;
+    const quantityIsLessPaginator = event.length >= this.pageSizeApi;
+    if(finalPage && quantityIsLessPaginator) {
       this.publisherCompanyServiceFindAll()
     }
   }
 
-  private updateDataTable(): void {
+  private initDataSourceAndTable(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
   }
 
+  private concatDataFromApi(data: PublisherCompany[]) {
+    if(data.length > 0) {
+      if(this.dataSource) {
+        const allData = this.dataSource.data.concat(data)
+        this.dataSource = new PublisherCompanyReadDataSource(allData);
+      } else {
+        this.dataSource = new PublisherCompanyReadDataSource(data);
+      }
+      this.pageApi++;
+      this.initDataSourceAndTable()
+      this.changeDetectorRefs.detectChanges();
+    }
+  }
+
   private publisherCompanyServiceFindAll(pageIndex: number=this.pageApi, pageSize: number=this.pageSizeApi) {
     this.publisherCompanyService.findAll(pageIndex, pageSize)
       .subscribe({
-        next: data => {
-          if(data.length > 0) {
-            if(this.dataSource) {
-              const allData = this.dataSource.data.concat(data)
-              this.dataSource = new PublisherCompanyReadDataSource(allData);
-            } else {
-              this.dataSource = new PublisherCompanyReadDataSource(data);
-            }
-            this.pageApi++;
-            this.updateDataTable()
-            this.changeDetectorRefs.detectChanges();
-           
-          }
-        },
+        next: data => this.concatDataFromApi(data),
         error: err => this.showMessagesService
           .showMessageFailed("Problemas no servidor, tente novamente mais tarde")
       })
