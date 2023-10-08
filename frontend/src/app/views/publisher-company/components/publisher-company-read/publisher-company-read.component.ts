@@ -16,7 +16,7 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<PublisherCompany>;
-  dataSource!: PublisherCompanyReadDataSource
+  dataSource: PublisherCompanyReadDataSource = new PublisherCompanyReadDataSource([]);
 
   displayedColumns = ['name', 'actions'];
 
@@ -31,12 +31,8 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
     private changeDetectorRefs: ChangeDetectorRef
   ) { }
 
-
-  ngOnInit() {
-    this.publisherCompanyServiceFindAll()
-  }
-
   ngAfterViewInit(): void {
+    this.publisherCompanyServiceFindAll()
     this.initDataSourceAndTable()
   }
 
