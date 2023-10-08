@@ -2,20 +2,22 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
+
 import { Observable, of as observableOf, merge } from 'rxjs';
-import { PublisherCompanyService } from '../../publisher-company.service';
-import { ShowMessagesService } from '../../show-messages.service';
+
 import { PublisherCompany } from '../../publisher-company.model';
 
 export class PublisherCompanyReadDataSource extends DataSource<PublisherCompany> {
   paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
 
+  data: PublisherCompany[] = []
+
   constructor(
-    public data: PublisherCompany[]
+    data:  PublisherCompany[]
   ) {
     super();
-    this.data = data 
+    this.data = data;
   }
 
   /**

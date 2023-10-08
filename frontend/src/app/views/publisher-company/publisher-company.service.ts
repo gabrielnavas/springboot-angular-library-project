@@ -27,7 +27,8 @@ export class PublisherCompanyService {
     )
   }
 
-  findAll(): Observable<PublisherCompany[]> {
-    return this.httpClient.get<PublisherCompany[]>(PublisherCompanyService.FIND_ALL_PUBLISHER_COMPANY_URL)
+  findAll(page: number=0, size: number = 10): Observable<PublisherCompany[]> {
+    const url = `${PublisherCompanyService.FIND_ALL_PUBLISHER_COMPANY_URL}?page=${page}&size=${size}&sort=name,ASC`
+    return this.httpClient.get<PublisherCompany[]>(url)
   }
 }
