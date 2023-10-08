@@ -101,13 +101,21 @@ public class PublishingCompanyController {
             Pageable pageable,
             @RequestParam(value = "name", required = false, defaultValue = "") String name
     ) {
-        logger.info(String.format("HTTP GET %s", PublishingCompanyController.REQUEST_MAPPING_PATH));
+        logger.info(
+                String.format(
+                        "HTTP GET %s - page number %d - page size %d - sort %s",
+                        PublishingCompanyController.REQUEST_MAPPING_PATH,
+                        pageable.getPageNumber(),
+                        pageable.getPageSize(),
+                        pageable.getSort()
+                )
+        );
 
         List<PublishingCompanyResponse> publishingCompanyResponses = publishingCompanyService
                 .getAllPublishingCompany(new HashMap<>() {{
                     put("name", name);
                 }}, pageable);
-            
+
 
         publishingCompanyResponses.forEach(publishingCompanyResponse -> {
             publishingCompanyResponse.add(linkTo(methodOn(PublishingCompanyController.class)
