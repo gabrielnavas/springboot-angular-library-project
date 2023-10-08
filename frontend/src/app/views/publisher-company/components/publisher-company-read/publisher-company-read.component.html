@@ -1,9 +1,40 @@
+<form class="search-field-container">
+  <mat-form-field class="search-input-field">
+    <mat-label>Buscar por nome</mat-label>
+    <input 
+          matInput
+          type="text"
+          autofocus
+          [(ngModel)]="searchInputField"
+          (keypress)="keyPressSearchInputField($event)"
+          name="input-search"
+          placeholder="John Lotty">
+  </mat-form-field>
+
+  <div class="search-field-buttons">
+    <button 
+      color="primary"
+      mat-raised-button
+      (click)="onClickButtonFindByFilter()">
+      <i class="material-icons">search</i>
+      Buscar
+    </button>
+  
+    <button 
+      mat-raised-button
+      (click)="initDataView()">
+      <i class="material-icons">cancel</i>
+      Buscar todos
+    </button>
+  </div>
+</form>
+
 <div class="table-container mat-elevation-z8">
-  <table mat-table class="full-width-table" matSort aria-label="Elements">
+  <table [dataSource]="data" mat-table class="full-width-table" matSort aria-label="Elements">
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
-      <td mat-cell *matCellDef="let row">{{row.name}}</td>
+      <td mat-cell *matCellDef="let row">{{ row.name }}</td>
     </ng-container>
 
     <!-- Actions Column -->
@@ -29,12 +60,23 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <mat-paginator #paginator
-    [length]="dataSource.data.length"
-    [pageIndex]="0"
-    [pageSize]="10"
-    [pageSizeOptions]="[10]"
-    (page)="changePage($event)"
-    aria-label="Select page">
-  </mat-paginator>
+  <button 
+    class="button-load-more-data"
+    mat-raised-button 
+    color="primary"
+    [disabled]="noMoreDataFromApi && anyDataFromApi"
+    (click)="loadMoreData()">
+      <span
+        *ngIf="!noMoreDataFromApi && !anyDataFromApi">
+        Obter mais
+      </span>
+      <strong 
+        *ngIf="noMoreDataFromApi">
+        Nenhum dado a mais foi encontrado
+      </strong>
+      <strong 
+        *ngIf="anyDataFromApi">
+        Nenhum dado foi encontrado
+      </strong>
+    </button>
 </div>

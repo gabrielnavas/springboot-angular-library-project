@@ -1,9 +1,37 @@
+.table-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.search-field-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 1.2rem;
+}
+
+.search-field-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.search-field-container button {
+  margin-left: .8rem;
+}
+
+.search-field-container button i { 
+  margin-right: .6rem;
+}
+
+
 .full-width-table {
   width: 100%;
 }
 
-.table-container {
-  margin-top: 1.3rem;
+.search-input-field {
+  margin-top: 1.1rem;
+  width: 70%;
 }
 
 .list-empty {
@@ -21,4 +49,8 @@
 
 .delete {
   color: #e35e6b;
+}
+
+.button-load-more-data {
+  margin: 1rem;
 }

@@ -15,9 +15,6 @@ import { HttpClientModule } from "@angular/common/http"
 import { PublisherCompanyComponent } from './publisher-company.component';
 import { PublisherCompanyCreateComponent } from './components/publisher-company-create/publisher-company-create.component';
 import { PublisherCompanyReadComponent } from './components/publisher-company-read/publisher-company-read.component';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
-
 
 
 @NgModule({
@@ -36,8 +33,6 @@ import { MatSortModule } from '@angular/material/sort';
     HttpClientModule,
     MatSnackBarModule,
     MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
   ]
 })
 export class PublisherCompanyModule { }
