@@ -42,25 +42,24 @@ public class PublishingCompanyService {
     public List<PublishingCompanyResponse> getAllPublishingCompany(Map<String, String> filters, Pageable pageable) {
         logger.info("get all Publishing Company Service");
 
+        Page<PublishingCompany> publishingCompanies;
+
         if (filters.get("name").length() > 0) {
-            var resp = publishingCompanyRepository
+            publishingCompanies = publishingCompanyRepository
                     .findAllByName(
                             filters.get("name"),
                             pageable
                     );
-            return resp.stream().map(publishingCompany -> PublishingCompanyResponse.builder()
-                            .key(publishingCompany.getId())
-                            .name(publishingCompany.getName())
-                            .build())
-                    .toList();
         } else {
-            Page<PublishingCompany> publishingCompanies = publishingCompanyRepository
+            publishingCompanies = publishingCompanyRepository
                     .findAll(pageable);
-            return publishingCompanies.stream().map(publishingCompany -> PublishingCompanyResponse.builder()
-                            .key(publishingCompany.getId())
-                            .name(publishingCompany.getName())
-                            .build())
-                    .toList();
+
         }
+
+        return publishingCompanies.stream().map(publishingCompany -> PublishingCompanyResponse.builder()
+                        .key(publishingCompany.getId())
+                        .name(publishingCompany.getName())
+                        .build())
+                .toList();
     }
 }
