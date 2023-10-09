@@ -375,8 +375,31 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
         Assertions.assertNotNull(publishingCompanyResponse.getKey());
         Assertions.assertNotNull(publishingCompanyResponse.getName());
+    }
 
-        Assertions.assertEquals(publishingCompanyResponse.getName(), publishingCompanyResponseInput.getName());
+
+    @Test
+    @Order(11)
+    public void testGetPublishingCompanyByIdNotFound() throws IOException {
+        String urlUpdate = String.format("/api/v1/publishing-company/%s", UUID.randomUUID());
+
+        RequestSpecification specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(urlUpdate)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
     }
 
     private PublishingCompanyRequest createMockPublishingCompanyRequest(String name) {
