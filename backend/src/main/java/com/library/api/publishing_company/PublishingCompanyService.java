@@ -88,4 +88,20 @@ public class PublishingCompanyService {
                         .build())
                 .toList();
     }
+
+    public PublishingCompanyResponse getPublishingCompanyById(UUID publishingCompaniesId) {
+        logger.info("get Publishing Company By Id Service");
+
+        Optional<PublishingCompany> optionalPublishingCompany = publishingCompanyRepository.findById(publishingCompaniesId);
+        if (optionalPublishingCompany.isEmpty()) {
+            throw new ObjectNotFoundException("publishing company");
+        }
+
+        PublishingCompany publishingCompany = optionalPublishingCompany.get();
+
+        return PublishingCompanyResponse.builder()
+                .key(publishingCompany.getId())
+                .name(publishingCompany.getName())
+                .build();
+    }
 }

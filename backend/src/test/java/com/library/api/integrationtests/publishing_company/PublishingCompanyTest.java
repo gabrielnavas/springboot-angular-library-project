@@ -138,7 +138,6 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
         Assertions.assertEquals(numberOfCreatePublishingCompanyResponse, publishingCompanyResponses.length);
 
         for (var pc : publishingCompanyResponses) {
-            System.out.println(pc.getName());
             Assertions.assertNotNull(pc.getKey());
             Assertions.assertNotNull(pc.getName());
             Assertions.assertTrue(pc.getName().length() > 0);
@@ -342,6 +341,42 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
 
         Assertions.assertEquals("publishing company not found", jsonMap.get("message"));
+    }
+
+
+    @Test
+    @Order(10)
+    public void testGetPublishingCompanyById() throws IOException {
+        PublishingCompanyResponse publishingCompanyResponseInput = publishingCompanyResponses[0];
+        String urlUpdate = String.format("/api/v1/publishing-company/%s", publishingCompanyResponseInput.getKey());
+
+        RequestSpecification specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(urlUpdate)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+
+        PublishingCompanyResponse publishingCompanyResponse = objectMapper
+                .readValue(response.body().asString(), PublishingCompanyResponse.class);
+
+        Assertions.assertNotNull(publishingCompanyResponse);
+
+        Assertions.assertNotNull(publishingCompanyResponse.getKey());
+        Assertions.assertNotNull(publishingCompanyResponse.getName());
+
+        Assertions.assertEquals(publishingCompanyResponse.getName(), publishingCompanyResponseInput.getName());
     }
 
     private PublishingCompanyRequest createMockPublishingCompanyRequest(String name) {

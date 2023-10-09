@@ -33,6 +33,8 @@ public class PublishingCompanyController {
     private final PublishingCompanyService publishingCompanyService;
     private final Logger logger = Logger.getLogger(PublishingCompanyController.class.getName());
 
+    // TODO: CONFIGURE HATEOAS
+
     @PostMapping(
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
@@ -67,7 +69,6 @@ public class PublishingCompanyController {
 
         response.add(linkTo(methodOn(PublishingCompanyController.class)
                 .createPublishingCompany(request)).withSelfRel());
-
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -147,7 +148,7 @@ public class PublishingCompanyController {
                             content = @Content
                     ),
                     @ApiResponse(
-                            description = "BadRequest",
+                            description = "NotFound",
                             responseCode = "404",
                             content = @Content
                     ),
@@ -172,5 +173,56 @@ public class PublishingCompanyController {
 
         publishingCompanyService.updatePublishingCompany(publishingCompanyId, PublishingCompanyRequest);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping(
+            value = "{publishingCompanyId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @Operation(
+            summary = "Get Publishing Companies By Id",
+            description = "Endpoint to Get Publishing Companies By Id",
+            tags = {"PublishingCompany"},
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(
+                                    array = @ArraySchema(schema = @Schema(implementation = PublishingCompany.class))
+                            )
+                    ),
+
+                    @ApiResponse(
+                            description = "NotFound",
+                            responseCode = "404",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "InternalServerError",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
+    public ResponseEntity<Object> getPublishingCompanyById(
+            @PathVariable("publishingCompanyId") UUID publishingCompanyId
+    ) {
+        logger.info(
+                String.format(
+                        "HTTP GET %s/%s",
+                        PublishingCompanyController.REQUEST_MAPPING_PATH,
+                        publishingCompanyId
+                )
+        );
+
+        PublishingCompanyResponse publishingCompanyResponse = publishingCompanyService
+                .getPublishingCompanyById(publishingCompanyId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(publishingCompanyResponse);
     }
 }
