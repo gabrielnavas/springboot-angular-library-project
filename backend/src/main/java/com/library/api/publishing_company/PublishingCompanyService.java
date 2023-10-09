@@ -104,4 +104,17 @@ public class PublishingCompanyService {
                 .name(publishingCompany.getName())
                 .build();
     }
+
+
+    public void removePublishingCompanyById(UUID publishingCompaniesId) {
+        logger.info("remove Publishing Company By Id Service");
+
+        Optional<PublishingCompany> optionalPublishingCompany = publishingCompanyRepository.findById(publishingCompaniesId);
+        if (optionalPublishingCompany.isEmpty()) {
+            throw new ObjectNotFoundException("publishing company");
+        }
+
+        PublishingCompany publishingCompany = optionalPublishingCompany.get();
+        publishingCompanyRepository.delete(publishingCompany);
+    }
 }

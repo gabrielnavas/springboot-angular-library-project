@@ -11,10 +11,7 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,6 +27,7 @@ import java.util.function.BiFunction;
 import static io.restassured.RestAssured.given;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PublishingCompanyTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
@@ -343,7 +341,6 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
         Assertions.assertEquals("publishing company not found", jsonMap.get("message"));
     }
 
-
     @Test
     @Order(10)
     public void testGetPublishingCompanyById() throws IOException {
@@ -359,7 +356,7 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
                 .build();
 
         Response response = given().spec(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get()
                 .then()
@@ -377,7 +374,6 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
         Assertions.assertNotNull(publishingCompanyResponse.getName());
     }
 
-
     @Test
     @Order(11)
     public void testGetPublishingCompanyByIdNotFound() throws IOException {
@@ -392,9 +388,56 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
                 .build();
 
         Response response = given().spec(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(12)
+    public void testRemovePublishingCompanyById() {
+        String urlUpdate = String.format("/api/v1/publishing-company/%s", publishingCompanyResponses[0].getKey());
+
+        RequestSpecification specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(urlUpdate)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .when()
+                .delete()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(13)
+    public void testRemovePublishingCompanyByIdNotFound() {
+        UUID randomId = UUID.randomUUID();
+        String urlUpdate = String.format("/api/v1/publishing-company/%s", randomId);
+
+        RequestSpecification specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(urlUpdate)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .when()
+                .delete()
                 .then()
                 .extract()
                 .response();

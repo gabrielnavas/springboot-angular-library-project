@@ -138,7 +138,7 @@ public class PublishingCompanyController {
             tags = {"PublishingCompany"},
             responses = {
                     @ApiResponse(
-                            description = "Success",
+                            description = "NoContent",
                             responseCode = "204",
                             content = @Content
                     ),
@@ -224,5 +224,53 @@ public class PublishingCompanyController {
                 .getPublishingCompanyById(publishingCompanyId);
 
         return ResponseEntity.status(HttpStatus.OK).body(publishingCompanyResponse);
+    }
+
+
+    @DeleteMapping(
+            value = "{publishingCompanyId}"
+    )
+    @Operation(
+            summary = "Remove Publishing Companies By Id",
+            description = "Endpoint to Remove Publishing Companies By Id",
+            tags = {"PublishingCompany"},
+            responses = {
+                    @ApiResponse(
+                            description = "NoContent",
+                            responseCode = "204",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "NotFound",
+                            responseCode = "404",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "InternalServerError",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
+    public ResponseEntity<Object> removePublishingCompanyById(
+            @PathVariable("publishingCompanyId") UUID publishingCompanyId
+    ) {
+        logger.info(
+                String.format(
+                        "HTTP DELETE %s/%s",
+                        PublishingCompanyController.REQUEST_MAPPING_PATH,
+                        publishingCompanyId
+                )
+        );
+
+        publishingCompanyService
+                .removePublishingCompanyById(publishingCompanyId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
