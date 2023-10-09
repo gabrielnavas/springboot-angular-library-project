@@ -45,7 +45,7 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
 
   loadMoreData() {
     if(this.noMoreDataFromApi || this.anyDataFromApi) {
-      this.showMessagesService.showMessageFailed("Nenhum dado a mais foi encontrado")
+      this.showMessagesService.showMessage("Nenhum dado a mais foi encontrado")
       return;
     }
 
@@ -69,7 +69,7 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
     }
 
     if(this.noMoreDataFromApi || this.anyDataFromApi) {
-      this.showMessagesService.showMessageFailed("Nenhum dado a mais foi encontrado")
+      this.showMessagesService.showMessage("Nenhum dado a mais foi encontrado")
       return;
     }
 
@@ -91,14 +91,14 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
         next: data => {
           if(data.length === 0) {
             this.anyDataFromApi = true;
-            this.showMessagesService.showMessageFailed("Nenhum dado foi encontrado")
+            this.showMessagesService.showMessage("Nenhum dado foi encontrado")
             return
           }
           this.data = data
           this.changeDetectorRefs.detectChanges();
         },
         error: err => this.showMessagesService
-          .showMessageFailed("Problemas no servidor, tente novamente mais tarde")
+          .showMessage("Problemas no servidor, tente novamente mais tarde")
       })
   }
 
@@ -108,7 +108,7 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
         next: data => {
           if(data.length === 0) {
             this.noMoreDataFromApi = true;
-            this.showMessagesService.showMessageFailed("Nenhum dado a mais foi encontrado")
+            this.showMessagesService.showMessage("Nenhum dado a mais foi encontrado")
             return
           }
           const allData = this.data.concat(data)
@@ -116,7 +116,7 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
           this.changeDetectorRefs.detectChanges();
         },
         error: err => this.showMessagesService
-          .showMessageFailed("Problemas no servidor, tente novamente mais tarde")
+          .showMessage("Problemas no servidor, tente novamente mais tarde")
       })
   }
 
@@ -134,13 +134,13 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
         next: data => {
           if(data.length === 0) {
             this.noMoreDataFromApi = true;
-            this.showMessagesService.showMessageFailed("Nenhum dado a mais foi encontrado")
+            this.showMessagesService.showMessage("Nenhum dado a mais foi encontrado")
           }
           this.data = data
           this.changeDetectorRefs.detectChanges();
         },
         error: err => this.showMessagesService
-          .showMessageFailed("Problemas no servidor, tente novamente mais tarde")
+          .showMessage("Problemas no servidor, tente novamente mais tarde")
       })
   }
 }

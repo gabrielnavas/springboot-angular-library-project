@@ -23,14 +23,14 @@ export class PublisherCompanyCreateComponent {
   createPublisherCompany(): void {
     const error = this.publisherCompany.validate();
     if (error != null) {
-      this.showMessagesService.showMessageFailed(error.message);
+      this.showMessagesService.showMessage(error.message);
       return;
     }
 
     this.publisherCompanyService.createPublisherCompany(this.publisherCompany)
       .subscribe({
-        complete: () => this.showMessagesService.showMessageSuccess("Editora de livros adicionada"),
-        error: err => this.showMessagesService.showMessageFailed("Problemas no servidor, tente novamente mais tarde")
+        complete: () => this.showMessagesService.showMessage("Editora de livros adicionada"),
+        error: err => this.showMessagesService.showMessage("Problemas no servidor, tente novamente mais tarde")
       })
     this.initPublisherCompanyModel();
   }

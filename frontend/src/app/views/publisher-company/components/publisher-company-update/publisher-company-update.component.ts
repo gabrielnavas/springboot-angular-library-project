@@ -34,7 +34,7 @@ export class PublisherCompanyUpdateComponent {
           this.publisherCompany = new PublisherCompany(value.id, value.name)
         },
         error: err => {
-          this.showMessagesService.showMessageFailed("Tente novamente mais tarde.")
+          this.showMessagesService.showMessage("Tente novamente mais tarde.")
         },
       })
   }
@@ -44,17 +44,17 @@ export class PublisherCompanyUpdateComponent {
     .subscribe({
       complete: () => {
         this.initPublisherCompanyModel();
-        this.showMessagesService.showMessageSuccess("Editora de livros atualizada")
+        this.showMessagesService.showMessage("Editora de livros atualizada")
         this.router.navigateByUrl("publisher-company")
       },
       error: (err: HttpErrorResponse) => {
         if(err.status === 0) {
-          this.showMessagesService.showMessageFailed("Problemas no servidor, tente novamente mais tarde")
+          this.showMessagesService.showMessage("Problemas no servidor, tente novamente mais tarde")
         } else if(err.status === 400) {
           const alreadyExistsWithName = err.error.message === 
             `publishing company already exists with attribute name with value ${this.publisherCompany.name}`
           if(alreadyExistsWithName) {
-            this.showMessagesService.showMessageFailed("Editora de livros já existe com esse nome. \nTente com outro nome.")
+            this.showMessagesService.showMessage("Editora de livros já existe com esse nome. \nTente com outro nome.")
           }
         }
       }

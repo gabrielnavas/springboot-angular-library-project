@@ -32,11 +32,11 @@ export class PublisherCompanyRemoveComponent {
     .subscribe({
       complete: () => {
         this.initPublisherCompanyModel();
-        this.showMessagesService.showMessageSuccess("Editora de livros removida")
+        this.showMessagesService.showMessage("Editora de livros removida")
         this.router.navigateByUrl("publisher-company")
       },
       error: (err: HttpErrorResponse) => {
-        this.showMessagesService.showMessageFailed("Problemas no servidor, tente novamente mais tarde")
+        this.showMessagesService.showMessage("Problemas no servidor, tente novamente mais tarde")
       }
     })
   }
@@ -53,7 +53,7 @@ export class PublisherCompanyRemoveComponent {
           this.publisherCompany = new PublisherCompany(value.id, value.name)
         },
         error: err => {
-          this.showMessagesService.showMessageFailed("Tente novamente mais tarde.")
+          this.showMessagesService.showMessage("Tente novamente mais tarde.")
         },
       })
   }
