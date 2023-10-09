@@ -1,5 +1,7 @@
 package com.library.api.publishing_company;
 
+import com.library.api.publishing_company.hateoas.PublishingCompanyHateoasWithRel;
+import com.library.api.publishing_company.hateoas.PublishingCompanyMapperHateoas;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,9 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = PublishingCompanyController.REQUEST_MAPPING_PATH)
@@ -67,8 +66,8 @@ public class PublishingCompanyController {
         logger.info(String.format("HTTP POST %s", PublishingCompanyController.REQUEST_MAPPING_PATH));
         PublishingCompanyResponse response = publishingCompanyService.createPublishingCompany(request);
 
-        response.add(linkTo(methodOn(PublishingCompanyController.class)
-                .createPublishingCompany(request)).withSelfRel());
+        PublishingCompanyMapperHateoas.set(response, PublishingCompanyHateoasWithRel.CREATE_PUBLISHING_COMPANY);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -118,14 +117,11 @@ public class PublishingCompanyController {
                     put("name", name);
                 }}, pageable);
 
-
-        publishingCompanyResponses.forEach(publishingCompanyResponse -> {
-            publishingCompanyResponse.add(linkTo(methodOn(PublishingCompanyController.class)
-                    .createPublishingCompany(new PublishingCompanyRequest(""))).withRel("create new publishing company"));
-
-            publishingCompanyResponse.add(linkTo(methodOn(PublishingCompanyController.class)
-                    .getAllPublishingCompany(pageable, name)).withSelfRel());
-        });
+        PublishingCompanyMapperHateoas.set(
+                publishingCompanyResponses,
+                pageable,
+                PublishingCompanyHateoasWithRel.GET_ALL_PUBLISHING_COMPANIES
+        );
 
         return ResponseEntity.status(HttpStatus.OK).body(publishingCompanyResponses);
     }
@@ -222,6 +218,11 @@ public class PublishingCompanyController {
 
         PublishingCompanyResponse publishingCompanyResponse = publishingCompanyService
                 .getPublishingCompanyById(publishingCompanyId);
+
+        PublishingCompanyMapperHateoas.set(
+                publishingCompanyResponse,
+                PublishingCompanyHateoasWithRel.GET_PUBLISHING_COMPANY_BY_ID
+        );
 
         return ResponseEntity.status(HttpStatus.OK).body(publishingCompanyResponse);
     }
