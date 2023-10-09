@@ -1,6 +1,7 @@
 package com.library.api.exceptions.handler;
 
-import com.library.api.exceptions.ObjectAlreadyExistsWith;
+import com.library.api.exceptions.ObjectAlreadyExistsWithException;
+import com.library.api.exceptions.ObjectNotFoundException;
 import com.library.api.exceptions.http_responses.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +29,21 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
                 );
     }
 
-    @ExceptionHandler(ObjectAlreadyExistsWith.class)
-    public final ResponseEntity<ExceptionResponse> handleObjectAlreadyExistsWithExceptions(ObjectAlreadyExistsWith ex, WebRequest request) {
+    @ExceptionHandler(ObjectAlreadyExistsWithException.class)
+    public final ResponseEntity<ExceptionResponse> handleObjectAlreadyExistsWithExceptions(ObjectAlreadyExistsWithException ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(
+                        ExceptionResponse.builder()
+                                .timestamp(new Date())
+                                .details(request.getDescription(false))
+                                .message(ex.getMessage())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handleObjectAlreadyExistsWithExceptions(ObjectNotFoundException ex, WebRequest request) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(
                         ExceptionResponse.builder()
                                 .timestamp(new Date())

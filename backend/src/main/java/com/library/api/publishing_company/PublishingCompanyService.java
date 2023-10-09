@@ -1,6 +1,7 @@
 package com.library.api.publishing_company;
 
-import com.library.api.exceptions.ObjectAlreadyExistsWith;
+import com.library.api.exceptions.ObjectAlreadyExistsWithException;
+import com.library.api.exceptions.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,7 @@ public class PublishingCompanyService {
 
         Optional<PublishingCompany> optionalPublishingCompany = publishingCompanyRepository.findByName(data.name());
         if (optionalPublishingCompany.isPresent()) {
-            throw new ObjectAlreadyExistsWith("publishing company", data.name());
+            throw new ObjectAlreadyExistsWithException("publishing company", "name", data.name());
         }
         var publishingCompany = PublishingCompany.builder()
                 .id(UUID.randomUUID())
@@ -37,6 +38,31 @@ public class PublishingCompanyService {
                 .name(publishingCompany.getName())
                 .build();
 
+    }
+
+    public void updatePublishingCompany(UUID publishingCompanyId, PublishingCompanyRequest data) {
+        logger.info("update Publishing Company Service");
+
+        Optional<PublishingCompany> optionalPublishingCompany = publishingCompanyRepository
+                .findById(publishingCompanyId);
+        if (optionalPublishingCompany.isEmpty()) {
+            throw new ObjectNotFoundException("publishing company");
+        }
+
+        Optional<PublishingCompany> optionalPublishingCompanyByName = publishingCompanyRepository
+                .findByName(data.name());
+        if (optionalPublishingCompanyByName.isPresent()
+                && !optionalPublishingCompanyByName.get().getId().equals(publishingCompanyId)) {
+            throw new ObjectAlreadyExistsWithException(
+                    "publishing company",
+                    "name",
+                    optionalPublishingCompanyByName.get().getName()
+            );
+        }
+
+        PublishingCompany publishingCompany = optionalPublishingCompany.get();
+        publishingCompany.setName(data.name());
+        publishingCompanyRepository.save(publishingCompany);
     }
 
     public List<PublishingCompanyResponse> getAllPublishingCompany(Map<String, String> filters, Pageable pageable) {

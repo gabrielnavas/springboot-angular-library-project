@@ -18,10 +18,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.type.TypeReference;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.DeserializationFeature;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.BiFunction;
 
 import static io.restassured.RestAssured.given;
@@ -32,55 +35,59 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
 
-    private static PublishingCompanyResponse publishingCompanyResponse;
+    private static final int numberOfCreatePublishingCompanyResponse = 2;
+
+    private static PublishingCompanyResponse[] publishingCompanyResponses;
     private static PublishingCompanyRequest publishingCompanyRequest;
 
     @BeforeAll
     public static void setup() {
         objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        publishingCompanyResponse = null;
         publishingCompanyRequest = null;
+        publishingCompanyResponses = new PublishingCompanyResponse[numberOfCreatePublishingCompanyResponse];
     }
 
     @Test
     @Order(1)
     public void testCreatePublishingCompany() throws IOException {
-        publishingCompanyRequest = createMockPublishingCompanyRequest();
+        for (int index = 0; index < numberOfCreatePublishingCompanyResponse; ++index) {
+            publishingCompanyRequest = createMockPublishingCompanyRequest(null);
 
-        specification = new RequestSpecBuilder()
-                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
-                .setBasePath("/api/v1/publishing-company")
-                .setPort(TestConfigs.SERVER_PORT)
-                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-                .build();
+            specification = new RequestSpecBuilder()
+                    .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                    .setBasePath("/api/v1/publishing-company")
+                    .setPort(TestConfigs.SERVER_PORT)
+                    .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                    .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                    .build();
 
-        Response response = given().spec(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .body(publishingCompanyRequest)
-                .when()
-                .post()
-                .then()
-                .extract()
-                .response();
+            Response response = given().spec(specification)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .accept(MediaType.APPLICATION_JSON_VALUE)
+                    .body(publishingCompanyRequest)
+                    .when()
+                    .post()
+                    .then()
+                    .extract()
+                    .response();
 
-        Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
+            Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
 
-        publishingCompanyResponse = objectMapper
-                .readValue(response.body().asString(), PublishingCompanyResponse.class);
+            publishingCompanyResponses[index] = objectMapper
+                    .readValue(response.body().asString(), PublishingCompanyResponse.class);
 
-        Assertions.assertNotNull(publishingCompanyResponse.getKey());
-        Assertions.assertNotNull(publishingCompanyResponse.getName());
+            Assertions.assertNotNull(publishingCompanyResponses[index].getKey());
+            Assertions.assertNotNull(publishingCompanyResponses[index].getName());
 
-        Assertions.assertEquals(publishingCompanyResponse.getName(), publishingCompanyRequest.name());
+            Assertions.assertEquals(publishingCompanyResponses[index].getName(), publishingCompanyRequest.name());
+        }
     }
 
     @Test
     @Order(2)
     public void testCreatePublishingCompanyWithWrongOrigin() throws IOException {
-        publishingCompanyRequest = createMockPublishingCompanyRequest();
+        publishingCompanyRequest = createMockPublishingCompanyRequest(null);
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
@@ -102,7 +109,6 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
     }
-
 
     @Test
     @Order(3)
@@ -129,7 +135,7 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
                 .readValue(response.body().asString(), PublishingCompanyResponse[].class);
 
         Assertions.assertNotNull(publishingCompanyResponses);
-        Assertions.assertEquals(1, publishingCompanyResponses.length);
+        Assertions.assertEquals(numberOfCreatePublishingCompanyResponse, publishingCompanyResponses.length);
 
         for (var pc : publishingCompanyResponses) {
             System.out.println(pc.getName());
@@ -161,7 +167,7 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
         String url = String.format(
                 "/api/v1/publishing-company?name=%s",
                 upperLower.apply(
-                        getSubString.apply(publishingCompanyResponse.getName(), substringLength),
+                        getSubString.apply(publishingCompanyResponses[0].getName(), substringLength),
                         substringLength
                 )
         );
@@ -183,10 +189,11 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
         Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
 
-        PublishingCompanyResponse[] publishingCompanyResponses = objectMapper.readValue(response.body().asString(), PublishingCompanyResponse[].class);
+        PublishingCompanyResponse[] publishingCompanyResponses = objectMapper
+                .readValue(response.body().asString(), PublishingCompanyResponse[].class);
 
         Assertions.assertNotNull(publishingCompanyResponses);
-        Assertions.assertEquals(1, publishingCompanyResponses.length);
+        Assertions.assertEquals(numberOfCreatePublishingCompanyResponse, publishingCompanyResponses.length);
 
         for (var pc : publishingCompanyResponses) {
             System.out.println(pc.getName());
@@ -218,8 +225,125 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
     }
 
+    @Test
+    @Order(6)
+    public void testUpdatePublishingCompany() {
+        PublishingCompanyRequest publishingCompanyRequestUpdated = createMockPublishingCompanyRequest(null);
 
-    private PublishingCompanyRequest createMockPublishingCompanyRequest() {
-        return new PublishingCompanyRequest(Faker.instance().book().publisher());
+        String urlUpdate = String.format("/api/v1/publishing-company/%s", publishingCompanyResponses[0].getKey());
+
+        RequestSpecification specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(urlUpdate)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(publishingCompanyRequestUpdated)
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(7)
+    public void testUpdatePublishingCompanyWithWrongCors() {
+        String urlUpdate = String.format("/api/v1/publishing-company/%s", createMockPublishingCompanyRequest(null));
+
+        RequestSpecification specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setBasePath(urlUpdate)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(createMockPublishingCompanyRequest(null))
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(8)
+    public void testUpdatePublishingCompanyWithSameName() throws IOException {
+        var publishingCompanySameName = createMockPublishingCompanyRequest(publishingCompanyResponses[1].getName());
+        UUID differentId = publishingCompanyResponses[0].getKey();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(String.format("/api/v1/publishing-company/%s", differentId))
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(publishingCompanySameName)
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
+
+        Map<String, Object> jsonMap = objectMapper
+                .readValue(response.body().asString(), new TypeReference<Object>() {
+                });
+
+
+        Assertions.assertEquals(String.format("publishing company already exists with attribute name with value %s", publishingCompanySameName.name()), jsonMap.get("message"));
+    }
+
+    @Test
+    @Order(9)
+    public void testUpdatePublishingCompanyReturningNotFound() throws IOException {
+        var randomObject = createMockPublishingCompanyRequest(null);
+        UUID fakeId = UUID.randomUUID();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(String.format("/api/v1/publishing-company/%s", fakeId))
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(randomObject)
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+
+        Map<String, Object> jsonMap = objectMapper
+                .readValue(response.body().asString(), new TypeReference<Object>() {
+                });
+
+
+        Assertions.assertEquals("publishing company not found", jsonMap.get("message"));
+    }
+
+    private PublishingCompanyRequest createMockPublishingCompanyRequest(String name) {
+        return new PublishingCompanyRequest(name == null ? Faker.instance().book().publisher() : name);
     }
 }

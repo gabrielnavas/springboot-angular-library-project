@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -126,5 +127,50 @@ public class PublishingCompanyController {
         });
 
         return ResponseEntity.status(HttpStatus.OK).body(publishingCompanyResponses);
+    }
+
+    @PatchMapping("{publishingCompanyId}")
+
+    @Operation(
+            summary = "Patch a Publishing Companies",
+            description = "Endpoint to Patch a Publishing Companies",
+            tags = {"PublishingCompany"},
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "204",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "404",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "InternalServerError",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
+    public ResponseEntity<?> updatePublishingCompany(
+            @PathVariable("publishingCompanyId") UUID publishingCompanyId,
+            @RequestBody PublishingCompanyRequest PublishingCompanyRequest
+    ) {
+        logger.info(
+                String.format(
+                        "HTTP PATCH %s/%s",
+                        PublishingCompanyController.REQUEST_MAPPING_PATH,
+                        publishingCompanyId
+                )
+        );
+
+        publishingCompanyService.updatePublishingCompany(publishingCompanyId, PublishingCompanyRequest);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

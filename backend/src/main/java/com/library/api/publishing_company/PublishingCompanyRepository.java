@@ -10,7 +10,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PublishingCompanyRepository extends JpaRepository<PublishingCompany, UUID> {
-    Optional<PublishingCompany> findByName(String name);
+    @Query("SELECT c FROM PublishingCompany c WHERE c.name =:name")
+    Optional<PublishingCompany> findByName(@Param("name") String name);
 
     @Query("SELECT c FROM PublishingCompany c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%',:name,'%'))")
     Page<PublishingCompany> findAllByName(@Param("name") String name, Pageable pageable);
