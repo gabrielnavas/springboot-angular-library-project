@@ -86,7 +86,7 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
     @Test
     @Order(2)
-    public void testCreatePublishingCompanyWithWrongOrigin() throws IOException {
+    public void testCreatePublishingCompanyWithWrongOrigin() {
         publishingCompanyRequest = createMockPublishingCompanyRequest(null);
 
         specification = new RequestSpecBuilder()
@@ -153,10 +153,11 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
             StringBuilder sb = new StringBuilder();
             int index = 0;
             while (index < s.length() && index < length) {
+                String chr = String.format("%s", s.charAt(index));
                 if (length % 2 == 0) {
-                    sb.append((s.charAt(index) + "").toLowerCase());
+                    sb.append(chr.toLowerCase());
                 } else {
-                    sb.append((s.charAt(index) + "").toUpperCase());
+                    sb.append(chr.toUpperCase());
                 }
                 index++;
             }
@@ -205,7 +206,7 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
     @Test
     @Order(5)
-    public void testGetAllPublishingCompanyWithWrongCors() throws IOException {
+    public void testGetAllPublishingCompanyWithWrongCors() {
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
                 .setBasePath("/api/v1/publishing-company")
@@ -303,7 +304,7 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
         Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
 
         Map<String, Object> jsonMap = objectMapper
-                .readValue(response.body().asString(), new TypeReference<Object>() {
+                .readValue(response.body().asString(), new TypeReference<>() {
                 });
 
 
@@ -336,7 +337,7 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
         Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
 
         Map<String, Object> jsonMap = objectMapper
-                .readValue(response.body().asString(), new TypeReference<Object>() {
+                .readValue(response.body().asString(), new TypeReference<>() {
                 });
 
 
