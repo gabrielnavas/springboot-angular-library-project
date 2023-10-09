@@ -56,7 +56,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="publishing_company" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1400" y="640"/>
+	<position x="1380" y="640"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -65,6 +65,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<constraint name="publishing_company_pk" type="pk-constr" table="public.publishing_company">
 		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="publishing_company_unique_name" type="uq-constr" table="public.publishing_company">
+		<columns names="name" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -120,6 +123,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<constraint name="classification_books_pk" type="pk-constr" table="public.classification_books">
 		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="classification_books_unique_name" type="uq-constr" table="public.classification_books">
+		<columns names="name" ref-type="src-columns"/>
 	</constraint>
 </table>
 
