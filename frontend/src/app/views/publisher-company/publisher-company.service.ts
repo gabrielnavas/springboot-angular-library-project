@@ -25,6 +25,10 @@ export class PublisherCompanyService {
   
   private static FIND_PUBLISHER_COMPANY_BY_ID_URL = 
     `${environment.endpoints.baseUrl}/${environment.endpoints.publishingCompany.baseUrl}`
+  
+  private static REMOVE_PUBLISHER_COMPANY_BY_ID_URL = 
+    `${environment.endpoints.baseUrl}/${environment.endpoints.publishingCompany.baseUrl}`
+
   constructor(
     private httpClient: HttpClient
   ) { }
@@ -59,5 +63,10 @@ export class PublisherCompanyService {
   findPublisherCompanyById(publisherCompanyId: string): Observable<PublisherCompany> {
     const url = `${PublisherCompanyService.FIND_PUBLISHER_COMPANY_BY_ID_URL}/${publisherCompanyId}`
     return this.httpClient.get<PublisherCompany>(url)
+  }
+
+  removePublisherCompanyById(publisherCompanyId: string): Observable<PublisherCompany> {
+    const url = `${PublisherCompanyService.REMOVE_PUBLISHER_COMPANY_BY_ID_URL}/${publisherCompanyId}`
+    return this.httpClient.delete<PublisherCompany>(url)
   }
 }
