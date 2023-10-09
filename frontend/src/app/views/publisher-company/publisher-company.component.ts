@@ -8,11 +8,6 @@ import { Router } from '@angular/router';
 })
 export class PublisherCompanyComponent {
 
-  constructor(
-    private router: Router
-  ) {}
+  constructor() {}
 
-  navigateToPublisherCompanyCreate(): void {
-    this.router.navigateByUrl("publisher-company/create")
-  }
 }

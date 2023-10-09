@@ -20,6 +20,12 @@ export class PublisherCompanyService {
   private static FIND_ALL_PUBLISHER_COMPANY_URL = 
     `${environment.endpoints.baseUrl}/${environment.endpoints.publishingCompany.baseUrl}`
 
+  private static UPDATE_PUBLISHER_COMPANY_URL = 
+    `${environment.endpoints.baseUrl}/${environment.endpoints.publishingCompany.baseUrl}`
+  
+  private static FIND_PUBLISHER_COMPANY_BY_ID_URL = 
+    `${environment.endpoints.baseUrl}/${environment.endpoints.publishingCompany.baseUrl}`
+
   constructor(
     private httpClient: HttpClient
   ) { }
@@ -41,5 +47,18 @@ export class PublisherCompanyService {
     }
     const url = `${PublisherCompanyService.FIND_ALL_PUBLISHER_COMPANY_URL}?page=${page}&size=${size}&sort=name,ASC${queryParams}`
     return this.httpClient.get<PublisherCompany[]>(url)
+  }
+
+  updatePublisherCompany(publisherCompanyId: string, publisherCompany: PublisherCompany): Observable<PublisherCompany> {
+    const url = `${PublisherCompanyService.UPDATE_PUBLISHER_COMPANY_URL}/${publisherCompanyId}`
+    return this.httpClient.patch<PublisherCompany>(
+      url, 
+      publisherCompany
+    )
+  }
+
+  findPublisherCompanyById(publisherCompanyId: string): Observable<PublisherCompany> {
+    const url = `${PublisherCompanyService.UPDATE_PUBLISHER_COMPANY_URL}/${publisherCompanyId}`
+    return this.httpClient.get<PublisherCompany>(url)
   }
 }

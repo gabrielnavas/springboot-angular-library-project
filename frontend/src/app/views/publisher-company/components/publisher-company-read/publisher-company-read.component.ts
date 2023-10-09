@@ -3,6 +3,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, ViewChild } 
 import { ShowMessagesService } from '../../show-messages.service';
 import { FindAllFilters, PublisherCompanyService } from '../../publisher-company.service';
 import { PublisherCompany } from '../../publisher-company.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'views-publisher-company-read',
@@ -25,7 +26,8 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
   constructor(
     private publisherCompanyService: PublisherCompanyService,
     private showMessagesService: ShowMessagesService,
-    private changeDetectorRefs: ChangeDetectorRef
+    private changeDetectorRefs: ChangeDetectorRef,
+    private router: Router
   ) { }
 
   ngAfterViewInit(): void {
@@ -77,6 +79,10 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
     } else {
       this.findAllByFilter();
     }
+  }
+
+  navigateToPublisherCompanyCreate(): void {
+    this.router.navigateByUrl("publisher-company/create")
   }
 
   private findAllInitPage(): void {

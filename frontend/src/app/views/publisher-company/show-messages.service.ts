@@ -23,7 +23,7 @@ export class ShowMessagesService {
   
   private showMessage(message: string, typeMessage: TypeMessage): void {
     this.snackBar.open(message, 'x', {
-      duration: 5000,
+      duration: 10000,
       horizontalPosition: 'right',
       verticalPosition: 'top',
       panelClass: [typeMessage],
