@@ -158,6 +158,103 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
         Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponses[0].getName());
     }
 
+
+    @Test
+    @Order(5)
+    public void testGetAllClassificationBooksWithName() throws IOException {
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath("/api/v1/classification-book")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("name", classificationBookResponse.getName())
+                .body(classificationBookRequest)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+
+        ClassificationBookResponse[] classificationBookResponses = objectMapper
+                .readValue(response.body().asString(), ClassificationBookResponse[].class);
+
+        Assertions.assertEquals(1, classificationBookResponses.length);
+
+        Assertions.assertNotNull(classificationBookResponses[0].getKey());
+        Assertions.assertNotNull(classificationBookResponses[0].getName());
+
+        Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponses[0].getName());
+    }
+
+
+    @Test
+    @Order(6)
+    public void testGetAllClassificationBooksWithNameAndPageable() throws IOException {
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath("/api/v1/classification-book")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("name", classificationBookResponse.getName())
+                .queryParam("page", 0)
+                .queryParam("page", 1)
+                .body(classificationBookRequest)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+
+        ClassificationBookResponse[] classificationBookResponses = objectMapper
+                .readValue(response.body().asString(), ClassificationBookResponse[].class);
+
+        Assertions.assertEquals(1, classificationBookResponses.length);
+
+        Assertions.assertNotNull(classificationBookResponses[0].getKey());
+        Assertions.assertNotNull(classificationBookResponses[0].getName());
+
+        Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponses[0].getName());
+    }
+
+
+    @Test
+    @Order(7)
+    public void testGetAllClassificationBooksWithWrongCors() throws IOException {
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setBasePath("/api/v1/classification-book")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(classificationBookRequest)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
+
     private ClassificationBookRequest createMockClassificationBookRequest(String name) {
         return new ClassificationBookRequest(name == null ? Faker.instance().book().publisher() : name);
     }

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -35,14 +36,26 @@ public class ClassificationBookService {
                 .build();
     }
 
-    public List<ClassificationBookResponse> getAllClassificationBooks(Pageable pageable) {
-        return classificationBookRepository.findAll(pageable)
-                .stream()
-                .map(cb -> ClassificationBookResponse.builder()
-                        .name(cb.getName())
-                        .key(cb.getId())
-                        .build()
-                )
-                .toList();
+    public List<ClassificationBookResponse> getAllClassificationBooks(Map<String, Object> filters, Pageable pageable) {
+        String name = ((String) filters.get("name"));
+
+        if (name.length() > 0) {
+            return classificationBookRepository.findAllByName(name, pageable)
+                    .map(cb -> ClassificationBookResponse.builder()
+                            .name(cb.getName())
+                            .key(cb.getId())
+                            .build()
+                    )
+                    .toList();
+        } else {
+            return classificationBookRepository.findAll(pageable)
+                    .stream()
+                    .map(cb -> ClassificationBookResponse.builder()
+                            .name(cb.getName())
+                            .key(cb.getId())
+                            .build()
+                    )
+                    .toList();
+        }
     }
 }

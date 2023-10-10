@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -49,7 +50,7 @@ public class ClassificationBookController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
-    public ResponseEntity<Object> createClassifcationBook(
+    public ResponseEntity<Object> createClassificationBook(
             @RequestBody ClassificationBookRequest request
     ) {
         ClassificationBookResponse response = classificationBookService.createClassificationBook(request);
@@ -84,10 +85,15 @@ public class ClassificationBookController {
     )
     @GetMapping
     public ResponseEntity<Object> getAllClassificationBooks(
-            Pageable pageable
+            Pageable pageable,
+            @RequestParam(value = "name", required = false, defaultValue = "") String name
     ) {
         List<ClassificationBookResponse> classificationBooksResponse =
-                this.classificationBookService.getAllClassificationBooks(pageable);
+                this.classificationBookService.getAllClassificationBooks(
+                        new HashMap<>() {{
+                            put("name", name);
+                        }},
+                        pageable);
         return ResponseEntity.status(HttpStatus.OK).body(classificationBooksResponse);
     }
 }
