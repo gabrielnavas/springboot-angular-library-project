@@ -76,7 +76,7 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
     @Test
     @Order(2)
-    public void testCreateClassificationBookAlreadyExistsName() {
+    public void testCreateClassificationBookAlreadyExistsName() throws IOException {
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
                 .setBasePath("/api/v1/classification-book")
@@ -101,7 +101,7 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
     @Test
     @Order(3)
-    public void testCreateClassificationBookWithWrongCors() throws IOException {
+    public void testCreateClassificationBookWithWrongCors() {
         ClassificationBookRequest classificationBookRequest = createMockClassificationBookRequest(null);
 
         specification = new RequestSpecBuilder()
@@ -123,6 +123,39 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
                 .response();
 
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(4)
+    public void testGetAllClassificationBooks() throws IOException {
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath("/api/v1/classification-book")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(classificationBookRequest)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+
+        ClassificationBookResponse[] classificationBookResponses = objectMapper
+                .readValue(response.body().asString(), ClassificationBookResponse[].class);
+
+        Assertions.assertEquals(1, classificationBookResponses.length);
+
+        Assertions.assertNotNull(classificationBookResponses[0].getKey());
+        Assertions.assertNotNull(classificationBookResponses[0].getName());
+
+        Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponses[0].getName());
     }
 
     private ClassificationBookRequest createMockClassificationBookRequest(String name) {
