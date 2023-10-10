@@ -9,6 +9,6 @@ import java.util.UUID;
 
 public interface ClassificationBookRepository extends JpaRepository<ClassificationBook, UUID> {
 
-    @Query("SELECT c FROM ClassificationBook c WHERE c.name =:name")
+    @Query("SELECT c FROM ClassificationBook c WHERE c.name = :name")
     Optional<ClassificationBook> findByName(@Param("name") String name);
 }
