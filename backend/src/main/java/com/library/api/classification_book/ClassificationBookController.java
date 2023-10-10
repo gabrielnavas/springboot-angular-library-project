@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/v1/classification-book")
@@ -94,6 +95,47 @@ public class ClassificationBookController {
                             put("name", name);
                         }},
                         pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(classificationBooksResponse);
+    }
+
+
+    @Operation(
+            summary = "Get Classification Book By Id",
+            description = "Endpoint to Get Classification Book By Id",
+            tags = {"ClassificationBook"},
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = ClassificationBookResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "404",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "InternalServerError",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
+    @GetMapping("{id}")
+    public ResponseEntity<Object> getClassificationBookById(
+            @PathVariable(value = "id") UUID id
+    ) {
+        ClassificationBookResponse classificationBooksResponse =
+                this.classificationBookService.getClassificationBookById(id);
         return ResponseEntity.status(HttpStatus.OK).body(classificationBooksResponse);
     }
 }

@@ -19,6 +19,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.DeserializationF
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 
@@ -138,7 +139,6 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
         Response response = given().spec(specification)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .body(classificationBookRequest)
                 .when()
                 .get()
                 .then()
@@ -173,7 +173,6 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
         Response response = given().spec(specification)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("name", classificationBookResponse.getName())
-                .body(classificationBookRequest)
                 .when()
                 .get()
                 .then()
@@ -210,7 +209,6 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
                 .queryParam("name", classificationBookResponse.getName())
                 .queryParam("page", 0)
                 .queryParam("page", 1)
-                .body(classificationBookRequest)
                 .when()
                 .get()
                 .then()
@@ -233,7 +231,7 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
     @Test
     @Order(7)
-    public void testGetAllClassificationBooksWithWrongCors() throws IOException {
+    public void testGetAllClassificationBooksWithWrongCors() {
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
                 .setBasePath("/api/v1/classification-book")
@@ -244,7 +242,6 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
         Response response = given().spec(specification)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .body(classificationBookRequest)
                 .when()
                 .get()
                 .then()
@@ -254,6 +251,82 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
     }
 
+
+    @Test
+    @Order(8)
+    public void testGetClassificationBookById() throws IOException {
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/api/v1/classification-book/{id}", classificationBookResponse.getKey())
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+
+        ClassificationBookResponse classificationBookResponse = objectMapper
+                .readValue(response.body().asString(), ClassificationBookResponse.class);
+
+        Assertions.assertNotNull(classificationBookResponse.getKey());
+        Assertions.assertNotNull(classificationBookResponse.getName());
+
+        Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponse.getName());
+    }
+
+
+    @Test
+    @Order(9)
+    public void testGetClassificationBookByIdWithWrongCors() {
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/api/v1/classification-book/{id}", classificationBookResponse.getKey())
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
+
+    @Test
+    @Order(10)
+    public void testGetClassificationBookByIdNotFound() {
+        UUID fakeId = UUID.randomUUID();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(classificationBookRequest)
+                .when()
+                .get("/api/v1/classification-book/{id}", fakeId)
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+    }
 
     private ClassificationBookRequest createMockClassificationBookRequest(String name) {
         return new ClassificationBookRequest(name == null ? Faker.instance().book().publisher() : name);

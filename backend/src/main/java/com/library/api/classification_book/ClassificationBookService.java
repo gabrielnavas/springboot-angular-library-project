@@ -1,6 +1,7 @@
 package com.library.api.classification_book;
 
 import com.library.api.exceptions.ObjectAlreadyExistsWithException;
+import com.library.api.exceptions.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -57,5 +59,20 @@ public class ClassificationBookService {
                     )
                     .toList();
         }
+    }
+
+
+    public ClassificationBookResponse getClassificationBookById(UUID id) {
+        Optional<ClassificationBook> optionalClassificationBook = classificationBookRepository.findById(id);
+        if (optionalClassificationBook.isEmpty()) {
+            throw new ObjectNotFoundException("classification book");
+        }
+
+        ClassificationBook classificationBook = optionalClassificationBook.get();
+
+        return ClassificationBookResponse.builder()
+                .key(classificationBook.getId())
+                .name(classificationBook.getName())
+                .build();
     }
 }
