@@ -18,6 +18,9 @@ import { PublisherCompanyCreateComponent } from './components/publisher-company-
 import { PublisherCompanyReadComponent } from './components/publisher-company-read/publisher-company-read.component';
 import { PublisherCompanyUpdateComponent } from './components/publisher-company-update/publisher-company-update.component';
 import { PublisherCompanyRemoveComponent } from './components/publisher-company-remove/publisher-company-remove.component';
+import { UtilsModule } from '../utils/utils.module';
+
+
 
 
 @NgModule({
@@ -39,6 +42,7 @@ import { PublisherCompanyRemoveComponent } from './components/publisher-company-
     HttpClientModule,
     MatSnackBarModule,
     MatTableModule,
+    UtilsModule
   ]
 })
 export class PublisherCompanyModule { }

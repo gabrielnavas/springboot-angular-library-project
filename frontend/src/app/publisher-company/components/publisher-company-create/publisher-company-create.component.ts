@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { PublisherCompany } from '../../publisher-company.model';
 import { PublisherCompanyService } from '../../publisher-company.service';
-import { ShowMessagesService } from '../../show-messages.service';
+import { ShowMessagesService } from '../../../utils/show-messages.service';
 
 
 @Component({

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { PublisherCompany } from '../../publisher-company.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PublisherCompanyService } from '../../publisher-company.service';
-import { ShowMessagesService } from '../../show-messages.service';
+import { ShowMessagesService } from '../../../utils/show-messages.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({

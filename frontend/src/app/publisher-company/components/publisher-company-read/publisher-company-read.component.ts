@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, ViewChild } from '@angular/core';
 
-import { ShowMessagesService } from '../../show-messages.service';
+import { ShowMessagesService } from '../../../utils/show-messages.service';
 import { FindAllFilters, PublisherCompanyService } from '../../publisher-company.service';
 import { PublisherCompany } from '../../publisher-company.model';
 import { Router } from '@angular/router';
