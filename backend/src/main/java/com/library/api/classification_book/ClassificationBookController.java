@@ -27,7 +27,7 @@ public class ClassificationBookController {
     @Operation(
             summary = "Create Classification Book",
             description = "Endpoint to Create an Classification Book",
-            tags = {"PublishingCompany"},
+            tags = {"ClassificationBook"},
             responses = {
                     @ApiResponse(
                             description = "Created",
@@ -60,7 +60,7 @@ public class ClassificationBookController {
     @Operation(
             summary = "Get All Classification Book",
             description = "Endpoint to Get All an Classification Book",
-            tags = {"PublishingCompany"},
+            tags = {"ClassificationBook"},
             responses = {
                     @ApiResponse(
                             description = "Success",
