@@ -1,0 +1,88 @@
+<mat-card class="card-container">
+  
+  <mat-card-title class="card-title">
+    Classificações de livros
+  </mat-card-title>
+  <mat-card-subtitle class="card-subitle">
+    Buscar e listar 
+  </mat-card-subtitle>
+  
+  <mat-card-content>
+    <form class="search-field-container">
+      <mat-form-field class="search-input-field">
+        <mat-label>Buscar por nome</mat-label>
+        <input 
+              matInput
+              type="text"
+              autofocus
+              name="input-search"
+              placeholder="John Lotty">
+      </mat-form-field>
+    
+      <div class="search-field-buttons">
+        <button 
+          color="warn"
+          mat-raised-button>
+          <i class="material-icons">search</i>
+          Buscar
+        </button>
+    
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="navigateToCreateClassificationBook()">
+          <i class="material-icons">note_add</i>
+          Novo
+        </button>
+      
+        <button 
+          mat-raised-button
+          (click)="initDataView()">
+          <i class="material-icons">cancel</i>
+          Buscar todos
+        </button>
+      </div>
+    </form>
+    
+    <div class="table-container mat-elevation-z8">
+      <table [dataSource]="data" mat-table class="full-width-table" matSort aria-label="Elements">
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+          <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+        </ng-container>
+    
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let row"  class="td-actions">
+            <a routerLink="">
+              <button mat-raised-button>
+                <i class="material-icons">edit</i>
+                Alterar
+              </button>
+            </a>
+            <a routerLink="">
+              <button mat-raised-button>
+                <i class="material-icons">delete</i>
+                Remover
+              </button>
+            </a>
+          </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    
+      <button 
+        class="button-load-more-data"
+        mat-raised-button 
+        color="primary">
+          <span>
+            Obter mais
+          </span>
+        </button>
+    </div>
+  </mat-card-content>
+</mat-card>

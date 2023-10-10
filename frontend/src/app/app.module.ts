@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { TemplatesModule } from './templates/templates.module';
 
 import { PublisherCompanyModule } from './publisher-company/publisher-company.module';
+import { ClassificationBookModule } from './classification-book/classification-book.module';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { PublisherCompanyModule } from './publisher-company/publisher-company.mo
     BrowserModule,
     BrowserAnimationsModule,
     TemplatesModule,
-    PublisherCompanyModule
+    PublisherCompanyModule,
+    ClassificationBookModule
   ],
   providers: [],
   bootstrap: [AppComponent]
