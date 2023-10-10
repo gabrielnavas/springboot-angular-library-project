@@ -3,7 +3,7 @@ import { PublisherCompany } from './publisher-company.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '../../environments/environment';
 
 export type FindAllFilters = {
   name: string

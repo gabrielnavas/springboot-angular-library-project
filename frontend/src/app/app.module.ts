@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
-import { TemplateModule } from './template/template.module';
+import { TemplatesModule } from './templates/templates.module';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PublisherCompanyModule } from './views/publisher-company/publisher-company.module';
+import { PublisherCompanyModule } from './publisher-company/publisher-company.module';
 
 
 @NgModule({
@@ -15,7 +15,7 @@ import { PublisherCompanyModule } from './views/publisher-company/publisher-comp
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    TemplateModule,
+    TemplatesModule,
     PublisherCompanyModule
   ],
   providers: [],
