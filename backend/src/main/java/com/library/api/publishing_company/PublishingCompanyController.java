@@ -32,8 +32,6 @@ public class PublishingCompanyController {
     private final PublishingCompanyService publishingCompanyService;
     private final Logger logger = Logger.getLogger(PublishingCompanyController.class.getName());
 
-    // TODO: CONFIGURE HATEOAS
-
     @PostMapping(
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
