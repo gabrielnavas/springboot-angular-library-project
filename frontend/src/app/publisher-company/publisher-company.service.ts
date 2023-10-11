@@ -40,7 +40,7 @@ export class PublisherCompanyService {
     )
   }
 
-  findAll(page: number=0, size: number = 10, filters: FindAllFilters): Observable<PublisherCompany[]> {
+  findAllPublisherCompany(page: number=0, size: number = 10, filters: FindAllFilters): Observable<PublisherCompany[]> {
     console.log(filters);
     
     let queryParams = ""

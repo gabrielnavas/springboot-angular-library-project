@@ -86,7 +86,11 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
   }
 
   private findAllInitPage(): void {
-    this.publisherCompanyService.findAll(this.pageApi, this.pageSizeApi, {name: this.searchInputField})
+    this.publisherCompanyService.findAllPublisherCompany(
+      this.pageApi, 
+      this.pageSizeApi, 
+      {name: this.searchInputField}
+    )
       .subscribe({
         next: data => {
           if(data.length === 0) {
@@ -103,7 +107,7 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
   }
 
   private findAllByMoreData(): void {
-    this.publisherCompanyService.findAll(this.pageApi, this.pageSizeApi, {name: this.searchInputField})
+    this.publisherCompanyService.findAllPublisherCompany(this.pageApi, this.pageSizeApi, {name: this.searchInputField})
       .subscribe({
         next: data => {
           if(data.length === 0) {
@@ -129,7 +133,7 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
       this.pageApi = 0;
       filters.name = this.searchInputField.trim()
     }
-    this.publisherCompanyService.findAll(this.pageApi, this.pageSizeApi, filters)
+    this.publisherCompanyService.findAllPublisherCompany(this.pageApi, this.pageSizeApi, filters)
       .subscribe({
         next: data => {
           if(data.length === 0) {
