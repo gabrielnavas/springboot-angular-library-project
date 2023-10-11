@@ -40,7 +40,7 @@ export class ClassificationBookCreateComponent {
             this.showMessagesService.showMessage("Problemas no servidor, tente novamente mais tarde")
           } else if(err.status === 400) {
             const alreadyExistsWithName = err.error.message === 
-              `publishing company already exists with attribute name with value ${this.classificationBook.name}`
+              `classification book already exists with attribute name with value ${this.classificationBook.name}`
             if(alreadyExistsWithName) {
               this.showMessagesService.showMessage("Classificação de livro já existe com esse nome. \nTente com outro nome.")
             }

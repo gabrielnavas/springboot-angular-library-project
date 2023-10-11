@@ -1,0 +1,34 @@
+<mat-card class="container">
+  <mat-card-title class="title">Gerenciar Classificação de livros</mat-card-title>
+  <mat-card-subtitle class="subtitle">Atualizar uma classificação de livros</mat-card-subtitle>
+
+  <form>
+      <mat-form-field>
+        <mat-label>Nome</mat-label>
+        <input 
+          matInput
+          [(ngModel)]="classificationBook.name"
+          (keypress)="keyPress($event)"
+          type="text"
+          autofocus
+          name="name"
+          placeholder="Globo books">
+      </mat-form-field>
+  </form>
+
+  <div>
+    <button 
+      mat-raised-button
+      color="primary"
+      (click)="updateClassificationBook()">
+      <i class="material-icons">note_add</i>
+      Atualizar
+    </button>
+    <button 
+      mat-raised-button
+      (click)="cancel()">
+      <i class="material-icons">cancel</i>
+      Cancelar
+    </button>
+  </div>
+</mat-card>

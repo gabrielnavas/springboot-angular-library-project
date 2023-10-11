@@ -17,6 +17,7 @@ import { ClassificationBookComponent } from './classification-book.component';
 import { ClassificationBookReadComponent } from './components/classification-book-read/classification-book-read.component';
 import { ClassificationBookCreateComponent } from './components/classification-book-create/classification-book-create.component';
 import { UtilsModule } from '../utils/utils.module';
+import { ClassificationBookUpdateComponent } from './components/classification-book-update/classification-book-update.component';
 
 
 
@@ -25,6 +26,7 @@ import { UtilsModule } from '../utils/utils.module';
     ClassificationBookComponent,
     ClassificationBookReadComponent,
     ClassificationBookCreateComponent,
+    ClassificationBookUpdateComponent,
   ],
   imports: [
     CommonModule,

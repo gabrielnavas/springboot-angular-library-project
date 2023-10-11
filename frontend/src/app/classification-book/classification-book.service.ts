@@ -16,10 +16,17 @@ export type FindAllFilters = {
 export class ClassificationBookService {
 
   private static CREATE_CLASSIFICATION_BOOK_URL = 
-    `${environment.endpoints.baseUrl}/${environment.endpoints.publishingCompany.baseUrl}`
+    `${environment.endpoints.baseUrl}/${environment.endpoints.classificationBook.baseUrl}`
 
   private static FIND_ALL_CLASSIFICATION_BOOK_URL = 
     `${environment.endpoints.baseUrl}/${environment.endpoints.classificationBook.baseUrl}`
+
+  private static FIND_CLASSIFICATION_BOOK_URL = 
+    `${environment.endpoints.baseUrl}/${environment.endpoints.classificationBook.baseUrl}`
+  
+  private static UPDATE_CLASSIFICATION_BOOK_URL = 
+    `${environment.endpoints.baseUrl}/${environment.endpoints.classificationBook.baseUrl}`
+
 
   constructor(
     private httpClient: HttpClient
@@ -45,5 +52,15 @@ export class ClassificationBookService {
     }
     
     return this.httpClient.get<ClassificationBook[]>(url)
+  }
+
+  findClassificationBookById(classificationBookId: string): Observable<ClassificationBook> {
+    const url = `${ClassificationBookService.FIND_CLASSIFICATION_BOOK_URL}/${classificationBookId}`
+    return this.httpClient.get<ClassificationBook>(url)
+  }
+
+  updatePartialsClassificationBooks(classificationBook: ClassificationBook): Observable<void> {
+    const url = `${ClassificationBookService.UPDATE_CLASSIFICATION_BOOK_URL}/${classificationBook.id}`
+    return this.httpClient.patch<void>(url, classificationBook)
   }
 }

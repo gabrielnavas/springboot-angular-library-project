@@ -59,7 +59,7 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Ações</th>
           <td mat-cell *matCellDef="let row"  class="td-actions">
-            <a routerLink="">
+            <a routerLink="/classification-book/update/{{ row.id }}">
               <button mat-raised-button>
                 <i class="material-icons">edit</i>
                 Alterar
