@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { PublisherCompany } from '../../publisher-company.model';
 import { PublisherCompanyService } from '../../publisher-company.service';
 import { ShowMessagesService } from '../../../utils/show-messages.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -29,10 +30,22 @@ export class PublisherCompanyCreateComponent {
 
     this.publisherCompanyService.createPublisherCompany(this.publisherCompany)
       .subscribe({
-        complete: () => this.showMessagesService.showMessage("Editora de livros adicionada"),
-        error: err => this.showMessagesService.showMessage("Problemas no servidor, tente novamente mais tarde")
+        complete: () => {
+          this.showMessagesService.showMessage("Editora de livros adicionada")
+          this.initPublisherCompanyModel();
+        },
+        error: (err: HttpErrorResponse) => {
+          if(err.status === 0) {
+            this.showMessagesService.showMessage("Problemas no servidor, tente novamente mais tarde")
+          } else if(err.status === 400) {
+            const alreadyExistsWithName = err.error.message === 
+              `publishing company already exists with attribute name with value ${this.publisherCompany.name}`
+            if(alreadyExistsWithName) {
+              this.showMessagesService.showMessage("Editora de livro já existe com esse nome. \nTente com outro nome.")
+            }
+          }
+        }
       })
-    this.initPublisherCompanyModel();
   }
 
   cancel(): void {
