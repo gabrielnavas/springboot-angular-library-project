@@ -21,7 +21,7 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
   pageSizeApi: Readonly<number> = 7;
 
   noMoreDataFromApi: boolean = false;
-  anyDataFromApi: boolean = false;
+  noDataFromApi: boolean = false;
 
   constructor(
     private publisherCompanyService: PublisherCompanyService,
@@ -38,13 +38,13 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
     this.data = []
     this.searchInputField = "";
     this.noMoreDataFromApi = false;
-    this.anyDataFromApi = false;
+    this.noDataFromApi = false;
     this.pageApi = 0;
     this.findAllInitPage();
   }
 
   loadMoreData() {
-    if(this.noMoreDataFromApi || this.anyDataFromApi) {
+    if(this.noMoreDataFromApi || this.noDataFromApi) {
       this.showMessagesService.showMessage("Nenhum dado a mais foi encontrado")
       return;
     }
@@ -68,7 +68,7 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
       return
     }
 
-    if(this.noMoreDataFromApi || this.anyDataFromApi) {
+    if(this.noMoreDataFromApi || this.noDataFromApi) {
       this.showMessagesService.showMessage("Nenhum dado a mais foi encontrado")
       return;
     }
@@ -94,7 +94,7 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
       .subscribe({
         next: data => {
           if(data.length === 0) {
-            this.anyDataFromApi = true;
+            this.noDataFromApi = true;
             this.showMessagesService.showMessage("Nenhum dado foi encontrado")
             return
           }
