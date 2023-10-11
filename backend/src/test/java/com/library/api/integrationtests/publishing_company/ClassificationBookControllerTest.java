@@ -31,48 +31,52 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
     private static ObjectMapper objectMapper;
 
     private static ClassificationBookRequest classificationBookRequest;
-    private static ClassificationBookResponse classificationBookResponse;
+    private static ClassificationBookResponse[] classificationBookResponses;
+
+    private static final int numberOfClassificationsBooksResponses = 2;
 
     @BeforeAll
     public static void setup() {
         objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         classificationBookRequest = null;
-        classificationBookResponse = null;
+        classificationBookResponses = new ClassificationBookResponse[numberOfClassificationsBooksResponses];
     }
 
     @Test
     @Order(1)
     public void testCreateClassificationBook() throws IOException {
-        classificationBookRequest = createMockClassificationBookRequest(null);
+        for (int index = 0; index < numberOfClassificationsBooksResponses; index++) {
+            classificationBookRequest = createMockClassificationBookRequest(null);
 
-        specification = new RequestSpecBuilder()
-                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
-                .setBasePath("/api/v1/classification-book")
-                .setPort(TestConfigs.SERVER_PORT)
-                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-                .build();
+            specification = new RequestSpecBuilder()
+                    .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                    .setBasePath("/api/v1/classification-book")
+                    .setPort(TestConfigs.SERVER_PORT)
+                    .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                    .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                    .build();
 
-        Response response = given().spec(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .body(classificationBookRequest)
-                .when()
-                .post()
-                .then()
-                .extract()
-                .response();
+            Response response = given().spec(specification)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .accept(MediaType.APPLICATION_JSON_VALUE)
+                    .body(classificationBookRequest)
+                    .when()
+                    .post()
+                    .then()
+                    .extract()
+                    .response();
 
-        Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
+            Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
 
-        classificationBookResponse = objectMapper
-                .readValue(response.body().asString(), ClassificationBookResponse.class);
+            classificationBookResponses[index] = objectMapper
+                    .readValue(response.body().asString(), ClassificationBookResponse.class);
 
-        Assertions.assertNotNull(classificationBookResponse.getKey());
-        Assertions.assertNotNull(classificationBookResponse.getName());
+            Assertions.assertNotNull(classificationBookResponses[index].getKey());
+            Assertions.assertNotNull(classificationBookResponses[index].getName());
 
-        Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponse.getName());
+            Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponses[index].getName());
+        }
     }
 
     @Test
@@ -150,12 +154,12 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
         ClassificationBookResponse[] classificationBookResponses = objectMapper
                 .readValue(response.body().asString(), ClassificationBookResponse[].class);
 
-        Assertions.assertEquals(1, classificationBookResponses.length);
+        Assertions.assertEquals(numberOfClassificationsBooksResponses, classificationBookResponses.length);
 
         Assertions.assertNotNull(classificationBookResponses[0].getKey());
         Assertions.assertNotNull(classificationBookResponses[0].getName());
 
-        Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponses[0].getName());
+        Assertions.assertEquals(classificationBookResponses[0].getName(), classificationBookResponses[0].getName());
     }
 
 
@@ -172,7 +176,7 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
         Response response = given().spec(specification)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("name", classificationBookResponse.getName())
+                .queryParam("name", classificationBookResponses[0].getName())
                 .when()
                 .get()
                 .then()
@@ -181,15 +185,15 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
         Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
 
-        ClassificationBookResponse[] classificationBookResponses = objectMapper
+        ClassificationBookResponse[] allClassificationBookResponses = objectMapper
                 .readValue(response.body().asString(), ClassificationBookResponse[].class);
 
-        Assertions.assertEquals(1, classificationBookResponses.length);
+        Assertions.assertEquals(1, allClassificationBookResponses.length);
 
         Assertions.assertNotNull(classificationBookResponses[0].getKey());
         Assertions.assertNotNull(classificationBookResponses[0].getName());
 
-        Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponses[0].getName());
+        Assertions.assertEquals(classificationBookResponses[0].getName(), allClassificationBookResponses[0].getName());
     }
 
 
@@ -206,7 +210,7 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
         Response response = given().spec(specification)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .queryParam("name", classificationBookResponse.getName())
+                .queryParam("name", classificationBookResponses[0].getName())
                 .queryParam("page", 0)
                 .queryParam("page", 1)
                 .when()
@@ -217,15 +221,15 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
         Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
 
-        ClassificationBookResponse[] classificationBookResponses = objectMapper
+        ClassificationBookResponse[] allClassificationBookResponses = objectMapper
                 .readValue(response.body().asString(), ClassificationBookResponse[].class);
 
-        Assertions.assertEquals(1, classificationBookResponses.length);
+        Assertions.assertEquals(1, allClassificationBookResponses.length);
 
-        Assertions.assertNotNull(classificationBookResponses[0].getKey());
-        Assertions.assertNotNull(classificationBookResponses[0].getName());
+        Assertions.assertNotNull(allClassificationBookResponses[0].getKey());
+        Assertions.assertNotNull(allClassificationBookResponses[0].getName());
 
-        Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponses[0].getName());
+        Assertions.assertEquals(classificationBookResponses[0].getName(), allClassificationBookResponses[0].getName());
     }
 
 
@@ -265,7 +269,7 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
         Response response = given().spec(specification)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
-                .get("/api/v1/classification-book/{id}", classificationBookResponse.getKey())
+                .get("/api/v1/classification-book/{id}", classificationBookResponses[0].getKey())
                 .then()
                 .extract()
                 .response();
@@ -278,7 +282,7 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
         Assertions.assertNotNull(classificationBookResponse.getKey());
         Assertions.assertNotNull(classificationBookResponse.getName());
 
-        Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponse.getName());
+        Assertions.assertEquals(classificationBookResponses[0].getName(), classificationBookResponse.getName());
     }
 
 
@@ -295,7 +299,7 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
         Response response = given().spec(specification)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
-                .get("/api/v1/classification-book/{id}", classificationBookResponse.getKey())
+                .get("/api/v1/classification-book/{id}", classificationBookResponses[0].getKey())
                 .then()
                 .extract()
                 .response();
