@@ -332,6 +332,120 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
         Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
     }
 
+    @Test
+    @Order(11)
+    public void testUpdatePartialsClassificationBookById() {
+        ClassificationBookRequest classificationBookRequest =
+                createMockClassificationBookRequest(null);
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(classificationBookRequest)
+                .when()
+                .patch(
+                        "/api/v1/classification-book/{id}",
+                        classificationBookResponses[0].getKey()
+                )
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(12)
+    public void testUpdatePartialsClassificationBookByIdWithWrongCors() {
+        ClassificationBookRequest classificationBookRequest =
+                createMockClassificationBookRequest(null);
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(classificationBookRequest)
+                .when()
+                .patch(
+                        "/api/v1/classification-book/{id}",
+                        classificationBookResponses[0].getKey()
+                )
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
+
+    @Test
+    @Order(13)
+    public void testUpdatePartialsClassificationBookByIdBadRequestAlreadyExistsWithName() {
+        ClassificationBookRequest classificationBookRequest =
+                createMockClassificationBookRequest(classificationBookResponses[1].getName());
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(classificationBookRequest)
+                .when()
+                .patch(
+                        "/api/v1/classification-book/{id}",
+                        classificationBookResponses[0].getKey()
+                )
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
+    }
+
+
+    @Test
+    @Order(13)
+    public void testUpdatePartialsClassificationBookByIdNotFound() {
+        UUID randomId = UUID.randomUUID();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(classificationBookRequest)
+                .when()
+                .patch("/api/v1/classification-book/{id}", randomId)
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+    }
+
     private ClassificationBookRequest createMockClassificationBookRequest(String name) {
         return new ClassificationBookRequest(name == null ? Faker.instance().book().publisher() : name);
     }

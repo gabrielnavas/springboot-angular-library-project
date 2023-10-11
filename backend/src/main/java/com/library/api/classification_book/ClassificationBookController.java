@@ -84,7 +84,9 @@ public class ClassificationBookController {
                     )
             }
     )
-    @GetMapping
+    @GetMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
     public ResponseEntity<Object> getAllClassificationBooks(
             Pageable pageable,
             @RequestParam(value = "name", required = false, defaultValue = "") String name
@@ -135,12 +137,27 @@ public class ClassificationBookController {
                     )
             }
     )
-    @GetMapping("{id}")
+    @GetMapping(
+            value = "{id}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
     public ResponseEntity<Object> getClassificationBookById(
             @PathVariable(value = "id") UUID id
     ) {
         ClassificationBookResponse classificationBooksResponse =
                 this.classificationBookService.getClassificationBookById(id);
         return ResponseEntity.status(HttpStatus.OK).body(classificationBooksResponse);
+    }
+
+    @PatchMapping(
+            value = "{id}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public ResponseEntity<Object> updatePartialsClassificationBookById(
+            @PathVariable(value = "id") UUID id,
+            @RequestBody ClassificationBookRequest request
+    ) {
+        classificationBookService.updatePartialsClassificationBookById(id, request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

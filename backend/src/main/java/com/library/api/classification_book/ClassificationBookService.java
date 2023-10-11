@@ -75,4 +75,23 @@ public class ClassificationBookService {
                 .name(classificationBook.getName())
                 .build();
     }
+
+
+    public void updatePartialsClassificationBookById(UUID id, ClassificationBookRequest request) {
+        Optional<ClassificationBook> optionalClassificationBookExists = classificationBookRepository.findById(id);
+        if (optionalClassificationBookExists.isEmpty()) {
+            throw new ObjectNotFoundException("classification book");
+        }
+
+        Optional<ClassificationBook> optionalClassificationBook =
+                classificationBookRepository.findByName(request.name());
+        if (optionalClassificationBook.isPresent() && !optionalClassificationBook.get().getId().equals(id)) {
+            throw new ObjectAlreadyExistsWithException("classification book", "name", request.name());
+        }
+
+        ClassificationBook classificationBook = optionalClassificationBookExists.get();
+        classificationBook.setName(request.name());
+
+        classificationBookRepository.save(classificationBook);
+    }
 }
