@@ -422,7 +422,7 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
 
     @Test
-    @Order(13)
+    @Order(14)
     public void testUpdatePartialsClassificationBookByIdNotFound() {
         UUID randomId = UUID.randomUUID();
 
@@ -439,6 +439,81 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
                 .body(classificationBookRequest)
                 .when()
                 .patch("/api/v1/classification-book/{id}", randomId)
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(15)
+    public void testDeleteClassificationBookById() {
+        UUID id = classificationBookResponses[0].getKey();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(classificationBookRequest)
+                .when()
+                .delete("/api/v1/classification-book/{id}", id)
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(16)
+    public void testDeleteClassificationBookByIdWithWrongCors() {
+        UUID id = classificationBookResponses[0].getKey();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(classificationBookRequest)
+                .when()
+                .delete("/api/v1/classification-book/{id}", id)
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(17)
+    public void testRemoveClassificationBookByIdNotFound() {
+        UUID randomId = UUID.randomUUID();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(classificationBookRequest)
+                .when()
+                .delete("/api/v1/classification-book/{id}", randomId)
                 .then()
                 .extract()
                 .response();

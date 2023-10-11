@@ -76,7 +76,6 @@ public class ClassificationBookService {
                 .build();
     }
 
-
     public void updatePartialsClassificationBookById(UUID id, ClassificationBookRequest request) {
         Optional<ClassificationBook> optionalClassificationBookExists = classificationBookRepository.findById(id);
         if (optionalClassificationBookExists.isEmpty()) {
@@ -93,5 +92,16 @@ public class ClassificationBookService {
         classificationBook.setName(request.name());
 
         classificationBookRepository.save(classificationBook);
+    }
+
+    public void removeClassificationBookById(UUID id) {
+        Optional<ClassificationBook> optionalClassificationBookExists = classificationBookRepository.findById(id);
+        if (optionalClassificationBookExists.isEmpty()) {
+            throw new ObjectNotFoundException("classification book");
+        }
+
+        ClassificationBook classificationBook = optionalClassificationBookExists.get();
+
+        classificationBookRepository.delete(classificationBook);
     }
 }

@@ -193,4 +193,47 @@ public class ClassificationBookController {
         classificationBookService.updatePartialsClassificationBookById(id, request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @Operation(
+            summary = "Remove Classification Book By Id",
+            description = "Endpoint to Remove Classification Book By Id",
+            tags = {"ClassificationBook"},
+            responses = {
+                    @ApiResponse(
+                            description = "NoContent",
+                            responseCode = "204",
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "Forbidden",
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "404",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "InternalServerError",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
+    @DeleteMapping(
+            value = "{id}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public ResponseEntity<Object> removeClassificationBookById(
+            @PathVariable(value = "id") UUID id
+    ) {
+        classificationBookService.removeClassificationBookById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
