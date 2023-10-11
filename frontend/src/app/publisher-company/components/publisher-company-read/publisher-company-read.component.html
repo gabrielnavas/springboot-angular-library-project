@@ -72,10 +72,10 @@
     class="button-load-more-data"
     mat-raised-button 
     color="primary"
-    [disabled]="noMoreDataFromApi && anyDataFromApi"
+    [disabled]="noMoreDataFromApi && noDataFromApi"
     (click)="loadMoreData()">
       <span
-        *ngIf="!noMoreDataFromApi && !anyDataFromApi">
+        *ngIf="!noMoreDataFromApi && !noDataFromApi">
         Obter mais
       </span>
       <strong 
@@ -83,7 +83,7 @@
         Nenhum dado a mais foi encontrado
       </strong>
       <strong 
-        *ngIf="anyDataFromApi">
+        *ngIf="noDataFromApi">
         Nenhum dado foi encontrado
       </strong>
     </button>
