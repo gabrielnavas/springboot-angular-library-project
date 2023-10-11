@@ -4,6 +4,7 @@ import { ClassificationBookService } from '../../classification-book.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ShowMessagesService } from 'src/app/utils/show-messages.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-classification-book-create',
@@ -31,10 +32,20 @@ export class ClassificationBookCreateComponent {
     this.classificationBookService.createClassificationBook(this.classificationBook)
       .subscribe({
         next: value => {
-          this.router.navigateByUrl("classification-book")
           this.showMessagesService.showMessage("Classificação de livros adicionado.")
+          this.initClassificationBookModel()
         },
-        error: err => this.showMessagesService.showMessage("Problema no servidor. Tente novamente mais tarde.")
+        error: (err: HttpErrorResponse) => {
+          if(err.status === 0) {
+            this.showMessagesService.showMessage("Problemas no servidor, tente novamente mais tarde")
+          } else if(err.status === 400) {
+            const alreadyExistsWithName = err.error.message === 
+              `publishing company already exists with attribute name with value ${this.classificationBook.name}`
+            if(alreadyExistsWithName) {
+              this.showMessagesService.showMessage("Classificação de livro já existe com esse nome. \nTente com outro nome.")
+            }
+          }
+        }
       })
   }
 
@@ -42,6 +53,10 @@ export class ClassificationBookCreateComponent {
     if(event.key === "Enter") {
       this.createClassificationBook();
     }
+  }
+
+  cancel(): void {
+    this.router.navigateByUrl("classification-book")
   }
 
   private initClassificationBookModel(): void {
