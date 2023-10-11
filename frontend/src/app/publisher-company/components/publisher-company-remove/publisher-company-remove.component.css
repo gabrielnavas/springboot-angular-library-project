@@ -7,6 +7,11 @@
   margin-bottom: .9rem;
 }
 
+.subtitle {
+  color: rgb(255, 35, 35);
+  font-size: .9rem;
+}
+
 form {
   display: flex;
   flex-direction: column;
