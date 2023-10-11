@@ -12,17 +12,20 @@
       <mat-form-field class="search-input-field">
         <mat-label>Buscar por nome</mat-label>
         <input 
-              matInput
-              type="text"
-              autofocus
-              name="input-search"
-              placeholder="John Lotty">
+          matInput
+          [(ngModel)]="searchInputField"
+          (keypress)="keyPressSearchInputField($event)"
+          type="text"
+          autofocus
+          name="input-search"
+          placeholder="John Lotty">
       </mat-form-field>
     
       <div class="search-field-buttons">
         <button 
           color="warn"
-          mat-raised-button>
+          mat-raised-button
+          (click)="onClickButtonFindByFilter()">
           <i class="material-icons">search</i>
           Buscar
         </button>
@@ -78,10 +81,20 @@
       <button 
         class="button-load-more-data"
         mat-raised-button 
+        (click)="loadMoreData()"
         color="primary">
-          <span>
-            Obter mais
-          </span>
+        <span
+          *ngIf="!noMoreDataFromApi && !noDataFromApi">
+          Obter mais
+        </span>
+        <strong 
+          *ngIf="noMoreDataFromApi">
+          Nenhum dado a mais foi encontrado
+        </strong>
+        <strong 
+          *ngIf="noDataFromApi">
+          Nenhum dado foi encontrado
+        </strong>
         </button>
     </div>
   </mat-card-content>
