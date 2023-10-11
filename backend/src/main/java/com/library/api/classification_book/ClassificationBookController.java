@@ -149,6 +149,39 @@ public class ClassificationBookController {
         return ResponseEntity.status(HttpStatus.OK).body(classificationBooksResponse);
     }
 
+
+    @Operation(
+            summary = "Update Partials Classification Book By Id",
+            description = "Endpoint to Update Partials Classification Book By Id",
+            tags = {"ClassificationBook"},
+            responses = {
+                    @ApiResponse(
+                            description = "NoContent",
+                            responseCode = "204",
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "Forbidden",
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "404",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "InternalServerError",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
     @PatchMapping(
             value = "{id}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
