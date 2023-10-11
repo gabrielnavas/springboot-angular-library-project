@@ -119,6 +119,11 @@ public class ClassificationBookController {
                             content = @Content
                     ),
                     @ApiResponse(
+                            description = "Forbidden",
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
                             description = "BadRequest",
                             responseCode = "404",
                             content = @Content
