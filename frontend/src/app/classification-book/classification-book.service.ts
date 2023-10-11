@@ -27,6 +27,9 @@ export class ClassificationBookService {
   private static UPDATE_CLASSIFICATION_BOOK_URL = 
     `${environment.endpoints.baseUrl}/${environment.endpoints.classificationBook.baseUrl}`
 
+  private static REMOVE_CLASSIFICATION_BOOK_URL = 
+    `${environment.endpoints.baseUrl}/${environment.endpoints.classificationBook.baseUrl}`
+
 
   constructor(
     private httpClient: HttpClient
@@ -62,5 +65,10 @@ export class ClassificationBookService {
   updatePartialsClassificationBooks(classificationBook: ClassificationBook): Observable<void> {
     const url = `${ClassificationBookService.UPDATE_CLASSIFICATION_BOOK_URL}/${classificationBook.id}`
     return this.httpClient.patch<void>(url, classificationBook)
+  }
+
+  removeClassificationBooks(classificationBookId: string): Observable<void> {
+    const url = `${ClassificationBookService.REMOVE_CLASSIFICATION_BOOK_URL}/${classificationBookId}`
+    return this.httpClient.delete<void>(url)
   }
 }

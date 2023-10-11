@@ -13,12 +13,13 @@ import { MatTableModule } from '@angular/material/table';
 
 import { HttpClientModule } from "@angular/common/http"
 
+import { UtilsModule } from '../utils/utils.module';
+
 import { ClassificationBookComponent } from './classification-book.component';
 import { ClassificationBookReadComponent } from './components/classification-book-read/classification-book-read.component';
 import { ClassificationBookCreateComponent } from './components/classification-book-create/classification-book-create.component';
-import { UtilsModule } from '../utils/utils.module';
 import { ClassificationBookUpdateComponent } from './components/classification-book-update/classification-book-update.component';
-
+import { ClassificationBookRemoveComponent } from './components/classification-book-remove/classification-book-remove.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { ClassificationBookUpdateComponent } from './components/classification-b
     ClassificationBookReadComponent,
     ClassificationBookCreateComponent,
     ClassificationBookUpdateComponent,
+    ClassificationBookRemoveComponent,
   ],
   imports: [
     CommonModule,

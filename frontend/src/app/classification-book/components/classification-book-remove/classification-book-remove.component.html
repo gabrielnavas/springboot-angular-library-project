@@ -1,0 +1,34 @@
+<mat-card class="add-publisher-company container">
+  <mat-card-title class="title">Remover uma Classificação de Livros</mat-card-title>
+
+  <form>
+      <mat-form-field>
+        <mat-label>Nome</mat-label>
+        <input 
+          matInput
+          type="text"
+          autofocus
+          [value]="classificationBook.name"
+          name="name"
+          readonly="true">
+      </mat-form-field>
+  </form>
+
+  <mat-card-title class="subtitle">Tem certeza disso?</mat-card-title>
+  
+  <div>
+    <button 
+      mat-raised-button
+      color="primary"
+      (click)="removeClassificationBook()">
+      <i class="material-icons">note_add</i>
+      Remover
+    </button>
+    <button 
+      mat-raised-button
+      (click)="cancel()">
+      <i class="material-icons">cancel</i>
+      Cancelar
+    </button>
+  </div>
+</mat-card>
