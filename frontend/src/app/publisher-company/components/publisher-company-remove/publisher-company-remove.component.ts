@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PublisherCompanyService } from '../../publisher-company.service';
 import { ShowMessagesService } from '../../../utils/show-messages.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-publisher-company-remove',
@@ -17,8 +18,11 @@ export class PublisherCompanyRemoveComponent {
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute, 
     private readonly publisherCompanyService: PublisherCompanyService,
-    private showMessagesService: ShowMessagesService
+    private showMessagesService: ShowMessagesService,
+    private readonly titleService: Title
   ) { 
+    this.titleService.setTitle("Procurar as Editora de livros");
+    
     const publisherCompanyId = this.activatedRoute.snapshot.paramMap.get("id");
     if(!publisherCompanyId) {
       this.router.navigateByUrl("publisher-company")
@@ -26,7 +30,7 @@ export class PublisherCompanyRemoveComponent {
       this.findPublisherCompanyById(publisherCompanyId)
     }
   }
-
+  
   removePublisherCompany(): void {
     this.publisherCompanyService.removePublisherCompanyById(this.publisherCompany.id as string)
     .subscribe({

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PublisherCompanyService } from '../../publisher-company.service';
 import { ShowMessagesService } from '../../../utils/show-messages.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-publisher-company-update',
@@ -17,8 +18,11 @@ export class PublisherCompanyUpdateComponent {
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute, 
     private readonly publisherCompanyService: PublisherCompanyService,
-    private showMessagesService: ShowMessagesService
+    private readonly showMessagesService: ShowMessagesService,
+    private readonly titleService: Title
   ) { 
+    this.titleService.setTitle("Atualizar uma Editora de livros");
+
     const publisherCompanyId = this.activatedRoute.snapshot.paramMap.get("id");
     if(!publisherCompanyId) {
       this.router.navigateByUrl("publisher-company")

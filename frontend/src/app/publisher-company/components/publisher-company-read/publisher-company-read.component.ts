@@ -4,6 +4,7 @@ import { ShowMessagesService } from '../../../utils/show-messages.service';
 import { FindAllFilters, PublisherCompanyService } from '../../publisher-company.service';
 import { PublisherCompany } from '../../publisher-company.model';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'views-publisher-company-read',
@@ -24,11 +25,14 @@ export class PublisherCompanyReadComponent implements AfterViewInit {
   noDataFromApi: boolean = false;
 
   constructor(
-    private publisherCompanyService: PublisherCompanyService,
-    private showMessagesService: ShowMessagesService,
-    private changeDetectorRefs: ChangeDetectorRef,
-    private router: Router
-  ) { }
+    private readonly publisherCompanyService: PublisherCompanyService,
+    private readonly showMessagesService: ShowMessagesService,
+    private readonly changeDetectorRefs: ChangeDetectorRef,
+    private readonly router: Router,
+    private readonly titleService: Title
+  ) { 
+    this.titleService.setTitle("Procurar as Editora de livros");
+  }
 
   ngAfterViewInit(): void {
     this.initDataView()
