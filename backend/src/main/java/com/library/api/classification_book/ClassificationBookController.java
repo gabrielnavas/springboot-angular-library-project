@@ -1,5 +1,7 @@
 package com.library.api.classification_book;
 
+import com.library.api.classification_book.hateoas.ClassificationBookHateoasWithRel;
+import com.library.api.classification_book.hateoas.ClassificationBookMapperHateoas;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -55,6 +57,10 @@ public class ClassificationBookController {
             @RequestBody ClassificationBookRequest request
     ) {
         ClassificationBookResponse response = classificationBookService.createClassificationBook(request);
+        ClassificationBookMapperHateoas.set(
+                response,
+                ClassificationBookHateoasWithRel.CREATE_CLASSIFICATION_BOOK
+        );
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -97,6 +103,11 @@ public class ClassificationBookController {
                             put("name", name);
                         }},
                         pageable);
+        ClassificationBookMapperHateoas.set(
+                classificationBooksResponse,
+                pageable,
+                ClassificationBookHateoasWithRel.GET_ALL_CLASSIFICATION_BOOKS
+        );
         return ResponseEntity.status(HttpStatus.OK).body(classificationBooksResponse);
     }
 
@@ -144,9 +155,13 @@ public class ClassificationBookController {
     public ResponseEntity<Object> getClassificationBookById(
             @PathVariable(value = "id") UUID id
     ) {
-        ClassificationBookResponse classificationBooksResponse =
+        ClassificationBookResponse classificationBookResponse =
                 this.classificationBookService.getClassificationBookById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(classificationBooksResponse);
+        ClassificationBookMapperHateoas.set(
+                classificationBookResponse,
+                ClassificationBookHateoasWithRel.GET_CLASSIFICATION_BOOK_BY_ID
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(classificationBookResponse);
     }
 
 
