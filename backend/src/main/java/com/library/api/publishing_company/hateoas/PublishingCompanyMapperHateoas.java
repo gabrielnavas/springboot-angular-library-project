@@ -14,15 +14,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public class PublishingCompanyMapperHateoas {
-    static public void set(PublishingCompanyResponse dto, PublishingCompanyHateoasWithRel withRel) {
+    static public void set(
+            PublishingCompanyResponse dto,
+            PublishingCompanyHateoasWithRel withRel) {
         Pageable pageRequest = PageRequest.of(0, 10, Sort.by("id"));
         setWithPageable(dto, pageRequest, withRel);
         setWithoutPageable(dto, dto.getKey(), withRel);
     }
 
 
-    static public void set(List<PublishingCompanyResponse> responsePersonList, Pageable pageable, PublishingCompanyHateoasWithRel withRel) {
-        for (var dto : responsePersonList) {
+    static public void set(List<PublishingCompanyResponse> list, Pageable pageable, PublishingCompanyHateoasWithRel withRel) {
+        for (var dto : list) {
             setWithPageable(dto, pageable, withRel);
             setWithoutPageable(dto, dto.getKey(), withRel);
         }
