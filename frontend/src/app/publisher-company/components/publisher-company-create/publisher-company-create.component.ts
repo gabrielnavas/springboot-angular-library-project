@@ -5,6 +5,7 @@ import { PublisherCompany } from '../../publisher-company.model';
 import { PublisherCompanyService } from '../../publisher-company.service';
 import { ShowMessagesService } from '../../../utils/show-messages.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -18,8 +19,11 @@ export class PublisherCompanyCreateComponent {
   constructor(
     private readonly router: Router,
     private readonly publisherCompanyService: PublisherCompanyService,
-    private showMessagesService: ShowMessagesService
-  ) { }
+    private readonly showMessagesService: ShowMessagesService,
+    private readonly titleService: Title
+  ) { 
+    this.titleService.setTitle("Adicionar Editora de livros");
+  }
 
   createPublisherCompany(): void {
     const error = this.publisherCompany.validate();
