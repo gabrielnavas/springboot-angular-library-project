@@ -13,7 +13,6 @@ import { MatTableModule } from '@angular/material/table';
 
 import { HttpClientModule } from "@angular/common/http"
 
-import { PublisherCompanyComponent } from './publisher-company.component';
 import { PublisherCompanyCreateComponent } from './components/publisher-company-create/publisher-company-create.component';
 import { PublisherCompanyReadComponent } from './components/publisher-company-read/publisher-company-read.component';
 import { PublisherCompanyUpdateComponent } from './components/publisher-company-update/publisher-company-update.component';
@@ -26,7 +25,6 @@ import { UtilsModule } from '../utils/utils.module';
 @NgModule({
   declarations: [
     PublisherCompanyReadComponent,
-    PublisherCompanyComponent,
     PublisherCompanyCreateComponent,
     PublisherCompanyUpdateComponent,
     PublisherCompanyRemoveComponent,

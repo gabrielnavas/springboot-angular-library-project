@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ShowMessagesService } from 'src/app/utils/show-messages.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-classification-book-create',
@@ -17,8 +18,10 @@ export class ClassificationBookCreateComponent {
   constructor(
     private classificationBookService: ClassificationBookService,
     private router: Router,
-    private showMessagesService: ShowMessagesService
+    private showMessagesService: ShowMessagesService,
+    private readonly titleService: Title
   ) {
+    this.titleService.setTitle("Adicionar uma editora de livros")
     this.initClassificationBookModel()
   }
 

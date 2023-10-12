@@ -15,7 +15,6 @@ import { HttpClientModule } from "@angular/common/http"
 
 import { UtilsModule } from '../utils/utils.module';
 
-import { ClassificationBookComponent } from './classification-book.component';
 import { ClassificationBookReadComponent } from './components/classification-book-read/classification-book-read.component';
 import { ClassificationBookCreateComponent } from './components/classification-book-create/classification-book-create.component';
 import { ClassificationBookUpdateComponent } from './components/classification-book-update/classification-book-update.component';
@@ -24,7 +23,6 @@ import { ClassificationBookRemoveComponent } from './components/classification-b
 
 @NgModule({
   declarations: [
-    ClassificationBookComponent,
     ClassificationBookReadComponent,
     ClassificationBookCreateComponent,
     ClassificationBookUpdateComponent,

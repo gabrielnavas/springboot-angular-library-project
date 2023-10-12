@@ -5,6 +5,7 @@ import { ClassificationBook } from '../../classification-book.model';
 import { ClassificationBookService } from '../../classification-book.service';
 
 import { ShowMessagesService } from 'src/app/utils/show-messages.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-classification-book-remove',
@@ -19,8 +20,11 @@ export class ClassificationBookRemoveComponent {
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute, 
     private readonly classificationBookService: ClassificationBookService,
-    private readonly showMessagesService: ShowMessagesService
+    private readonly showMessagesService: ShowMessagesService,
+    private readonly titleService: Title
   ) {
+    this.titleService.setTitle("Remover uma Classificação de Livros");
+
     const classificationBookId = this.activatedRoute.snapshot.paramMap.get("id");
       if(!classificationBookId) {
         this.cancel()

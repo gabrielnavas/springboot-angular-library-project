@@ -1,10 +1,16 @@
 .container {
-  margin-top: 3.5rem;
+  margin-top: 4rem;
   padding: .8rem;
 }
 
 .title {
-  margin-bottom: .9rem;
+  margin-left: 1.1rem;
+  margin-bottom: .4rem;
+}
+
+.subtitle {
+  margin-bottom: 1.8rem;
+  margin-left: 1.1rem;
 }
 
 form {

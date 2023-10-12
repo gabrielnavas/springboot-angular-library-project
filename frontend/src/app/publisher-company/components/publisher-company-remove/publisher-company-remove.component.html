@@ -1,34 +1,39 @@
-<mat-card class="add-publisher-company container">
-  <mat-card-title class="title">Remover uma Editora de Livros</mat-card-title>
+<mat-card class="container">
+  <mat-card-title class="title">Gerenciar Editora de Livros</mat-card-title>
+  <mat-card-title class="subtitle">Remover uma Editora de Livros</mat-card-title>
 
-  <form>
-      <mat-form-field>
-        <mat-label>Nome</mat-label>
-        <input 
-          matInput
-          type="text"
-          autofocus
-          [value]="publisherCompany.name"
-          name="name"
-          readonly="true">
-      </mat-form-field>
-  </form>
+  <mat-card-content>
+    <form>
+        <mat-form-field>
+          <mat-label>Nome</mat-label>
+          <input 
+            matInput
+            type="text"
+            autofocus
+            [value]="publisherCompany.name"
+            name="name"
+            readonly="true">
+        </mat-form-field>
+    </form>
+    
+    <span class="alert-remove">
+      Tem certeza disso?
+    </span>
   
-  <mat-card-title class="subtitle">Tem certeza disso?</mat-card-title>
-
-  <div>
-    <button 
-      mat-raised-button
-      color="primary"
-      (click)="removePublisherCompany()">
-      <i class="material-icons">note_add</i>
-      Remover
-    </button>
-    <button 
-      mat-raised-button
-      (click)="cancel()">
-      <i class="material-icons">cancel</i>
-      Cancelar
-    </button>
-  </div>
+    <div>
+      <button 
+        mat-raised-button
+        color="primary"
+        (click)="removePublisherCompany()">
+        <i class="material-icons">note_add</i>
+        Remover
+      </button>
+      <button 
+        mat-raised-button
+        (click)="cancel()">
+        <i class="material-icons">cancel</i>
+        Cancelar
+      </button>
+    </div>
+  </mat-card-content>
 </mat-card>

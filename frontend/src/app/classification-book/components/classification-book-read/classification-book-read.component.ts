@@ -5,6 +5,7 @@ import { ClassificationBookService, FindAllFilters } from '../../classification-
 import { ClassificationBook } from '../../classification-book.model';
 
 import { ShowMessagesService } from 'src/app/utils/show-messages.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'classification-book-read',
@@ -29,7 +30,10 @@ export class ClassificationBookReadComponent implements AfterViewInit {
     private readonly classificationBookService: ClassificationBookService, 
     private showMessagesService: ShowMessagesService,
     private changeDetectorRefs: ChangeDetectorRef,
-  ) { }
+    private readonly titleService: Title
+  ) { 
+    this.titleService.setTitle("Buscar e listar Classificações de livros");
+  }
 
   ngAfterViewInit(): void {
     this.initDataView()

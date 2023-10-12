@@ -1,33 +1,36 @@
-<mat-card class="add-publisher-company container">
-  <mat-card-title class="title">Atualizar uma Editora de Livros</mat-card-title>
+<mat-card class="container">
+  <mat-card-subtitle class="subtitle">Gerenciar Classificação de livros</mat-card-subtitle>
+  <mat-card-title class="subtitle">Atualizar uma Classificação de Livros</mat-card-title>
 
-  <form>
-      <mat-form-field>
-        <mat-label>Nome</mat-label>
-        <input 
-          matInput
-          type="text"
-          autofocus
-          [(ngModel)]="publisherCompany.name"
-          (keypress)="keyPress($event)"
-          name="name"
-          placeholder="John Lotty">
-      </mat-form-field>
-  </form>
-
-  <div>
-    <button 
-      mat-raised-button
-      color="primary"
-      (click)="updatePublisherCompany()">
-      <i class="material-icons">note_add</i>
-      Atualizar
-    </button>
-    <button 
-      mat-raised-button
-      (click)="cancel()">
-      <i class="material-icons">cancel</i>
-      Cancelar
-    </button>
-  </div>
+  <mat-card-content>
+    <form>
+        <mat-form-field>
+          <mat-label>Nome</mat-label>
+          <input 
+            matInput
+            type="text"
+            autofocus
+            [(ngModel)]="publisherCompany.name"
+            (keypress)="keyPress($event)"
+            name="name"
+            placeholder="John Lotty">
+        </mat-form-field>
+    </form>
+  
+    <div>
+      <button 
+        mat-raised-button
+        color="primary"
+        (click)="updatePublisherCompany()">
+        <i class="material-icons">note_add</i>
+        Atualizar
+      </button>
+      <button 
+        mat-raised-button
+        (click)="cancel()">
+        <i class="material-icons">cancel</i>
+        Cancelar
+      </button>
+    </div>
+  </mat-card-content>
 </mat-card>

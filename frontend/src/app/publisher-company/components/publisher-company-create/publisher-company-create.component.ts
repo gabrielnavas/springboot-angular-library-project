@@ -22,7 +22,7 @@ export class PublisherCompanyCreateComponent {
     private readonly showMessagesService: ShowMessagesService,
     private readonly titleService: Title
   ) { 
-    this.titleService.setTitle("Adicionar Editora de livros");
+    this.titleService.setTitle("Adicionar uma editora de livros");
   }
 
   createPublisherCompany(): void {

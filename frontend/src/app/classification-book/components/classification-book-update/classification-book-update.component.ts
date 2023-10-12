@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ClassificationBookService } from '../../classification-book.service';
 import { ShowMessagesService } from 'src/app/utils/show-messages.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-classification-book-update',
@@ -17,8 +18,11 @@ export class ClassificationBookUpdateComponent {
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute, 
     private readonly classificationBookService: ClassificationBookService,
-    private readonly showMessagesService: ShowMessagesService
+    private readonly showMessagesService: ShowMessagesService,
+    private readonly titleService: Title
   ) {
+    this.titleService.setTitle("Atualizar uma classificação de livros")
+
     const classificationBookId = this.activatedRoute.snapshot.paramMap.get("id");
     if(!classificationBookId) {
       this.cancel()
