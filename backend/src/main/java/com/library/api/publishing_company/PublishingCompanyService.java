@@ -7,10 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Service
@@ -28,15 +25,17 @@ public class PublishingCompanyService {
         if (optionalPublishingCompany.isPresent()) {
             throw new ObjectAlreadyExistsWithException("publishing company", "name", data.name());
         }
+
+        Date now = new Date();
+
         var publishingCompany = PublishingCompany.builder()
                 .id(UUID.randomUUID())
                 .name(data.name())
+                .createdAt(now)
+                .updateAt(now)
                 .build();
         publishingCompany = publishingCompanyRepository.save(publishingCompany);
-        return PublishingCompanyResponse.builder()
-                .key(publishingCompany.getId())
-                .name(publishingCompany.getName())
-                .build();
+        return modelToResponse(publishingCompany);
 
     }
 
@@ -82,10 +81,8 @@ public class PublishingCompanyService {
 
         }
 
-        return publishingCompanies.stream().map(publishingCompany -> PublishingCompanyResponse.builder()
-                        .key(publishingCompany.getId())
-                        .name(publishingCompany.getName())
-                        .build())
+        return publishingCompanies.stream()
+                .map(PublishingCompanyService::modelToResponse)
                 .toList();
     }
 
@@ -98,11 +95,7 @@ public class PublishingCompanyService {
         }
 
         PublishingCompany publishingCompany = optionalPublishingCompany.get();
-
-        return PublishingCompanyResponse.builder()
-                .key(publishingCompany.getId())
-                .name(publishingCompany.getName())
-                .build();
+        return modelToResponse(publishingCompany);
     }
 
 
@@ -116,5 +109,14 @@ public class PublishingCompanyService {
 
         PublishingCompany publishingCompany = optionalPublishingCompany.get();
         publishingCompanyRepository.delete(publishingCompany);
+    }
+
+    private static PublishingCompanyResponse modelToResponse(PublishingCompany publishingCompany) {
+        return PublishingCompanyResponse.builder()
+                .key(publishingCompany.getId())
+                .name(publishingCompany.getName())
+                .createdAt(publishingCompany.getCreatedAt())
+                .updatedAt(publishingCompany.getUpdateAt())
+                .build();
     }
 }

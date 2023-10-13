@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.util.Date;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
@@ -13,10 +14,13 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "name"})
-public class PublishingCompanyResponse extends RepresentationModel<PublishingCompanyResponse> {
+@JsonPropertyOrder({"id", "name", "createdAt", "updatedAt"})
+public class PublishingCompanyResponse
+        extends RepresentationModel<PublishingCompanyResponse> {
 
     @JsonProperty("id")
     private UUID key;
     private String name;
+    private Date createdAt;
+    private Date updatedAt;
 }

@@ -79,10 +79,10 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
             Assertions.assertNotNull(classificationBookResponses[index].getUpdatedAt());
 
             long seconds = 1000 * 30;
-            Date fifteenSecondsLater = new Date(new Date().getTime() - seconds);
+            Date dateLater = new Date(new Date().getTime() - seconds);
 
-            Assertions.assertTrue(fifteenSecondsLater.before(classificationBookResponses[index].getCreatedAt()));
-            Assertions.assertTrue(fifteenSecondsLater.before(classificationBookResponses[index].getUpdatedAt()));
+            Assertions.assertTrue(dateLater.before(classificationBookResponses[index].getCreatedAt()));
+            Assertions.assertTrue(dateLater.before(classificationBookResponses[index].getUpdatedAt()));
 
             Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponses[index].getName());
         }

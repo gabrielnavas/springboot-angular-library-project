@@ -20,6 +20,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.DeserializationF
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -77,6 +78,14 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
             Assertions.assertNotNull(publishingCompanyResponses[index].getKey());
             Assertions.assertNotNull(publishingCompanyResponses[index].getName());
+            Assertions.assertNotNull(publishingCompanyResponses[index].getCreatedAt());
+            Assertions.assertNotNull(publishingCompanyResponses[index].getUpdatedAt());
+
+            long seconds = 1000 * 30;
+            Date dateLater = new Date(new Date().getTime() - seconds);
+
+            Assertions.assertTrue(dateLater.before(publishingCompanyResponses[index].getCreatedAt()));
+            Assertions.assertTrue(dateLater.before(publishingCompanyResponses[index].getUpdatedAt()));
 
             Assertions.assertEquals(publishingCompanyResponses[index].getName(), publishingCompanyRequest.name());
         }
@@ -197,6 +206,8 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
             System.out.println(pc.getName());
             Assertions.assertNotNull(pc.getKey());
             Assertions.assertNotNull(pc.getName());
+            Assertions.assertNotNull(pc.getCreatedAt());
+            Assertions.assertNotNull(pc.getUpdatedAt());
             Assertions.assertTrue(pc.getName().length() > 0);
         }
     }
@@ -372,6 +383,8 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
         Assertions.assertNotNull(publishingCompanyResponse.getKey());
         Assertions.assertNotNull(publishingCompanyResponse.getName());
+        Assertions.assertNotNull(publishingCompanyResponse.getCreatedAt());
+        Assertions.assertNotNull(publishingCompanyResponse.getUpdatedAt());
     }
 
     @Test
