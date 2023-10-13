@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Date;
 import java.util.UUID;
@@ -15,8 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonPropertyOrder(value = {"id", "name", "createdAt", "updatedAt"})
-public class AuthorBookResponse {
-    
+public class AuthorBookResponse extends RepresentationModel<AuthorBookResponse> {
+
     @JsonProperty(value = "id")
     private UUID key;
     private String name;

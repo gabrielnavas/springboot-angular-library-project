@@ -1,5 +1,7 @@
 package com.library.api.author_book;
 
+import com.library.api.author_book.hateoas.AuthorBookHateoasWithRel;
+import com.library.api.author_book.hateoas.AuthorBookMapperHateoas;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -48,6 +50,7 @@ public class AuthorBookController {
             @RequestBody AuthorBookRequest request
     ) {
         AuthorBookResponse response = authorBookService.createAuthorBook(request);
+        AuthorBookMapperHateoas.set(response, AuthorBookHateoasWithRel.CREATE_AUTHOR_BOOK);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
