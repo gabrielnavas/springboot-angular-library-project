@@ -19,6 +19,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.DeserializationF
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
@@ -74,6 +75,14 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
             Assertions.assertNotNull(classificationBookResponses[index].getKey());
             Assertions.assertNotNull(classificationBookResponses[index].getName());
+            Assertions.assertNotNull(classificationBookResponses[index].getCreatedAt());
+            Assertions.assertNotNull(classificationBookResponses[index].getUpdatedAt());
+
+            long seconds = 1000 * 30;
+            Date fifteenSecondsLater = new Date(new Date().getTime() - seconds);
+
+            Assertions.assertTrue(fifteenSecondsLater.before(classificationBookResponses[index].getCreatedAt()));
+            Assertions.assertTrue(fifteenSecondsLater.before(classificationBookResponses[index].getUpdatedAt()));
 
             Assertions.assertEquals(classificationBookRequest.name(), classificationBookResponses[index].getName());
         }
@@ -158,6 +167,8 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
         Assertions.assertNotNull(classificationBookResponses[0].getKey());
         Assertions.assertNotNull(classificationBookResponses[0].getName());
+        Assertions.assertNotNull(classificationBookResponses[0].getCreatedAt());
+        Assertions.assertNotNull(classificationBookResponses[0].getUpdatedAt());
 
         Assertions.assertEquals(classificationBookResponses[0].getName(), classificationBookResponses[0].getName());
     }
@@ -192,6 +203,8 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
         Assertions.assertNotNull(classificationBookResponses[0].getKey());
         Assertions.assertNotNull(classificationBookResponses[0].getName());
+        Assertions.assertNotNull(classificationBookResponses[0].getCreatedAt());
+        Assertions.assertNotNull(classificationBookResponses[0].getUpdatedAt());
 
         Assertions.assertEquals(classificationBookResponses[0].getName(), allClassificationBookResponses[0].getName());
     }
@@ -281,8 +294,12 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
         Assertions.assertNotNull(classificationBookResponse.getKey());
         Assertions.assertNotNull(classificationBookResponse.getName());
+        Assertions.assertNotNull(classificationBookResponse.getCreatedAt());
+        Assertions.assertNotNull(classificationBookResponse.getUpdatedAt());
 
         Assertions.assertEquals(classificationBookResponses[0].getName(), classificationBookResponse.getName());
+        Assertions.assertTrue(new Date().after(classificationBookResponse.getCreatedAt()));
+        Assertions.assertTrue(new Date().after(classificationBookResponse.getUpdatedAt()));
     }
 
 
@@ -448,7 +465,7 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
     @Test
     @Order(15)
-    public void testDeleteClassificationBookById() {
+    public void testRemoveClassificationBookById() {
         UUID id = classificationBookResponses[0].getKey();
 
         specification = new RequestSpecBuilder()
@@ -473,7 +490,7 @@ public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
     @Test
     @Order(16)
-    public void testDeleteClassificationBookByIdWithWrongCors() {
+    public void testRemoveClassificationBookByIdWithWrongCors() {
         UUID id = classificationBookResponses[0].getKey();
 
         specification = new RequestSpecBuilder()

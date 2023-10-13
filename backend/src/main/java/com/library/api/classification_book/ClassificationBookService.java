@@ -6,10 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -26,16 +23,16 @@ public class ClassificationBookService {
             throw new ObjectAlreadyExistsWithException("classification book", "name", request.name());
         }
 
+        Date now = new Date();
+
         ClassificationBook classificationBook = ClassificationBook.builder()
                 .name(request.name())
+                .createdAt(now)
+                .updatedAt(now)
                 .build();
 
         classificationBook = classificationBookRepository.save(classificationBook);
-
-        return ClassificationBookResponse.builder()
-                .key(classificationBook.getId())
-                .name(classificationBook.getName())
-                .build();
+        return modelToResponse(classificationBook);
     }
 
     public List<ClassificationBookResponse> getAllClassificationBooks(Map<String, Object> filters, Pageable pageable) {
@@ -43,20 +40,12 @@ public class ClassificationBookService {
 
         if (name.length() > 0) {
             return classificationBookRepository.findAllByName(name, pageable)
-                    .map(cb -> ClassificationBookResponse.builder()
-                            .name(cb.getName())
-                            .key(cb.getId())
-                            .build()
-                    )
+                    .map(ClassificationBookService::modelToResponse)
                     .toList();
         } else {
             return classificationBookRepository.findAll(pageable)
                     .stream()
-                    .map(cb -> ClassificationBookResponse.builder()
-                            .name(cb.getName())
-                            .key(cb.getId())
-                            .build()
-                    )
+                    .map(ClassificationBookService::modelToResponse)
                     .toList();
         }
     }
@@ -70,10 +59,7 @@ public class ClassificationBookService {
 
         ClassificationBook classificationBook = optionalClassificationBook.get();
 
-        return ClassificationBookResponse.builder()
-                .key(classificationBook.getId())
-                .name(classificationBook.getName())
-                .build();
+        return modelToResponse(classificationBook);
     }
 
     public void updatePartialsClassificationBookById(UUID id, ClassificationBookRequest request) {
@@ -103,5 +89,14 @@ public class ClassificationBookService {
         ClassificationBook classificationBook = optionalClassificationBookExists.get();
 
         classificationBookRepository.delete(classificationBook);
+    }
+
+    private static ClassificationBookResponse modelToResponse(ClassificationBook classificationBook) {
+        return ClassificationBookResponse.builder()
+                .key(classificationBook.getId())
+                .name(classificationBook.getName())
+                .createdAt(classificationBook.getCreatedAt())
+                .updatedAt(classificationBook.getUpdatedAt())
+                .build();
     }
 }
