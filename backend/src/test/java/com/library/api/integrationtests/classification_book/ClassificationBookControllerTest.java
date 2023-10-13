@@ -1,4 +1,4 @@
-package com.library.api.integrationtests.publishing_company;
+package com.library.api.integrationtests.classification_book;
 
 import com.github.javafaker.Faker;
 import com.library.api.TestConfigs;
