@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="1.0.5" use-changelog="false" last-position="0,0" last-zoom="0.7" max-obj-count="9"
+<dbmodel pgmodeler-ver="1.0.5" use-changelog="false" last-position="0,0" last-zoom="0.75" max-obj-count="10"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -16,14 +16,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <schema name="public" layers="0" fill-color="#e1e1e1" sql-disabled="true">
 </schema>
 
-<table name="books" layers="0" collapse-mode="2" max-obj-count="9" z-value="0">
+<table name="books" layers="0" collapse-mode="2" max-obj-count="10" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="820" y="560"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="author" not-null="true">
+	<column name="title" not-null="true">
 		<type name="varchar" length="255"/>
 	</column>
 	<column name="isbn" not-null="true">
@@ -32,22 +32,24 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="pages" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="year_publication" not-null="true">
-		<type name="date" length="0"/>
-	</column>
 	<column name="key_words">
 		<type name="varchar" length="1000"/>
+	</column>
+	<column name="year_publication" not-null="true">
+		<type name="date" length="0"/>
 	</column>
 	<constraint name="books_pk" type="pk-constr" table="public.books">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_classification_books" index="6"/>
-		<object name="id_publishing_company" index="5"/>
+		<object name="id_author_books" index="8"/>
+		<object name="id_classification_books" index="7"/>
+		<object name="id_publishing_company" index="6"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
+		<object name="author_books_fk" index="3"/>
 		<object name="classification_books_fk" index="2"/>
 		<object name="publishing_company_fk" index="1"/>
 	</customidxs>
@@ -111,7 +113,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</customidxs>
 </table>
 
-<table name="classification_books" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+<table name="classification_books" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="1420" y="400"/>
@@ -120,6 +122,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="name" not-null="true">
 		<type name="varchar" length="255"/>
+	</column>
+	<column name="created_at" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="updated_at" not-null="true">
+		<type name="timestamp" length="0"/>
 	</column>
 	<constraint name="classification_books_pk" type="pk-constr" table="public.classification_books">
 		<columns names="id" ref-type="src-columns"/>
@@ -285,6 +293,32 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-fk-pattern="{st}_fk"
 	 src-table="public.copies_books"
 	 dst-table="public.reservation_books"
+	 src-required="true" dst-required="false"/>
+
+<table name="author_books" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1300" y="880"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="255"/>
+	</column>
+	<constraint name="author_books_unique_name" type="uq-constr" table="public.author_books">
+		<columns names="name" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="author_books_pk" type="pk-constr" table="public.author_books">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="author_books_has_many_books" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="public.author_books"
+	 dst-table="public.books"
 	 src-required="true" dst-required="false"/>
 
 </dbmodel>
