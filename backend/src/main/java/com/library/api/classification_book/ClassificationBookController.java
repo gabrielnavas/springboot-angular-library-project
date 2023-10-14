@@ -198,8 +198,7 @@ public class ClassificationBookController {
             }
     )
     @PatchMapping(
-            value = "{id}",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+            value = "{id}"
     )
     public ResponseEntity<Object> updatePartialsClassificationBookById(
             @PathVariable(value = "id") UUID id,
@@ -241,10 +240,7 @@ public class ClassificationBookController {
                     )
             }
     )
-    @DeleteMapping(
-            value = "{id}",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
-    )
+    @DeleteMapping(value = "{id}")
     public ResponseEntity<Object> removeClassificationBookById(
             @PathVariable(value = "id") UUID id
     ) {
