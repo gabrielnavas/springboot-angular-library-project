@@ -41,8 +41,6 @@ export class PublisherCompanyService {
   }
 
   findAllPublisherCompany(page: number=0, size: number = 10, filters: FindAllFilters): Observable<PublisherCompany[]> {
-    console.log(filters);
-    
     let queryParams = ""
     const anyParams = Object.values(filters).filter(value => value.length > 0).length > 0
     if(anyParams) {

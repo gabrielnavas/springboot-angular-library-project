@@ -1,10 +1,14 @@
 export class AuthorBook {
   id?: string
   name: string
+  createdAt?: Date
+  updateAt?: Date
 
-  constructor(id: string="", name: string="") {
+  constructor(id: string="", name: string="", createdAt: Date = new Date(), updatedAt: Date = new Date()) {
     this.id = id;
     this.name = name;
+    this.createdAt = createdAt
+    this.updateAt = updatedAt
   }
 
   validate(): Error | null {

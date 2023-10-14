@@ -1,7 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+
 import { AuthorBook } from './author-book.model';
+
+import { environment } from '../../environments/environment';
+
+export type FindAllFilters = {
+  name: string
+}
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +20,21 @@ export class AuthorBookService {
   ) { }
 
   createAuthorBook(authorBook: AuthorBook): Observable<AuthorBook> {
-    return this.httpClient.post<AuthorBook>(
-      "http://localhost:8080/api/v1/author-book", 
-      authorBook
-    )
+    const url = `${environment.endpoints.baseUrl}/${environment.endpoints.authorBook.baseUrl}`
+    return this.httpClient.post<AuthorBook>(url, authorBook)
+  }
+
+  findAllAuthorBook(page: number=0, pageSize: number=10, filters: FindAllFilters): Observable<AuthorBook[]> {
+    let queryParams = ""
+    const hasAnyParams = Object.values(filters)
+      .filter(value => value.length > 0)
+      .length > 0
+    
+    if(hasAnyParams) {
+      queryParams = `&name=${filters.name}`
+    }
+
+    let url = `${environment.endpoints.baseUrl}/${environment.endpoints.authorBook.baseUrl}?page=${page}&size=${pageSize}&sort=name,ASC${queryParams}`
+    return this.httpClient.get<AuthorBook[]>(url)
   }
 }
