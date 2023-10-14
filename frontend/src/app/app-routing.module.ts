@@ -11,6 +11,8 @@ import { ClassificationBookUpdateComponent } from './classification-book/compone
 import { ClassificationBookRemoveComponent } from './classification-book/components/classification-book-remove/classification-book-remove.component';
 import { ClassificationBookReadComponent } from './classification-book/components/classification-book-read/classification-book-read.component';
 
+import { AuthorBookReadComponent } from './author-book/components/author-book-read/author-book-read.component';
+import { AuthorBookCreateComponent } from './author-book/components/author-book-create/author-book-create.component';
 
 const routes: Routes = [{
   path: "publisher-company",
@@ -36,6 +38,12 @@ const routes: Routes = [{
 }, {
   path: "classification-book/remove/:id",
   component: ClassificationBookRemoveComponent
+}, {
+  path: "author-book",
+  component: AuthorBookReadComponent
+}, {
+  path: "author-book/create",
+  component: AuthorBookCreateComponent
 }];
 
 @NgModule({

@@ -10,16 +10,14 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from '@angular/material/table';
 
-
 import { HttpClientModule } from "@angular/common/http"
 
 import { PublisherCompanyCreateComponent } from './components/publisher-company-create/publisher-company-create.component';
 import { PublisherCompanyReadComponent } from './components/publisher-company-read/publisher-company-read.component';
 import { PublisherCompanyUpdateComponent } from './components/publisher-company-update/publisher-company-update.component';
 import { PublisherCompanyRemoveComponent } from './components/publisher-company-remove/publisher-company-remove.component';
+
 import { UtilsModule } from '../utils/utils.module';
-
-
 
 
 @NgModule({
