@@ -3,6 +3,7 @@ package com.library.api.author_book;
 import com.library.api.author_book.hateoas.AuthorBookHateoasWithRel;
 import com.library.api.author_book.hateoas.AuthorBookMapperHateoas;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -57,6 +58,37 @@ public class AuthorBookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(
+            summary = "Get All Author Books",
+            description = "Endpoint to Get All Author Books",
+            tags = {"AuthorBook"},
+            responses = {
+                    @ApiResponse(
+                            description = "OK",
+                            responseCode = "200",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = AuthorBookResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "Forbidden",
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "InternalServerError",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
     @GetMapping
     public ResponseEntity<Object> getAllAuthorBooks(
             Pageable pageable,
@@ -76,6 +108,35 @@ public class AuthorBookController {
         return ResponseEntity.status(HttpStatus.OK).body(authorBookResponses);
     }
 
+    @Operation(
+            summary = "Get an Author Books",
+            description = "Endpoint to Get an Author Books",
+            tags = {"AuthorBook"},
+            responses = {
+                    @ApiResponse(
+                            description = "OK",
+                            responseCode = "200",
+                            content = @Content(
+                                    schema = @Schema(implementation = AuthorBookResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "Forbidden",
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "InternalServerError",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
     @GetMapping(value = "{id}")
     public ResponseEntity<Object> getAllAuthorBooks(
             @PathVariable(value = "id") UUID id
@@ -90,6 +151,35 @@ public class AuthorBookController {
         return ResponseEntity.status(HttpStatus.OK).body(authorBookResponse);
     }
 
+    @Operation(
+            summary = "Update Partials an Author Books",
+            description = "Endpoint to Update partials an Author Books",
+            tags = {"AuthorBook"},
+            responses = {
+                    @ApiResponse(
+                            description = "NoContent",
+                            responseCode = "204",
+                            content = @Content(
+                                    schema = @Schema(implementation = AuthorBookResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "Forbidden",
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "InternalServerError",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
     @PatchMapping(value = "{id}")
     public ResponseEntity<Object> updatePartialsAuthorBook(
             @PathVariable(value = "id") UUID id,
