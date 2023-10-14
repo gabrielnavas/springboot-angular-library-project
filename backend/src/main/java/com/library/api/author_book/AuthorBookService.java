@@ -61,4 +61,21 @@ public class AuthorBookService {
                 .updatedAt(authorBook.getUpdatedAt())
                 .build();
     }
+
+    public void updatePartialsAuthorBook(UUID id, AuthorBookRequest request) {
+        Optional<AuthorBook> optionalAuthorBook = authorBookRepository.findById(id);
+        if (optionalAuthorBook.isEmpty()) {
+            throw new ObjectNotFoundException("author book");
+        }
+
+        Optional<AuthorBook> optionalAuthorBookByName = authorBookRepository.findByName(request.name());
+        if (optionalAuthorBookByName.isPresent()
+                && !optionalAuthorBookByName.get().getId().equals(id)) {
+            throw new ObjectAlreadyExistsWithException("author book", "name", request.name());
+        }
+
+        AuthorBook authorBook = optionalAuthorBook.get();
+        authorBook.setName(request.name());
+        authorBookRepository.save(authorBook);
+    }
 }

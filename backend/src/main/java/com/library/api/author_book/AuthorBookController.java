@@ -89,4 +89,13 @@ public class AuthorBookController {
         );
         return ResponseEntity.status(HttpStatus.OK).body(authorBookResponse);
     }
+
+    @PatchMapping(value = "{id}")
+    public ResponseEntity<Object> updatePartialsAuthorBook(
+            @PathVariable(value = "id") UUID id,
+            @RequestBody AuthorBookRequest request
+    ) {
+        authorBookService.updatePartialsAuthorBook(id, request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

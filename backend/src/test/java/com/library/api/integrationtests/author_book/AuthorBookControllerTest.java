@@ -296,6 +296,116 @@ public class AuthorBookControllerTest extends AbstractIntegrationTest {
         Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
     }
 
+    @Test
+    @Order(9)
+    public void testUpdatePartialsAuthorBookById() {
+        AuthorBookRequest newAuthorBookResponseParam = createMockAuthorBookRequest(null);
+        AuthorBookResponse authorBookResponseToUpdate = authorBookResponses[0];
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(String.format("/api/v1/author-book/%s", authorBookResponseToUpdate.getKey()))
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(newAuthorBookResponseParam)
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(10)
+    public void testUpdatePartialsAuthorBookByIdWithWrongCors() {
+        AuthorBookRequest newAuthorBookResponseParam = createMockAuthorBookRequest(null);
+        AuthorBookResponse authorBookResponseToUpdate = authorBookResponses[0];
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setBasePath(String.format("/api/v1/author-book/%s", authorBookResponseToUpdate.getKey()))
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(newAuthorBookResponseParam)
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(11)
+    public void testUpdatePartialsAuthorBookByIdNotFound() {
+        AuthorBookRequest newAuthorBookResponseParam = createMockAuthorBookRequest(null);
+        UUID randomId = UUID.randomUUID();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(String.format("/api/v1/author-book/%s", randomId))
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(newAuthorBookResponseParam)
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+    }
+
+
+    @Test
+    @Order(12)
+    public void testUpdatePartialsAuthorBookByIdAlreadyExistsAuthorBookName() {
+        AuthorBookRequest newAuthorBookResponseParam =
+                createMockAuthorBookRequest(authorBookResponses[1].getName());
+        AuthorBookResponse authorBookResponseToUpdate = authorBookResponses[0];
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(String.format("/api/v1/author-book/%s", authorBookResponseToUpdate.getKey()))
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(newAuthorBookResponseParam)
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
+    }
+    
     private AuthorBookRequest createMockAuthorBookRequest(String name) {
         if (name == null) {
             return new AuthorBookRequest(Faker.instance().book().author());
