@@ -3,6 +3,7 @@ import { AuthorBook } from '../../author-book.model';
 import { Router } from '@angular/router';
 import { AuthorBookService } from '../../author-book.service';
 import { ShowMessagesService } from 'src/app/utils/show-messages.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-author-book-create',
@@ -39,6 +40,17 @@ export class AuthorBookCreateComponent {
         next: () => {
           this.showMessagesService.showMessage("Autor de livros adicionado.")
           this.initAuthorBook()
+        },
+        error: (err: HttpErrorResponse) => {
+          if(err.status === 0) {
+            this.showMessagesService.showMessage("Problemas no servidor, tente novamente mais tarde")
+          } else if(err.status === 400) {
+            const alreadyExistsWithName = err.error.message === 
+              `author book already exists with attribute name with value ${this.authorBook.name}`
+            if(alreadyExistsWithName) {
+              this.showMessagesService.showMessage("Autor de livro já existe com esse nome. Tente com outro nome.")
+            }
+          }
         }
       })
   }
