@@ -14,6 +14,6 @@ public interface AuthorBookRepository extends JpaRepository<AuthorBook, UUID> {
     @Query("SELECT ab FROM AuthorBook ab WHERE ab.name = :name")
     Optional<AuthorBook> findByName(@Param("name") String name);
 
-    @Query("SELECT ab FROM AuthorBook ab WHERE LOWER(ab.name) like CONCAT('%s', :name, '%s')")
+    @Query("SELECT ab FROM AuthorBook ab WHERE LOWER(ab.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<AuthorBook> findAllByLikeName(@Param("name") String name, Pageable pageable);
 }

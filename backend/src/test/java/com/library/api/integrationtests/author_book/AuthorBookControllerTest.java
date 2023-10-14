@@ -145,6 +145,7 @@ public class AuthorBookControllerTest extends AbstractIntegrationTest {
                 "/api/v1/author-book?page=0&size=1",
                 String.format("/api/v1/author-book?name=%s", authorBookResponses[0].getName()),
                 String.format("/api/v1/author-book?page=0&size=1&name=%s", authorBookResponses[0].getName()),
+                String.format("/api/v1/author-book?page=0&size=1&name=%s", authorBookResponses[0].getName().substring(0, 3)),
         };
 
         for (String path : paths) {
