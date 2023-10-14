@@ -187,6 +187,28 @@ public class AuthorBookControllerTest extends AbstractIntegrationTest {
         }
     }
 
+    @Test
+    @Order(5)
+    public void testGetAllAuthorBooksWithWrongCors() throws IOException {
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setBasePath("/api/v1/author-book")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
     private AuthorBookRequest createMockAuthorBookRequest(String name) {
         return new AuthorBookRequest(name == null ? Faker.instance().book().author() : name);
     }
