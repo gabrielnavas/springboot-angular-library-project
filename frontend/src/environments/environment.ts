@@ -7,5 +7,8 @@ export const environment = {
     classificationBook: {
       baseUrl: "classification-book"
     },
+    authorBook: {
+      baseUrl: "author-book"
+    },
   }
 };
