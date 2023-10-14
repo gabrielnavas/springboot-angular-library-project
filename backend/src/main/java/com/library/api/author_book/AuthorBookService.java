@@ -1,14 +1,12 @@
 package com.library.api.author_book;
 
 import com.library.api.exceptions.ObjectAlreadyExistsWithException;
+import com.library.api.exceptions.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -44,6 +42,15 @@ public class AuthorBookService {
                 .stream()
                 .map(AuthorBookService::modelToResponse)
                 .toList();
+    }
+
+    public AuthorBookResponse getAuthorBookById(UUID id) {
+        Optional<AuthorBook> optionalAuthorBook = authorBookRepository.findById(id);
+        if (optionalAuthorBook.isEmpty()) {
+            throw new ObjectNotFoundException("author book");
+        }
+        AuthorBook authorBook = optionalAuthorBook.get();
+        return modelToResponse(authorBook);
     }
 
     private static AuthorBookResponse modelToResponse(AuthorBook authorBook) {

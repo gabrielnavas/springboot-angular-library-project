@@ -21,6 +21,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 
@@ -87,10 +88,9 @@ public class AuthorBookControllerTest extends AbstractIntegrationTest {
         }
     }
 
-
     @Test
     @Order(2)
-    public void testCreatedBookAuthorWithWrongCors() throws IOException {
+    public void testCreatedBookAuthorWithWrongCors() {
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
                 .setBasePath("/api/v1/author-book")
@@ -135,7 +135,6 @@ public class AuthorBookControllerTest extends AbstractIntegrationTest {
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
     }
-
 
     @Test
     @Order(4)
@@ -189,7 +188,7 @@ public class AuthorBookControllerTest extends AbstractIntegrationTest {
 
     @Test
     @Order(5)
-    public void testGetAllAuthorBooksWithWrongCors() throws IOException {
+    public void testGetAllAuthorBooksWithWrongCors() {
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
                 .setBasePath("/api/v1/author-book")
@@ -209,7 +208,98 @@ public class AuthorBookControllerTest extends AbstractIntegrationTest {
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
     }
 
+    @Test
+    @Order(6)
+    public void testGetAuthorBookById() throws IOException {
+        AuthorBookResponse authorBookResponseParam = authorBookResponses[0];
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(String.format("/api/v1/author-book/%s", authorBookResponseParam.getKey()))
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+
+        AuthorBookResponse authorBookResponse = objectMapper
+                .readValue(response.body().asString(), AuthorBookResponse.class);
+
+        Assertions.assertNotNull(authorBookResponse.getKey());
+        Assertions.assertNotNull(authorBookResponse.getName());
+        Assertions.assertNotNull(authorBookResponse.getCreatedAt());
+        Assertions.assertNotNull(authorBookResponse.getUpdatedAt());
+
+        long seconds = 1000 * 30;
+        Date dateLater = new Date(new Date().getTime() - seconds);
+
+        Assertions.assertTrue(dateLater.before(authorBookResponse.getCreatedAt()));
+        Assertions.assertTrue(dateLater.before(authorBookResponse.getUpdatedAt()));
+
+        Assertions.assertEquals(authorBookResponseParam.getName(), authorBookResponse.getName());
+    }
+
+    @Test
+    @Order(7)
+    public void testGetAuthorBookByIdWithWrongCors() {
+        AuthorBookResponse authorBookResponseParam = authorBookResponses[0];
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setBasePath(String.format("/api/v1/author-book/%s", authorBookResponseParam.getKey()))
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(8)
+    public void testGetAuthorBookByIdNotFound() {
+        UUID randomId = UUID.randomUUID();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(String.format("/api/v1/author-book/%s", randomId))
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+    }
+
     private AuthorBookRequest createMockAuthorBookRequest(String name) {
-        return new AuthorBookRequest(name == null ? Faker.instance().book().author() : name);
+        if (name == null) {
+            return new AuthorBookRequest(Faker.instance().book().author());
+        }
+        return new AuthorBookRequest(name);
     }
 }

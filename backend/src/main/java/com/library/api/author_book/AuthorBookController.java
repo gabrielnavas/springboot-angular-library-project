@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/v1/author-book")
@@ -73,5 +74,19 @@ public class AuthorBookController {
                 AuthorBookHateoasWithRel.GET_ALL_AUTHOR_BOOKS
         );
         return ResponseEntity.status(HttpStatus.OK).body(authorBookResponses);
+    }
+
+    @GetMapping(value = "{id}")
+    public ResponseEntity<Object> getAllAuthorBooks(
+            @PathVariable(value = "id") UUID id
+    ) {
+        AuthorBookResponse authorBookResponse =
+                authorBookService.getAuthorBookById(id);
+
+        AuthorBookMapperHateoas.set(
+                authorBookResponse,
+                AuthorBookHateoasWithRel.GET_AUTHOR_BOOK_BY_ID
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(authorBookResponse);
     }
 }
