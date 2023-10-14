@@ -19,6 +19,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.DeserializationF
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 
 import static io.restassured.RestAssured.given;
@@ -30,7 +31,7 @@ public class AuthorBookControllerTest extends AbstractIntegrationTest {
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
 
-    private static int numberOfAuthorBookResponses = 2;
+    private static final int numberOfAuthorBookResponses = 2;
     private static AuthorBookResponse[] authorBookResponses;
 
     private static AuthorBookRequest authorBookRequest;
@@ -113,7 +114,7 @@ public class AuthorBookControllerTest extends AbstractIntegrationTest {
 
     @Test
     @Order(3)
-    public void testCreatedBookAuthorAlreadyExistsAuthorBookName() throws IOException {
+    public void testCreatedBookAuthorAlreadyExistsAuthorBookName() {
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
                 .setBasePath("/api/v1/author-book")
@@ -133,6 +134,57 @@ public class AuthorBookControllerTest extends AbstractIntegrationTest {
                 .response();
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
+    }
+
+
+    @Test
+    @Order(4)
+    public void testGetAllAuthorBooks() throws IOException {
+
+        String[] paths = {
+                "/api/v1/author-book",
+                "/api/v1/author-book?page=0&size=1",
+                String.format("/api/v1/author-book?name=%s", authorBookResponses[0].getName()),
+                String.format("/api/v1/author-book?page=0&size=1&name=%s", authorBookResponses[0].getName()),
+        };
+
+        for (String path : paths) {
+            specification = new RequestSpecBuilder()
+                    .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                    .setBasePath(path)
+                    .setPort(TestConfigs.SERVER_PORT)
+                    .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                    .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                    .build();
+
+            Response response = given().spec(specification)
+                    .accept(MediaType.APPLICATION_JSON_VALUE)
+                    .when()
+                    .get()
+                    .then()
+                    .extract()
+                    .response();
+
+            Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+
+            AuthorBookResponse[] authorBookResponses = objectMapper
+                    .readValue(response.body().asString(), AuthorBookResponse[].class);
+
+            Assertions.assertEquals(numberOfAuthorBookResponses, authorBookResponses.length);
+
+            Arrays.stream(authorBookResponses).forEach(authorBookResponse -> {
+                Assertions.assertNotNull(authorBookResponse.getKey());
+                Assertions.assertNotNull(authorBookResponse.getName());
+                Assertions.assertNotNull(authorBookResponse.getCreatedAt());
+                Assertions.assertNotNull(authorBookResponse.getUpdatedAt());
+
+                long seconds = 1000 * 30;
+                Date dateLater = new Date(new Date().getTime() - seconds);
+
+                Assertions.assertTrue(dateLater.before(authorBookResponse.getCreatedAt()));
+                Assertions.assertTrue(dateLater.before(authorBookResponse.getUpdatedAt()));
+            });
+        }
     }
 
     private AuthorBookRequest createMockAuthorBookRequest(String name) {

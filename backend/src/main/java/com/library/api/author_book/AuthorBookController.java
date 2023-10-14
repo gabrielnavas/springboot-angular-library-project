@@ -8,12 +8,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/v1/author-book")
@@ -52,5 +54,24 @@ public class AuthorBookController {
         AuthorBookResponse response = authorBookService.createAuthorBook(request);
         AuthorBookMapperHateoas.set(response, AuthorBookHateoasWithRel.CREATE_AUTHOR_BOOK);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getAllAuthorBooks(
+            Pageable pageable,
+            @RequestParam(value = "name", required = false, defaultValue = "") String name
+    ) {
+        Map<String, Object> filters = new HashMap<>() {{
+            put("name", name);
+        }};
+        List<AuthorBookResponse> authorBookResponses =
+                authorBookService.getAllAuthorBooks(filters, pageable);
+
+        AuthorBookMapperHateoas.set(
+                authorBookResponses,
+                pageable,
+                AuthorBookHateoasWithRel.GET_ALL_AUTHOR_BOOKS
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(authorBookResponses);
     }
 }
