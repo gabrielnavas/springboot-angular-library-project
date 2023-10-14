@@ -405,7 +405,78 @@ public class AuthorBookControllerTest extends AbstractIntegrationTest {
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
     }
-    
+
+
+    @Test
+    @Order(13)
+    public void testRemoveAuthorBookById() {
+        AuthorBookResponse authorBookResponseToUpdate = authorBookResponses[0];
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(String.format("/api/v1/author-book/%s", authorBookResponseToUpdate.getKey()))
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .when()
+                .delete()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(14)
+    public void testRemoveAuthorBookByIdWithWrongCors() {
+        AuthorBookResponse authorBookResponseToUpdate = authorBookResponses[0];
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setBasePath(String.format("/api/v1/author-book/%s", authorBookResponseToUpdate.getKey()))
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .when()
+                .delete()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
+    @Test
+    @Order(15)
+    public void testRemoveAuthorBookByIdNotFound() {
+        UUID randomId = UUID.randomUUID();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(String.format("/api/v1/author-book/%s", randomId))
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .when()
+                .delete()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+    }
+
+
     private AuthorBookRequest createMockAuthorBookRequest(String name) {
         if (name == null) {
             return new AuthorBookRequest(Faker.instance().book().author());

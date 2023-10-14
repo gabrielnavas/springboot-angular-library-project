@@ -78,4 +78,13 @@ public class AuthorBookService {
         authorBook.setName(request.name());
         authorBookRepository.save(authorBook);
     }
+
+    public void removeAuthorBookById(UUID id) {
+        Optional<AuthorBook> optionalAuthorBook = authorBookRepository.findById(id);
+        if (optionalAuthorBook.isEmpty()) {
+            throw new ObjectNotFoundException("author book");
+        }
+        AuthorBook authorBook = optionalAuthorBook.get();
+        authorBookRepository.delete(authorBook);
+    }
 }

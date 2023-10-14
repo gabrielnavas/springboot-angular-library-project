@@ -138,7 +138,7 @@ public class AuthorBookController {
             }
     )
     @GetMapping(value = "{id}")
-    public ResponseEntity<Object> getAllAuthorBooks(
+    public ResponseEntity<Object> getAuthorBookById(
             @PathVariable(value = "id") UUID id
     ) {
         AuthorBookResponse authorBookResponse =
@@ -152,8 +152,8 @@ public class AuthorBookController {
     }
 
     @Operation(
-            summary = "Update Partials an Author Books",
-            description = "Endpoint to Update partials an Author Books",
+            summary = "Update Partials an Author Book",
+            description = "Endpoint to Update partials an Author Book",
             tags = {"AuthorBook"},
             responses = {
                     @ApiResponse(
@@ -181,11 +181,49 @@ public class AuthorBookController {
             }
     )
     @PatchMapping(value = "{id}")
-    public ResponseEntity<Object> updatePartialsAuthorBook(
+    public ResponseEntity<Object> updatePartialsAuthorBookById(
             @PathVariable(value = "id") UUID id,
             @RequestBody AuthorBookRequest request
     ) {
         authorBookService.updatePartialsAuthorBook(id, request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
+    @Operation(
+            summary = "Remove an Author Book",
+            description = "Endpoint to Remove an Author Book",
+            tags = {"AuthorBook"},
+            responses = {
+                    @ApiResponse(
+                            description = "NoContent",
+                            responseCode = "204",
+                            content = @Content(
+                                    schema = @Schema(implementation = AuthorBookResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "Forbidden",
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "InternalServerError",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
+    @DeleteMapping(value = "{id}")
+    public ResponseEntity<Object> deleteAuthorBookById(
+            @PathVariable(value = "id") UUID id
+    ) {
+        authorBookService.removeAuthorBookById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
