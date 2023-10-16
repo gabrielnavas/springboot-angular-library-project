@@ -1,0 +1,41 @@
+<p>author-book-remove works!</p>
+<mat-card class="container">
+  <mat-card-title class="title">Gerenciar Author de livros</mat-card-title>
+  <mat-card-subtitle class="subtitle">Remover Author de livros</mat-card-subtitle>
+
+  <mat-card-content>
+
+    <form>
+        <mat-form-field>
+          <mat-label>Nome</mat-label>
+          <input 
+            matInput
+            type="text"
+            autofocus
+            [value]="authorBook.name"
+            name="name"
+            readonly="true">
+        </mat-form-field>
+    </form>
+  
+    <span class="alert-remove">
+      Tem certeza disso?
+    </span>
+    
+    <div>
+      <button 
+        mat-raised-button
+        color="primary"
+        (click)="removeClassificationBook()">
+        <i class="material-icons">note_add</i>
+        Remover
+      </button>
+      <button 
+        mat-raised-button
+        (click)="cancel()">
+        <i class="material-icons">cancel</i>
+        Cancelar
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

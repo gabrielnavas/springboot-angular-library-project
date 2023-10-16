@@ -14,13 +14,15 @@ import { AuthorBookReadComponent } from './components/author-book-read/author-bo
 import { AuthorBookCreateComponent } from './components/author-book-create/author-book-create.component';
 
 import { UtilsModule } from '../utils/utils.module';
-import { AuthorBookUpdateComponent } from './components/author-book-update/author-book-update.component'
+import { AuthorBookUpdateComponent } from './components/author-book-update/author-book-update.component';
+import { AuthorBookRemoveComponent } from './components/author-book-remove/author-book-remove.component'
 
 @NgModule({
   declarations: [
     AuthorBookReadComponent,
     AuthorBookCreateComponent,
     AuthorBookUpdateComponent,
+    AuthorBookRemoveComponent,
   ],
   imports: [
     CommonModule,

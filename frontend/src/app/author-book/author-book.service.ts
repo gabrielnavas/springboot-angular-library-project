@@ -31,8 +31,12 @@ export class AuthorBookService {
 
   findAuthorBookById(authorBookId: string): Observable<AuthorBook> {
     const url = `${environment.endpoints.baseUrl}/${environment.endpoints.authorBook.baseUrl}/${authorBookId}`
-    return this.httpClient.get<AuthorBook>(url)
-    
+    return this.httpClient.get<AuthorBook>(url) 
+  }
+
+  removeAuthorBookById(authorBookId: string): Observable<void> {
+    const url = `${environment.endpoints.baseUrl}/${environment.endpoints.authorBook.baseUrl}/${authorBookId}`
+    return this.httpClient.delete<void>(url) 
   }
 
   findAllAuthorBook(page: number=0, pageSize: number=10, filters: FindAllFilters): Observable<AuthorBook[]> {
