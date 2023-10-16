@@ -28,5 +28,10 @@ button i {
 
 .alert-remove {
   color: rgb(255, 52, 52);
-  margin: .8rem 0 .8rem 0;
+  font-weight: 500;
+  font-size: .95rem;
+}
+
+.buttons-group {
+  margin-top: .8rem;
 }
