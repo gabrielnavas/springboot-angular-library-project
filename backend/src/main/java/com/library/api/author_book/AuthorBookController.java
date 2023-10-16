@@ -18,14 +18,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @RestController
-@RequestMapping(value = "/api/v1/author-book")
+@RequestMapping(value = AuthorBookController.REQUEST_MAPPING_PATH)
 @AllArgsConstructor
 @Tag(name = "AuthorBook", description = "Endpoints to Managing the Author Book")
 public class AuthorBookController {
 
     private final AuthorBookService authorBookService;
+
+    private final Logger logger = Logger.getLogger(AuthorBookController.class.getName());
+
+    public static final String REQUEST_MAPPING_PATH = "/api/v1/author-book";
 
     @Operation(
             summary = "Create Author Book",
@@ -53,6 +58,13 @@ public class AuthorBookController {
     public ResponseEntity<Object> createdAuthorBook(
             @RequestBody AuthorBookRequest request
     ) {
+        logger.info(
+                String.format(
+                        "HTTP POST %s",
+                        AuthorBookController.REQUEST_MAPPING_PATH
+                )
+        );
+
         AuthorBookResponse response = authorBookService.createAuthorBook(request);
         AuthorBookMapperHateoas.set(response, AuthorBookHateoasWithRel.CREATE_AUTHOR_BOOK);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -94,6 +106,16 @@ public class AuthorBookController {
             Pageable pageable,
             @RequestParam(value = "name", required = false, defaultValue = "") String name
     ) {
+        logger.info(
+                String.format(
+                        "HTTP GET %s - page number %d - page size %d - sort %s",
+                        AuthorBookController.REQUEST_MAPPING_PATH,
+                        pageable.getPageNumber(),
+                        pageable.getPageSize(),
+                        pageable.getSort()
+                )
+        );
+
         Map<String, Object> filters = new HashMap<>() {{
             put("name", name);
         }};
@@ -141,6 +163,14 @@ public class AuthorBookController {
     public ResponseEntity<Object> getAuthorBookById(
             @PathVariable(value = "id") UUID id
     ) {
+        logger.info(
+                String.format(
+                        "HTTP GET %s/%s",
+                        AuthorBookController.REQUEST_MAPPING_PATH,
+                        id
+                )
+        );
+
         AuthorBookResponse authorBookResponse =
                 authorBookService.getAuthorBookById(id);
 
@@ -185,6 +215,14 @@ public class AuthorBookController {
             @PathVariable(value = "id") UUID id,
             @RequestBody AuthorBookRequest request
     ) {
+        logger.info(
+                String.format(
+                        "HTTP PATCH %s/%s",
+                        AuthorBookController.REQUEST_MAPPING_PATH,
+                        id
+                )
+        );
+
         authorBookService.updatePartialsAuthorBook(id, request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -223,6 +261,14 @@ public class AuthorBookController {
     public ResponseEntity<Object> deleteAuthorBookById(
             @PathVariable(value = "id") UUID id
     ) {
+        logger.info(
+                String.format(
+                        "HTTP DELETE %s/%s",
+                        AuthorBookController.REQUEST_MAPPING_PATH,
+                        id
+                )
+        );
+
         authorBookService.removeAuthorBookById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

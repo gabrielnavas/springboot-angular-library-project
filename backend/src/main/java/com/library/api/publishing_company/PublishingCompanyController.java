@@ -125,7 +125,6 @@ public class PublishingCompanyController {
     }
 
     @PatchMapping("{publishingCompanyId}")
-
     @Operation(
             summary = "Patch a Publishing Companies",
             description = "Endpoint to Patch a Publishing Companies",
