@@ -1,0 +1,36 @@
+<mat-card class="container">
+  <mat-card-title class="title">Gerenciar Author de livros</mat-card-title>
+  <mat-card-subtitle class="subtitle">Atualizar Author de livros</mat-card-subtitle>
+
+  <mat-card-content>
+    <form>
+        <mat-form-field>
+          <mat-label>Nome</mat-label>
+          <input 
+            matInput
+            type="text"
+            autofocus
+            [(ngModel)]="authorBook.name"
+            (keypress)="keyPress($event)"
+            name="name"
+            placeholder="Mary Lasson">
+        </mat-form-field>
+    </form>
+  
+    <div>
+      <button 
+        mat-raised-button
+        color="primary"
+        (click)="updateAuthorBook()">
+        <i class="material-icons">note_add</i>
+        Adicionar
+      </button>
+      <button 
+        mat-raised-button
+        (click)="cancel()">
+        <i class="material-icons">cancel</i>
+        Cancelar
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

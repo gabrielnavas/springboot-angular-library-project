@@ -1,0 +1,27 @@
+.container {
+  margin-top: 4rem;
+  padding: .8rem;
+}
+
+.title {
+  margin-left: 1.1rem;
+  margin-bottom: .4rem;
+}
+
+.subtitle {
+  margin-bottom: 1.8rem;
+  margin-left: 1.1rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  margin-right: .9rem;
+}
+
+button i {
+  margin-right: .8rem;
+}

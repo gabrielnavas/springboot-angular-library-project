@@ -13,6 +13,7 @@ import { ClassificationBookReadComponent } from './classification-book/component
 
 import { AuthorBookReadComponent } from './author-book/components/author-book-read/author-book-read.component';
 import { AuthorBookCreateComponent } from './author-book/components/author-book-create/author-book-create.component';
+import { AuthorBookUpdateComponent } from './author-book/components/author-book-update/author-book-update.component';
 
 const routes: Routes = [{
   path: "publisher-company",
@@ -44,6 +45,9 @@ const routes: Routes = [{
 }, {
   path: "author-book/create",
   component: AuthorBookCreateComponent
+}, {
+  path: "author-book/update/:id",
+  component: AuthorBookUpdateComponent
 }];
 
 @NgModule({

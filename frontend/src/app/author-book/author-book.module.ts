@@ -13,12 +13,14 @@ import { MatTableModule } from '@angular/material/table';
 import { AuthorBookReadComponent } from './components/author-book-read/author-book-read.component';
 import { AuthorBookCreateComponent } from './components/author-book-create/author-book-create.component';
 
-import { UtilsModule } from '../utils/utils.module'
+import { UtilsModule } from '../utils/utils.module';
+import { AuthorBookUpdateComponent } from './components/author-book-update/author-book-update.component'
 
 @NgModule({
   declarations: [
     AuthorBookReadComponent,
     AuthorBookCreateComponent,
+    AuthorBookUpdateComponent,
   ],
   imports: [
     CommonModule,

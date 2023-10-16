@@ -1,10 +1,10 @@
 <mat-card class="container">
   
   <mat-card-title class="title">
-    Gerenciar Editora de livros
+    Gerenciar Author de livros
   </mat-card-title>
   <mat-card-subtitle class="subtitle">
-    Buscar e listar Editoras de Livros 
+    Buscar e listar Author de livros
   </mat-card-subtitle>
   
   <mat-card-content>
@@ -71,13 +71,13 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Ações</th>
           <td mat-cell *matCellDef="let row"  class="td-actions">
-            <a routerLink="/publisher-company/update/{{ row.id }}">
+            <a routerLink="/author-book/update/{{ row.id }}">
               <button mat-raised-button>
                 <i class="material-icons">edit</i>
                 Alterar
               </button>
             </a>
-            <a routerLink="/publisher-company/remove/{{ row.id }}">
+            <a routerLink="">
               <button mat-raised-button>
                 <i class="material-icons">delete</i>
                 Remover

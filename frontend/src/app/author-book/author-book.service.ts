@@ -24,6 +24,17 @@ export class AuthorBookService {
     return this.httpClient.post<AuthorBook>(url, authorBook)
   }
 
+  updatePartialsAuthorBook(authorBook: AuthorBook): Observable<void> {
+    const url = `${environment.endpoints.baseUrl}/${environment.endpoints.authorBook.baseUrl}/${authorBook.id}`
+    return this.httpClient.patch<void>(url, authorBook)
+  }
+
+  findAuthorBookById(authorBookId: string): Observable<AuthorBook> {
+    const url = `${environment.endpoints.baseUrl}/${environment.endpoints.authorBook.baseUrl}/${authorBookId}`
+    return this.httpClient.get<AuthorBook>(url)
+    
+  }
+
   findAllAuthorBook(page: number=0, pageSize: number=10, filters: FindAllFilters): Observable<AuthorBook[]> {
     let queryParams = ""
     const hasAnyParams = Object.values(filters)
