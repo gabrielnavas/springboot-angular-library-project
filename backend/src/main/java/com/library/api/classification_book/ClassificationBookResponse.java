@@ -22,4 +22,13 @@ public class ClassificationBookResponse extends RepresentationModel<Classificati
 
     private Date createdAt;
     private Date updatedAt;
+
+    public static ClassificationBookResponse modelToResponse(ClassificationBook classificationBook) {
+        return ClassificationBookResponse.builder()
+                .key(classificationBook.getId())
+                .name(classificationBook.getName())
+                .createdAt(classificationBook.getCreatedAt())
+                .updatedAt(classificationBook.getUpdatedAt())
+                .build();
+    }
 }

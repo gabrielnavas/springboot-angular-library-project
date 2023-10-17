@@ -32,7 +32,7 @@ public class ClassificationBookService {
                 .build();
 
         classificationBook = classificationBookRepository.save(classificationBook);
-        return modelToResponse(classificationBook);
+        return ClassificationBookResponse.modelToResponse(classificationBook);
     }
 
     public List<ClassificationBookResponse> getAllClassificationBooks(Map<String, Object> filters, Pageable pageable) {
@@ -40,12 +40,12 @@ public class ClassificationBookService {
 
         if (name.length() > 0) {
             return classificationBookRepository.findAllByName(name, pageable)
-                    .map(ClassificationBookService::modelToResponse)
+                    .map(ClassificationBookResponse::modelToResponse)
                     .toList();
         } else {
             return classificationBookRepository.findAll(pageable)
                     .stream()
-                    .map(ClassificationBookService::modelToResponse)
+                    .map(ClassificationBookResponse::modelToResponse)
                     .toList();
         }
     }
@@ -59,7 +59,7 @@ public class ClassificationBookService {
 
         ClassificationBook classificationBook = optionalClassificationBook.get();
 
-        return modelToResponse(classificationBook);
+        return ClassificationBookResponse.modelToResponse(classificationBook);
     }
 
     public void updatePartialsClassificationBookById(UUID id, ClassificationBookRequest request) {
@@ -89,14 +89,5 @@ public class ClassificationBookService {
         ClassificationBook classificationBook = optionalClassificationBookExists.get();
 
         classificationBookRepository.delete(classificationBook);
-    }
-
-    private static ClassificationBookResponse modelToResponse(ClassificationBook classificationBook) {
-        return ClassificationBookResponse.builder()
-                .key(classificationBook.getId())
-                .name(classificationBook.getName())
-                .createdAt(classificationBook.getCreatedAt())
-                .updatedAt(classificationBook.getUpdatedAt())
-                .build();
     }
 }
