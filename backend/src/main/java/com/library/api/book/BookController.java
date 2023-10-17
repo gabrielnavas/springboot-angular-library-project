@@ -1,4 +1,4 @@
-package com.library.api.book.controllers;
+package com.library.api.book;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

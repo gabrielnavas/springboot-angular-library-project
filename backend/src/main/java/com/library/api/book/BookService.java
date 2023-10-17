@@ -1,4 +1,4 @@
-package com.library.api.book.controllers;
+package com.library.api.book;
 
 import com.library.api.author_book.AuthorBook;
 import com.library.api.author_book.AuthorBookRepository;

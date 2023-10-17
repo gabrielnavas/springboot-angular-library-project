@@ -1,4 +1,4 @@
-package com.library.api.book.controllers;
+package com.library.api.book;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
