@@ -23,4 +23,13 @@ public class AuthorBookResponse extends RepresentationModel<AuthorBookResponse> 
     private String name;
     private Date createdAt;
     private Date updatedAt;
+
+    public static AuthorBookResponse modelToResponse(AuthorBook model) {
+        return AuthorBookResponse.builder()
+                .key(model.getId())
+                .name(model.getName())
+                .createdAt(model.getCreatedAt())
+                .updatedAt(model.getUpdatedAt())
+                .build();
+    }
 }

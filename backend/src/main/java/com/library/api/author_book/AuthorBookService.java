@@ -27,20 +27,20 @@ public class AuthorBookService {
                 .updatedAt(now)
                 .build();
         authorBook = authorBookRepository.save(authorBook);
-        return modelToResponse(authorBook);
+        return AuthorBookResponse.modelToResponse(authorBook);
     }
 
     public List<AuthorBookResponse> getAllAuthorBooks(Map<String, Object> filters, Pageable pageable) {
         if (filters.containsKey("name") && ((String) filters.get("name")).length() > 0) {
             String name = (String) filters.get("name");
             return authorBookRepository.findAllByLikeName(name, pageable)
-                    .stream().map(AuthorBookService::modelToResponse)
+                    .stream().map(AuthorBookResponse::modelToResponse)
                     .toList();
         }
 
         return authorBookRepository.findAll(pageable)
                 .stream()
-                .map(AuthorBookService::modelToResponse)
+                .map(AuthorBookResponse::modelToResponse)
                 .toList();
     }
 
@@ -50,16 +50,7 @@ public class AuthorBookService {
             throw new ObjectNotFoundException("author book");
         }
         AuthorBook authorBook = optionalAuthorBook.get();
-        return modelToResponse(authorBook);
-    }
-
-    private static AuthorBookResponse modelToResponse(AuthorBook authorBook) {
-        return AuthorBookResponse.builder()
-                .key(authorBook.getId())
-                .name(authorBook.getName())
-                .createdAt(authorBook.getCreatedAt())
-                .updatedAt(authorBook.getUpdatedAt())
-                .build();
+        return AuthorBookResponse.modelToResponse(authorBook);
     }
 
     public void updatePartialsAuthorBook(UUID id, AuthorBookRequest request) {
