@@ -26,13 +26,14 @@ import static io.restassured.RestAssured.given;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Order(2)
 public class ClassificationBookControllerTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
 
     private static ClassificationBookRequest classificationBookRequest;
-    private static ClassificationBookResponse[] classificationBookResponses;
+    public static ClassificationBookResponse[] classificationBookResponses;
 
     private static final int numberOfClassificationsBooksResponses = 2;
 

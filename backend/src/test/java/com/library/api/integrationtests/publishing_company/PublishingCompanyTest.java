@@ -29,6 +29,7 @@ import static io.restassured.RestAssured.given;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Order(3)
 public class PublishingCompanyTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
@@ -36,7 +37,7 @@ public class PublishingCompanyTest extends AbstractIntegrationTest {
 
     private static final int numberOfCreatePublishingCompanyResponse = 2;
 
-    private static PublishingCompanyResponse[] publishingCompanyResponses;
+    public static PublishingCompanyResponse[] publishingCompanyResponses;
     private static PublishingCompanyRequest publishingCompanyRequest;
 
     @BeforeAll
