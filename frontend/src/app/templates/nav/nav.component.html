@@ -5,19 +5,31 @@
     opened 
     fixedInViewport="true" 
     fixedTopGap="64">
+    
     <mat-nav-list class="nav-list">
-      <a mat-list-item routerLink="publisher-company">
-        <i class="material-icons">book</i>
-        <span class="item-title">Editora de livros</span>
-      </a>
-      <a mat-list-item routerLink="classification-book">
-        <i class="material-icons">book</i>
-        <span class="item-title">Classificação de livros</span>
-      </a>
-      <a mat-list-item routerLink="author-book">
-        <i class="material-icons">assignment</i>
-        <span class="item-title">Author de livros</span>
-      </a>
+
+      <mat-expansion-panel [class.mat-elevation-z0]="true" dense>
+        <mat-expansion-panel-header>
+          Livros
+      </mat-expansion-panel-header>
+
+      <mat-nav-list dense>
+        <a mat-list-item routerLink="publisher-company">
+          <i class="material-icons">book</i>
+          <span class="item-title">Editora</span>
+        </a>
+        <a mat-list-item routerLink="classification-book">
+          <i class="material-icons">book</i>
+          <span class="item-title">Classificação</span>
+        </a>
+        <a mat-list-item routerLink="author-book">
+          <i class="material-icons">assignment</i>
+          <span class="item-title">Author</span>
+        </a>
+      </mat-nav-list>
+
+    </mat-expansion-panel>
+      
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content class="content">
