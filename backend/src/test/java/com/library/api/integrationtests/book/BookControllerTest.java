@@ -43,7 +43,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
     private static PublishingCompanyResponse publishingCompanyResponse;
 
     @BeforeAll
-    public static void setup() throws IOException {
+    public static void setup() {
         objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
@@ -113,6 +113,37 @@ public class BookControllerTest extends AbstractIntegrationTest {
         Assertions.assertEquals(publishingCompanyResponse.getName(), bookResponse.getPublishingCompany().getName());
         Assertions.assertEquals(publishingCompanyResponse.getCreatedAt(), bookResponse.getPublishingCompany().getCreatedAt());
         Assertions.assertEquals(publishingCompanyResponse.getCreatedAt(), bookResponse.getPublishingCompany().getUpdatedAt());
+    }
+
+
+    @Test
+    @Order(5)
+    public void testCreatedBookAuthorWithWrongCorsForbidden() throws IOException {
+        BookRequest bookRequest = createBook(
+                publishingCompanyResponse,
+                classificationBookResponse,
+                authorBookResponse
+        );
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setBasePath("/api/v1/book")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(bookRequest)
+                .when()
+                .post()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
     }
 
     private static BookRequest createBook(
