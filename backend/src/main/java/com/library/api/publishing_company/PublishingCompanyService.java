@@ -35,7 +35,7 @@ public class PublishingCompanyService {
                 .updateAt(now)
                 .build();
         publishingCompany = publishingCompanyRepository.save(publishingCompany);
-        return modelToResponse(publishingCompany);
+        return PublishingCompanyResponse.modelToResponse(publishingCompany);
 
     }
 
@@ -82,7 +82,7 @@ public class PublishingCompanyService {
         }
 
         return publishingCompanies.stream()
-                .map(PublishingCompanyService::modelToResponse)
+                .map(PublishingCompanyResponse::modelToResponse)
                 .toList();
     }
 
@@ -95,7 +95,7 @@ public class PublishingCompanyService {
         }
 
         PublishingCompany publishingCompany = optionalPublishingCompany.get();
-        return modelToResponse(publishingCompany);
+        return PublishingCompanyResponse.modelToResponse(publishingCompany);
     }
 
 
@@ -109,14 +109,5 @@ public class PublishingCompanyService {
 
         PublishingCompany publishingCompany = optionalPublishingCompany.get();
         publishingCompanyRepository.delete(publishingCompany);
-    }
-
-    private static PublishingCompanyResponse modelToResponse(PublishingCompany publishingCompany) {
-        return PublishingCompanyResponse.builder()
-                .key(publishingCompany.getId())
-                .name(publishingCompany.getName())
-                .createdAt(publishingCompany.getCreatedAt())
-                .updatedAt(publishingCompany.getUpdateAt())
-                .build();
     }
 }

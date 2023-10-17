@@ -23,4 +23,13 @@ public class PublishingCompanyResponse
     private String name;
     private Date createdAt;
     private Date updatedAt;
+
+    public static PublishingCompanyResponse modelToResponse(PublishingCompany publishingCompany) {
+        return PublishingCompanyResponse.builder()
+                .key(publishingCompany.getId())
+                .name(publishingCompany.getName())
+                .createdAt(publishingCompany.getCreatedAt())
+                .updatedAt(publishingCompany.getUpdateAt())
+                .build();
+    }
 }
