@@ -1,9 +1,9 @@
 ## Library Project
 
 ### Database
-- [ ] PostgreSQL
-- [ ] Docker
-- [ ] Docker Compose
+- PostgreSQL
+- Docker
+- Docker Compose
 
 ### Backend
 - Spring Boot Web
