@@ -4,7 +4,7 @@ CREATE TABLE public.books (
 	isbn varchar(13) NOT NULL,
 	pages integer NOT NULL,
 	key_words varchar(1000),
-	year_publication date NOT NULL,
+	publication date NOT NULL,
     created_at timestamp NOT NULL,
     updated_at timestamp NOT NULL,
 	id_publishing_company uuid NOT NULL,
