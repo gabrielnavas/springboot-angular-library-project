@@ -5,6 +5,8 @@ CREATE TABLE public.books (
 	pages integer NOT NULL,
 	key_words varchar(1000),
 	year_publication date NOT NULL,
+    created_at timestamp NOT NULL,
+    updated_at timestamp NOT NULL,
 	id_publishing_company uuid NOT NULL,
 	id_classification_books uuid NOT NULL,
 	id_author_books uuid NOT NULL,

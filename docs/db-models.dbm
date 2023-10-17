@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="1.0.5" use-changelog="false" last-position="195,194" last-zoom="0.75" max-obj-count="10"
+<dbmodel pgmodeler-ver="1.0.5" use-changelog="false" last-position="0,0" last-zoom="0.75" max-obj-count="10"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -16,7 +16,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <schema name="public" layers="0" fill-color="#e1e1e1" sql-disabled="true">
 </schema>
 
-<table name="books" layers="0" collapse-mode="2" max-obj-count="10" z-value="0">
+<table name="books" layers="0" collapse-mode="2" max-obj-count="13" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="820" y="560"/>
@@ -38,14 +38,20 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="year_publication" not-null="true">
 		<type name="date" length="0"/>
 	</column>
+	<column name="created_at" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="updated_at" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
 	<constraint name="books_pk" type="pk-constr" table="public.books">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_author_books" index="8"/>
-		<object name="id_classification_books" index="7"/>
-		<object name="id_publishing_company" index="6"/>
+		<object name="id_author_books" index="10"/>
+		<object name="id_classification_books" index="9"/>
+		<object name="id_publishing_company" index="8"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
