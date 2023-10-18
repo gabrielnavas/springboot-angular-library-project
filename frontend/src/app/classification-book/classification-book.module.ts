@@ -10,6 +10,7 @@ import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from "@angular/material/dialog";
 
 import { HttpClientModule } from "@angular/common/http"
 
@@ -19,6 +20,7 @@ import { ClassificationBookReadComponent } from './components/classification-boo
 import { ClassificationBookCreateComponent } from './components/classification-book-create/classification-book-create.component';
 import { ClassificationBookUpdateComponent } from './components/classification-book-update/classification-book-update.component';
 import { ClassificationBookRemoveComponent } from './components/classification-book-remove/classification-book-remove.component';
+import { ClassificationBookFindDialogComponent } from './components/classification-book-find-dialog/classification-book-find-dialog.component';
 
 
 @NgModule({
@@ -27,6 +29,8 @@ import { ClassificationBookRemoveComponent } from './components/classification-b
     ClassificationBookCreateComponent,
     ClassificationBookUpdateComponent,
     ClassificationBookRemoveComponent,
+    ClassificationBookFindDialogComponent,
+    
   ],
   imports: [
     CommonModule,
@@ -39,6 +43,7 @@ import { ClassificationBookRemoveComponent } from './components/classification-b
     MatInputModule,                 
     MatSnackBarModule ,             
     MatTableModule,
+    MatDialogModule,
     UtilsModule                 
   ]
 })

@@ -9,13 +9,15 @@ import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AuthorBookReadComponent } from './components/author-book-read/author-book-read.component';
 import { AuthorBookCreateComponent } from './components/author-book-create/author-book-create.component';
 
 import { UtilsModule } from '../utils/utils.module';
 import { AuthorBookUpdateComponent } from './components/author-book-update/author-book-update.component';
-import { AuthorBookRemoveComponent } from './components/author-book-remove/author-book-remove.component'
+import { AuthorBookRemoveComponent } from './components/author-book-remove/author-book-remove.component';
+import { AuthorBookFindDialogComponent } from './components/author-book-find-dialog/author-book-find-dialog.component'
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { AuthorBookRemoveComponent } from './components/author-book-remove/autho
     AuthorBookCreateComponent,
     AuthorBookUpdateComponent,
     AuthorBookRemoveComponent,
+    AuthorBookFindDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -34,6 +37,7 @@ import { AuthorBookRemoveComponent } from './components/author-book-remove/autho
     MatInputModule,
     MatSnackBarModule,
     MatTableModule,
+    MatDialogModule,
     UtilsModule
   ]
 })

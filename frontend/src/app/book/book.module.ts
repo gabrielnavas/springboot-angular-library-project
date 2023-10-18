@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BookReadComponent } from './components/book-read/book-read.component';
 
-import { FormsModule } from "@angular/forms"
+import { FormsModule, ReactiveFormsModule } from "@angular/forms"
 
 import { MatCardModule } from "@angular/material/card"
 import { MatButtonModule } from "@angular/material/button";
@@ -12,13 +11,15 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { MatListModule } from "@angular/material/list";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatIconModule } from "@angular/material/icon";
+import { MatDialogModule } from "@angular/material/dialog";
 
-import { BookCreateComponent } from './components/book-create/book-create.component'
+import { BookReadComponent } from './components/book-read/book-read.component';
+import { BookCreateComponent } from './components/book-create/book-create.component';
 
 @NgModule({
   declarations: [
     BookReadComponent,
-    BookCreateComponent
+    BookCreateComponent,
   ],
   imports: [
     CommonModule,
@@ -31,6 +32,8 @@ import { BookCreateComponent } from './components/book-create/book-create.compon
     MatListModule,
     MatChipsModule,
     MatIconModule,
+    MatDialogModule,
+    ReactiveFormsModule, 
   ]
 })
 export class BookModule { }

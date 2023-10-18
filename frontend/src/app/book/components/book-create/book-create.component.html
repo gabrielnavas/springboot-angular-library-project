@@ -6,43 +6,61 @@
 
   <mat-card-content>
     <form>
-      <mat-form-field class="full-width">
-        <mat-label>Título *</mat-label>
+      <mat-form-field class="width-60 margin-bottom margin-right">
+        <mat-label>Título</mat-label>
         <input 
           matInput
           type="text"
           name="title"
           autofocus
-          placeholder="Senhor dos Aneis - As duas torres">
+          placeholder="Senhor dos Aneis - As duas torres"
+          [formControl]="titleFormControl" 
+          [errorStateMatcher]="matcher">
+          <mat-error *ngIf="titleFormControl.hasError('required')">
+            Título é <strong>obrigatório</strong>. Deve ter entre 1 a 120 caracteres.
+          </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>ISBN *</mat-label>
-        <input 
-          matInput
-          type="text"
-          name="isbn"
-          placeholder="1A44">
-      </mat-form-field>
-
-      <mat-form-field class="margin-left">
-        <mat-label>Páginas *</mat-label>
-        <input 
-          matInput
-          type="number"
-          name="pages"
-          placeholder="500">
-      </mat-form-field>
-
-      <mat-form-field class="margin-left">
-        <mat-label>Data de publicação (mês/dia/ano) *</mat-label>
+      <mat-form-field class="margin-right margin-bottom">
+        <mat-label>Publicação * mês/dia/ano </mat-label>
         <input 
           type="date"
           matNativeControl="date"
           name="publication">
       </mat-form-field>
 
-      <mat-form-field class="full-width">
+      <mat-form-field class="width-40 margin-right margin-bottom">
+        <mat-label>Páginas</mat-label>
+        <input 
+          matInput
+          type="number"
+          name="pages"
+          placeholder="500"
+          [formControl]="pagesFormControl" 
+          [errorStateMatcher]="matcher">
+          <mat-error *ngIf="pagesFormControl.hasError('required')">
+            Quantidade páginas é <strong>obrigatório</strong>.
+          </mat-error>
+          <mat-error *ngIf="pagesFormControl.hasError('required')">
+            Deve ter entre <strong>1</strong> a <strong>50,000 mil</strong>.
+          </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="width-40 margin-right margin-bottom">
+        <mat-label>ISBN</mat-label>
+        <input 
+          matInput
+          type="text"
+          name="isbn"
+          placeholder="1A44" 
+          [formControl]="isbnFormControl" 
+          [errorStateMatcher]="matcher">
+          <mat-error *ngIf="isbnFormControl.hasError('required')">
+            ISBN é <strong>obrigatório</strong> Deve ter entre <strong>1</strong> a <strong>20</strong> caracteres.
+          </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="width-60">
         <mat-label>Palavras-chave</mat-label>
         <mat-chip-grid #chipGrid aria-label="Entre com as palavras-chave">
           <mat-chip-row *ngFor="let keyWord of keyWords"
@@ -63,73 +81,93 @@
         </mat-chip-grid>
       </mat-form-field>
 
-      <mat-divider></mat-divider>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="title">Autor</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="input-width margin-right">
+            <mat-label>Nome do author escolhido *</mat-label>
+            <input 
+              matInput
+              type="text"
+              name="publication"
+              [value]="book.authorBookResponse?.name"
+              readonly>
+          </mat-form-field>
+          <button
+            class="margin-left button-width" 
+            mat-raised-button
+            color="primary"
+            (click)="openDialogAuthorBookFind()">
+            Buscar autor
+          </button>
+        </mat-card-content>
+      </mat-card>
 
-      <div>
-        <mat-form-field>
-          <mat-label>Autor escolhido *</mat-label>
-          <input 
-            matInput
-            type="text"
-            name="publication"
-            readonly>
-        </mat-form-field>
-        <button
-          class="margin-left button-width" 
-          mat-raised-button
-          color="primary">
-          Buscar autor
-        </button>
-      </div>
+      <mat-card class="margin-top">
+        <mat-card-header>
+          <mat-card-title class="title">Classificação escolhido</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="input-width margin-right">
+            <mat-label>Nome da classificação escolhida *</mat-label>
+            <input 
+              matInput
+              type="text"
+              name="classification-book"
+              [value]="book.classificationBook?.name"
+              readonly>
+          </mat-form-field>
+          <button 
+            class="margin-left button-width" 
+            mat-raised-button
+            color="primary"
+            (click)="openDialogClassificationBookFind()">
+            Buscar Classificação
+          </button>
+        </mat-card-content>
+      </mat-card>
 
-      <div>
-        <mat-form-field>
-          <mat-label>Classificação escolhido *</mat-label>
-          <input 
-            matInput
-            type="text"
-            name="classification-book"
-            readonly>
-        </mat-form-field>
-        <button 
-          class="margin-left button-width" 
-          mat-raised-button
-          color="primary">
-          Buscar Classificação
-        </button>
-      </div>
+      <mat-card class="margin-top">
+        <mat-card-header>
+          <mat-card-title class="title">Editora</mat-card-title>
+        </mat-card-header>
+          <mat-card-content>
+          <mat-form-field class="input-width margin-right">
+            <mat-label>Nome da editora escolhida *</mat-label>
+            <input 
+              matInput
+              type="text"
+              name="publishing-company"
+              [value]="book.publishingCompany?.name"
+              readonly>
+          </mat-form-field>
+          <button 
+            class="margin-left button-width" 
+            mat-raised-button
+            color="primary"
+            (click)="openDialogPublisherCompanyFind()">
+            Buscar Editora
+          </button>
+        </mat-card-content>
+      </mat-card>
 
-      <div>
-        <mat-form-field>
-          <mat-label>Editora escolhido *</mat-label>
-          <input 
-            matInput
-            type="text"
-            name="publishing-company"
-            readonly>
-        </mat-form-field>
-        <button 
-          class="margin-left button-width" 
-          mat-raised-button
-          color="primary">
-          Buscar Editora
-        </button>
-      </div>
     </form>
 
 
-    <div>
+    <div class="margin-top">
       <button 
         mat-raised-button
         color="primary"
         (click)="createBook()">
-        <i class="material-icons">note_add</i>
+        <mat-icon>note_add</mat-icon>
         Adicionar
       </button>
       <button 
         mat-raised-button
         (click)="cancel()">
-        <i class="material-icons">cancel</i>
+        <mat-icon>cancel</mat-icon>
         Cancelar
       </button>
     </div>

@@ -1,6 +1,5 @@
 .container {
   margin-top: 4rem;
-  padding: .8rem;
 }
 
 .title {
@@ -13,16 +12,32 @@
   margin-left: 1.1rem;
 }
 
-.full-width {
-  width: 100%;
+.width-60 {
+  width: 60%;
 }
 
-.margin-left {
-  margin-left: 1rem;
+.width-40 {
+  width: 40%;
+}
+
+.margin-right {
+  margin-right: 1rem;
+}
+
+.margin-top {
+  margin-top: 1.5rem;
+}
+
+.margin-bottom {
+  margin-bottom: 1.3rem;
 }
 
 .button-width {
   min-width: 13rem;
+}
+
+.input-width {
+  min-width: 50%;
 }
 
 button {
