@@ -1,0 +1,138 @@
+<mat-card class="container">
+  <mat-card-header>
+    <mat-card-title class="title">Gerenciar livros</mat-card-title>
+    <mat-card-subtitle class="subtitle">Adicionar novo livro</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form>
+      <mat-form-field class="full-width">
+        <mat-label>Título *</mat-label>
+        <input 
+          matInput
+          type="text"
+          name="title"
+          autofocus
+          placeholder="Senhor dos Aneis - As duas torres">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>ISBN *</mat-label>
+        <input 
+          matInput
+          type="text"
+          name="isbn"
+          placeholder="1A44">
+      </mat-form-field>
+
+      <mat-form-field class="margin-left">
+        <mat-label>Páginas *</mat-label>
+        <input 
+          matInput
+          type="number"
+          name="pages"
+          placeholder="500">
+      </mat-form-field>
+
+      <mat-form-field class="margin-left">
+        <mat-label>Data de publicação (mês/dia/ano) *</mat-label>
+        <input 
+          type="date"
+          matNativeControl="date"
+          name="publication">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Palavras-chave</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Entre com as palavras-chave">
+          <mat-chip-row *ngFor="let keyWord of keyWords"
+                        (removed)="removeKeyWord(keyWord)"
+                        [editable]="true"
+                        (edited)="editKeyWord(keyWord, $event)"
+                        [aria-description]="'Pressione enter para editar ' + keyWord">
+            {{ keyWord }}
+            <button matChipRemove [attr.aria-label]="'Remover ' + keyWord">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          <input placeholder="Cavalo..."
+                [matChipInputFor]="chipGrid"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur"
+                (matChipInputTokenEnd)="addKeyWord($event)"/>
+        </mat-chip-grid>
+      </mat-form-field>
+
+      <mat-divider></mat-divider>
+
+      <div>
+        <mat-form-field>
+          <mat-label>Autor escolhido *</mat-label>
+          <input 
+            matInput
+            type="text"
+            name="publication"
+            readonly>
+        </mat-form-field>
+        <button
+          class="margin-left button-width" 
+          mat-raised-button
+          color="primary">
+          Buscar autor
+        </button>
+      </div>
+
+      <div>
+        <mat-form-field>
+          <mat-label>Classificação escolhido *</mat-label>
+          <input 
+            matInput
+            type="text"
+            name="classification-book"
+            readonly>
+        </mat-form-field>
+        <button 
+          class="margin-left button-width" 
+          mat-raised-button
+          color="primary">
+          Buscar Classificação
+        </button>
+      </div>
+
+      <div>
+        <mat-form-field>
+          <mat-label>Editora escolhido *</mat-label>
+          <input 
+            matInput
+            type="text"
+            name="publishing-company"
+            readonly>
+        </mat-form-field>
+        <button 
+          class="margin-left button-width" 
+          mat-raised-button
+          color="primary">
+          Buscar Editora
+        </button>
+      </div>
+    </form>
+
+
+    <div>
+      <button 
+        mat-raised-button
+        color="primary"
+        (click)="createBook()">
+        <i class="material-icons">note_add</i>
+        Adicionar
+      </button>
+      <button 
+        mat-raised-button
+        (click)="cancel()">
+        <i class="material-icons">cancel</i>
+        Cancelar
+      </button>
+    </div>
+  </mat-card-content>
+  
+</mat-card>
