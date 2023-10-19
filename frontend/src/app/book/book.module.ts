@@ -14,6 +14,9 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatIconModule } from "@angular/material/icon";
 import { MatDialogModule } from "@angular/material/dialog";
 
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from "@angular/material/datepicker";
+
 import { BookReadComponent } from './components/book-read/book-read.component';
 import { BookCreateComponent } from './components/book-create/book-create.component';
 
@@ -35,6 +38,8 @@ import { BookCreateComponent } from './components/book-create/book-create.compon
     MatChipsModule,
     MatIconModule,
     MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     ReactiveFormsModule, 
   ]
 })
