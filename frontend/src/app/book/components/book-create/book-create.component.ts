@@ -62,12 +62,6 @@ export class BookCreateComponent {
     this.updateDateNow()
   }
 
-  updateDateNow(): void {
-    setInterval(() => {
-      this.dateNow = new Date()
-    }, 1000)
-  }
-
   changePublication(event: MatDatepickerInputEvent<Date>) {
     if(event.value) {
       this.book.publication = event.value
@@ -101,10 +95,6 @@ export class BookCreateComponent {
 
   cancel(): void {
     this.router.navigateByUrl("book")
-  }
-
-  private initBook(): void {
-    this.book = new Book()
   }
 
   addKeyWord(event: MatChipInputEvent): void {
@@ -187,5 +177,15 @@ export class BookCreateComponent {
         this.book.publishingCompany = publishingCompany
       }
     });
+  }
+
+  private updateDateNow(): void {
+    setInterval(() => {
+      this.dateNow = new Date()
+    }, 1000)
+  }
+
+  private initBook(): void {
+    this.book = new Book()
   }
 }
