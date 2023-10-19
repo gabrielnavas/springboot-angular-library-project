@@ -25,13 +25,16 @@
           </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="margin-right margin-bottom">
-        <mat-label>Publicação * mês/dia/ano </mat-label>
+      <mat-form-field>
+        <mat-label>Data de publicação</mat-label>
         <input 
-          type="date"
-          matNativeControl="date"
-          name="publication"
-          [(ngModel)]="book.publication">
+          matInput 
+          [matDatepicker]="picker"
+          (dateChange)="changePublication($event)"
+          [max]="dateNow">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field class="width-40 margin-right margin-bottom">
@@ -40,6 +43,7 @@
           matInput
           type="number"
           name="pages"
+          min="1"
           placeholder="500"
           [formControl]="pagesFormControl" 
           [errorStateMatcher]="matcher"

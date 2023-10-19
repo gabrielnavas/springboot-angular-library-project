@@ -15,6 +15,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { ShowMessagesService } from 'src/app/utils/show-messages.service';
 import { BookService } from '../../book.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -35,13 +36,13 @@ export class BookCreateComponent {
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
+  //validations
   readonly maxLengthTitle = 120;
   readonly maxLengthIsbn = 20;
   readonly maxPages = 50000;
   readonly maxLengthKeyWord = 50;
   readonly maxKeyWord = 20;
-
-  //validations
+  dateNow: Date = new Date()
   titleFormControl = new FormControl('', [Validators.required]);
   pagesFormControl = new FormControl('', [Validators.required, Validators.min(1), Validators.max(50000)]);
   isbnFormControl = new FormControl('', [Validators.required]);
@@ -55,9 +56,28 @@ export class BookCreateComponent {
     private readonly showMessagesService: ShowMessagesService
   ) {
     this.initBook()
+    this.updateDateNow()
+  }
+
+  updateDateNow(): void {
+    setInterval(() => {
+      this.dateNow = new Date()
+    }, 1000)
+  }
+
+  changePublication(event: MatDatepickerInputEvent<Date>) {
+    if(event.value) {
+      this.book.publication = event.value
+    }
   }
 
   createBook(): void {
+    const errors: string[] = this.book.validate()
+    if(errors.length > 0) {
+      this.showMessagesService.showMessage(errors[0])
+      return
+    }
+
     this.bookService.createBook(this.book)
       .subscribe({
         complete: (() => {
