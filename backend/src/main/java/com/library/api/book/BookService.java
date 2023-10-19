@@ -4,6 +4,7 @@ import com.library.api.author_book.AuthorBook;
 import com.library.api.author_book.AuthorBookRepository;
 import com.library.api.classification_book.ClassificationBook;
 import com.library.api.classification_book.ClassificationBookRepository;
+import com.library.api.exceptions.ObjectAlreadyExistsWithException;
 import com.library.api.exceptions.ObjectNotFoundException;
 import com.library.api.publishing_company.PublishingCompany;
 import com.library.api.publishing_company.PublishingCompanyRepository;
@@ -23,6 +24,11 @@ public class BookService {
     private final ClassificationBookRepository classificationBookRepository;
 
     public BookResponse createBook(BookRequest data) {
+        Optional<Book> optionalBook = bookRepository.findByTitle(data.getTitle());
+        if (optionalBook.isPresent()) {
+            throw new ObjectAlreadyExistsWithException("book", "title", data.getTitle());
+        }
+
         Optional<PublishingCompany> optionalPublishingCompany = publishingCompanyRepository.findById(data.getPublishingCompanyId());
         if (optionalPublishingCompany.isEmpty()) {
             throw new ObjectNotFoundException("publishing company");
