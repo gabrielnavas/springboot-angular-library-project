@@ -1,3 +1,7 @@
+import * as moment from 'moment';
+
+moment.locale('pt-BR');
+
 export class PublishingCompanyResponse {
   constructor(
     public id: string = "",
@@ -39,4 +43,49 @@ export class Book {
     public classificationBook: ClassificationBookResponse | null = null,
     public authorBookResponse: AuthorBookResponse | null = null, 
   ) { }
+
+  private isAfterToday(date: Date): boolean {
+    const now = new Date()
+    const isBefore = moment(date).isBefore(now)
+    return isBefore
+  }
+
+  validate = (): string[] => {
+    const errors: string[] = []
+    if(this.title.length === 0) {
+      errors.push("O título é necessário.");
+    }
+    if(this.title.length > 120) {
+      errors.push("O título deve ter no máximo 120 caracteres.");
+    }
+    if(!this.isAfterToday(this.publication)) {
+      errors.push("Data de lancamento deve ser hoje ou antes.");
+    }
+    if(this.isbn.length === 0) {
+      errors.push("O ISBN é necessário.");
+    }
+    if(this.isbn.length > 20) {
+      errors.push("O ISBN deve ter no máximo 20 caracteres.");
+    }
+    if(this.pages <= 0) {
+      errors.push("O número de páginas deve ser maior que 1.");
+    }
+    if(this.pages > 50_000) {
+      errors.push("O número de páginas ser no máximo 50000.");
+    }
+    if(this.keyWords.length > 20) {
+      errors.push("Deve ter no máximo 20 palavras-chave.");
+    }
+    if(this.classificationBook === null) {
+      errors.push("Selecione uma classificação.");
+    }
+    if(this.authorBookResponse === null) {
+      errors.push("Selecione um author.");
+    }
+    if(this.authorBookResponse === null) {
+      errors.push("Selecione uma editora.");
+    }
+
+    return errors
+  }
 }
