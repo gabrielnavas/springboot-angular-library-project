@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms"
+import { HttpClientModule } from "@angular/common/http"
 
 import { MatCardModule } from "@angular/material/card"
 import { MatButtonModule } from "@angular/material/button";
@@ -23,6 +24,7 @@ import { BookCreateComponent } from './components/book-create/book-create.compon
   ],
   imports: [
     CommonModule,
+    HttpClientModule,
     MatCardModule,
     MatButtonModule,
     FormsModule,

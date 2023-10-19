@@ -12,6 +12,9 @@ import { AuthorBookFindDialogComponent } from 'src/app/author-book/components/au
 import { PublisherCompanyFindDialogComponent } from 'src/app/publisher-company/components/publisher-company-find-dialog/publisher-company-find-dialog.component';
 
 import { ErrorStateMatcher } from '@angular/material/core';
+import { ShowMessagesService } from 'src/app/utils/show-messages.service';
+import { BookService } from '../../book.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -31,23 +34,46 @@ export class BookCreateComponent {
   // for keyWorkds Dynamic Input
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  keyWords: string[] = [];
+
+  readonly maxLengthTitle = 120;
+  readonly maxLengthIsbn = 20;
+  readonly maxPages = 50000;
+  readonly maxLengthKeyWord = 50;
+  readonly maxKeyWord = 20;
 
   //validations
-  titleFormControl = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(120)]);
-  isbnFormControl = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]);
-  pagesFormControl = new FormControl('', [Validators.required, Validators.min(1), Validators.max(20)]);
+  titleFormControl = new FormControl('', [Validators.required]);
+  pagesFormControl = new FormControl('', [Validators.required, Validators.min(1), Validators.max(50000)]);
+  isbnFormControl = new FormControl('', [Validators.required]);
+  keyWordsArrayFormControl = new FormControl('', [Validators.maxLength(this.maxKeyWord)]);
   matcher = new MyErrorStateMatcher();
 
   constructor(
     private readonly router: Router,
-    public dialog: MatDialog
+    public readonly dialog: MatDialog,
+    private readonly bookService: BookService,
+    private readonly showMessagesService: ShowMessagesService
   ) {
     this.initBook()
   }
 
   createBook(): void {
-
+    this.bookService.createBook(this.book)
+      .subscribe({
+        complete: (() => {
+          this.router.navigateByUrl("book")
+        }),
+        error: (err: HttpErrorResponse) => {
+          if(err.status === 0 || err.status === 500) {
+            this.showMessagesService.showMessage("Problemas no servidor. Tente novamente mais tarde.")
+          } else if(err.status === 400) {
+            const possibleBadResponse = `book already exists with attribute title with value ${this.book.title}`
+            if(err.error.message === possibleBadResponse) {
+              this.showMessagesService.showMessage("Livro já adicionado com esse título")
+            }
+          }
+        },
+      })
   }
 
   cancel(): void {
@@ -61,18 +87,24 @@ export class BookCreateComponent {
   addKeyWord(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    if (value) {
-      this.keyWords.push(value);
+    if (!value) {
+      return
     }
 
+    if(value.length > this.maxKeyWord) {
+      this.showMessagesService.showMessage(`A palavra-chave deve ter no máximo ${this.maxKeyWord} caracteres`)
+      return
+    }
+
+    this.book.keyWords.push(value);
     event.chipInput!.clear();
   }
 
   removeKeyWord(keyWord: string): void {
-    const index = this.keyWords.indexOf(keyWord);
+    const index = this.book.keyWords.indexOf(keyWord);
 
     if (index >= 0) {
-      this.keyWords.splice(index, 1);
+      this.book.keyWords.splice(index, 1);
     }
   }
 
@@ -84,9 +116,14 @@ export class BookCreateComponent {
       return;
     }
 
-    const index = this.keyWords.indexOf(fruit);
+    if(value.length > this.maxKeyWord) {
+      this.showMessagesService.showMessage(`A palavra-chave deve ter no máximo ${this.maxKeyWord} caracteres`)
+      return
+    }
+
+    const index = this.book.keyWords.indexOf(fruit);
     if (index >= 0) {
-      this.keyWords[index] = value;
+      this.book.keyWords[index] = value;
     }
   }
 
