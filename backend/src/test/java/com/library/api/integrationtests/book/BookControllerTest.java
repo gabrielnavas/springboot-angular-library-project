@@ -151,8 +151,89 @@ public class BookControllerTest extends AbstractIntegrationTest {
     @Test
     @Order(6)
     public void testGetAllBooks() throws IOException {
+
+        String[] paths = {
+                "/api/v1/book",
+                String.format("/api/v1/book?title=%s", bookRequest.getTitle().substring(1, 3)),
+                String.format("/api/v1/book?isbn=%s", bookRequest.getIsbn().charAt(1)),
+                String.format("/api/v1/book?title=%s&isbn=%s",
+                        bookRequest.getTitle().substring(1, 3), bookRequest.getIsbn().charAt(1)),
+                String.format("/api/v1/book?page=0&size=1&sort=title,ASC&title=%s&isbn=%s",
+                        bookRequest.getTitle().substring(1, 3), bookRequest.getIsbn().charAt(1))
+        };
+
+        for (String path : paths) {
+            specification = new RequestSpecBuilder()
+                    .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                    .setBasePath(path)
+                    .setPort(TestConfigs.SERVER_PORT)
+                    .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                    .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                    .build();
+
+            Response response = given().spec(specification)
+                    .accept(MediaType.APPLICATION_JSON_VALUE)
+                    .when()
+                    .get()
+                    .then()
+                    .extract()
+                    .response();
+
+            Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+
+            BookResponse[] bookResponses = objectMapper.readValue(response.body().asString(), BookResponse[].class);
+
+            Assertions.assertEquals(1, bookResponses.length);
+
+            for (BookResponse bookResponse : bookResponses) {
+                // book
+                Assertions.assertDoesNotThrow(() -> {
+                    UUID.fromString(bookResponse.getId().toString());
+                });
+                Assertions.assertEquals(bookRequest.getIsbn(), bookResponse.getIsbn());
+                Assertions.assertEquals(bookRequest.getKeyWords(), bookResponse.getKeyWords());
+
+                // verify book.publication
+                Calendar bookRequestCalendar = Calendar.getInstance();
+                Calendar bookResponseCalendar = Calendar.getInstance();
+                bookRequestCalendar.setTime(bookRequest.getPublication());
+                bookResponseCalendar.setTime(bookResponse.getPublication());
+                boolean sameDay = bookRequestCalendar.get(Calendar.YEAR) == bookResponseCalendar.get(Calendar.YEAR) &&
+                        bookRequestCalendar.get(Calendar.DAY_OF_YEAR) == bookResponseCalendar.get(Calendar.DAY_OF_YEAR);
+                Assertions.assertTrue(sameDay);
+
+                Assertions.assertEquals(bookRequest.getPages(), bookResponse.getPages());
+                Date lastMinuteBeforeNow = new Date(new Date().getTime() - 1000 * 30);
+                Assertions.assertTrue(lastMinuteBeforeNow.before(bookResponse.getCreatedAt()));
+                Assertions.assertTrue(lastMinuteBeforeNow.before(bookResponse.getUpdatedAt()));
+
+                // author
+                Assertions.assertEquals(authorBookResponse.getKey(), bookResponse.getAuthorBookResponse().getKey());
+                Assertions.assertEquals(authorBookResponse.getName(), bookResponse.getAuthorBookResponse().getName());
+                Assertions.assertEquals(authorBookResponse.getCreatedAt(), bookResponse.getAuthorBookResponse().getCreatedAt());
+                Assertions.assertEquals(authorBookResponse.getUpdatedAt(), bookResponse.getAuthorBookResponse().getUpdatedAt());
+
+                // classification book
+                Assertions.assertEquals(classificationBookResponse.getKey(), bookResponse.getClassificationBook().getKey());
+                Assertions.assertEquals(classificationBookResponse.getName(), bookResponse.getClassificationBook().getName());
+                Assertions.assertEquals(classificationBookResponse.getCreatedAt(), bookResponse.getClassificationBook().getCreatedAt());
+                Assertions.assertEquals(classificationBookResponse.getUpdatedAt(), bookResponse.getClassificationBook().getUpdatedAt());
+
+
+                // publishing company
+                Assertions.assertEquals(publishingCompanyResponse.getKey(), bookResponse.getPublishingCompany().getKey());
+                Assertions.assertEquals(publishingCompanyResponse.getName(), bookResponse.getPublishingCompany().getName());
+                Assertions.assertEquals(publishingCompanyResponse.getCreatedAt(), bookResponse.getPublishingCompany().getCreatedAt());
+                Assertions.assertEquals(publishingCompanyResponse.getCreatedAt(), bookResponse.getPublishingCompany().getUpdatedAt());
+            }
+        }
+    }
+
+    @Test
+    @Order(7)
+    public void testGetAllBooksWithWrongCors() {
         specification = new RequestSpecBuilder()
-                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
                 .setBasePath("/api/v1/book")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
@@ -167,53 +248,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
                 .extract()
                 .response();
 
-        Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
-
-        BookResponse[] bookResponses = objectMapper.readValue(response.body().asString(), BookResponse[].class);
-
-        Assertions.assertEquals(1, bookResponses.length);
-
-        for (BookResponse bookResponse : bookResponses) {
-            // book
-            Assertions.assertDoesNotThrow(() -> {
-                UUID.fromString(bookResponse.getId().toString());
-            });
-            Assertions.assertEquals(bookRequest.getIsbn(), bookResponse.getIsbn());
-            Assertions.assertEquals(bookRequest.getKeyWords(), bookResponse.getKeyWords());
-
-            // verify book.publication
-            Calendar bookRequestCalendar = Calendar.getInstance();
-            Calendar bookResponseCalendar = Calendar.getInstance();
-            bookRequestCalendar.setTime(bookRequest.getPublication());
-            bookResponseCalendar.setTime(bookResponse.getPublication());
-            boolean sameDay = bookRequestCalendar.get(Calendar.YEAR) == bookResponseCalendar.get(Calendar.YEAR) &&
-                    bookRequestCalendar.get(Calendar.DAY_OF_YEAR) == bookResponseCalendar.get(Calendar.DAY_OF_YEAR);
-            Assertions.assertTrue(sameDay);
-
-            Assertions.assertEquals(bookRequest.getPages(), bookResponse.getPages());
-            Date lastMinuteBeforeNow = new Date(new Date().getTime() - 1000 * 30);
-            Assertions.assertTrue(lastMinuteBeforeNow.before(bookResponse.getCreatedAt()));
-            Assertions.assertTrue(lastMinuteBeforeNow.before(bookResponse.getUpdatedAt()));
-
-            // author
-            Assertions.assertEquals(authorBookResponse.getKey(), bookResponse.getAuthorBookResponse().getKey());
-            Assertions.assertEquals(authorBookResponse.getName(), bookResponse.getAuthorBookResponse().getName());
-            Assertions.assertEquals(authorBookResponse.getCreatedAt(), bookResponse.getAuthorBookResponse().getCreatedAt());
-            Assertions.assertEquals(authorBookResponse.getUpdatedAt(), bookResponse.getAuthorBookResponse().getUpdatedAt());
-
-            // classification book
-            Assertions.assertEquals(classificationBookResponse.getKey(), bookResponse.getClassificationBook().getKey());
-            Assertions.assertEquals(classificationBookResponse.getName(), bookResponse.getClassificationBook().getName());
-            Assertions.assertEquals(classificationBookResponse.getCreatedAt(), bookResponse.getClassificationBook().getCreatedAt());
-            Assertions.assertEquals(classificationBookResponse.getUpdatedAt(), bookResponse.getClassificationBook().getUpdatedAt());
-
-
-            // publishing company
-            Assertions.assertEquals(publishingCompanyResponse.getKey(), bookResponse.getPublishingCompany().getKey());
-            Assertions.assertEquals(publishingCompanyResponse.getName(), bookResponse.getPublishingCompany().getName());
-            Assertions.assertEquals(publishingCompanyResponse.getCreatedAt(), bookResponse.getPublishingCompany().getCreatedAt());
-            Assertions.assertEquals(publishingCompanyResponse.getCreatedAt(), bookResponse.getPublishingCompany().getUpdatedAt());
-        }
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
     }
 
     private static BookRequest createBook(
