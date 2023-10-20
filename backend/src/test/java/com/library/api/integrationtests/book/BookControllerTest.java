@@ -50,6 +50,106 @@ public class BookControllerTest extends AbstractIntegrationTest {
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
+
+    /**
+     * create a Publishing Company, needed to create a book
+     *
+     * @throws IOException
+     */
+    @Test
+    @Order(1)
+    public void createPublishingCompanyResponse() throws IOException {
+        PublishingCompanyRequest publishingCompanyRequest = new PublishingCompanyRequest(Faker.instance().book().publisher());
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath("/api/v1/publishing-company")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(publishingCompanyRequest)
+                .when()
+                .post()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
+
+        publishingCompanyResponse = objectMapper.readValue(response.body().asString(), PublishingCompanyResponse.class);
+    }
+
+    /**
+     * create a Author Book, needed to create a book
+     *
+     * @throws IOException
+     */
+    @Test
+    @Order(2)
+    public void createAuthorBookResponse() throws IOException {
+        AuthorBookRequest authorBookRequest = new AuthorBookRequest(Faker.instance().book().author());
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath("/api/v1/author-book")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(authorBookRequest)
+                .when()
+                .post()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
+
+        authorBookResponse = objectMapper.readValue(response.body().asString(), AuthorBookResponse.class);
+    }
+
+    /**
+     * create a ClassificationBook, needed to create a book
+     *
+     * @throws IOException
+     */
+    @Test
+    @Order(3)
+    public void createClassificationBookResponse() throws IOException {
+        ClassificationBookRequest classificationBookRequest = new ClassificationBookRequest(Faker.instance().book().genre());
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath("/api/v1/classification-book")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(classificationBookRequest)
+                .when()
+                .post()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
+
+        classificationBookResponse = objectMapper.readValue(response.body().asString(), ClassificationBookResponse.class);
+    }
+
     @Test
     @Order(4)
     public void testCreatedBook() throws IOException {
@@ -277,89 +377,5 @@ public class BookControllerTest extends AbstractIntegrationTest {
                 .classificationBookId(classificationBookResponse.getKey())
                 .authorBookId(authorBookResponse.getKey())
                 .build();
-    }
-
-    @Test
-    @Order(1)
-    public void createPublishingCompanyResponse() throws IOException {
-        PublishingCompanyRequest publishingCompanyRequest = new PublishingCompanyRequest(Faker.instance().book().publisher());
-
-        specification = new RequestSpecBuilder()
-                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
-                .setBasePath("/api/v1/publishing-company")
-                .setPort(TestConfigs.SERVER_PORT)
-                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-                .build();
-
-        Response response = given().spec(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .body(publishingCompanyRequest)
-                .when()
-                .post()
-                .then()
-                .extract()
-                .response();
-
-        Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
-
-        publishingCompanyResponse = objectMapper.readValue(response.body().asString(), PublishingCompanyResponse.class);
-    }
-
-    @Test
-    @Order(2)
-    public void createAuthorBookResponse() throws IOException {
-        AuthorBookRequest authorBookRequest = new AuthorBookRequest(Faker.instance().book().author());
-
-        specification = new RequestSpecBuilder()
-                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
-                .setBasePath("/api/v1/author-book")
-                .setPort(TestConfigs.SERVER_PORT)
-                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-                .build();
-
-        Response response = given().spec(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .body(authorBookRequest)
-                .when()
-                .post()
-                .then()
-                .extract()
-                .response();
-
-        Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
-
-        authorBookResponse = objectMapper.readValue(response.body().asString(), AuthorBookResponse.class);
-    }
-
-    @Test
-    @Order(3)
-    public void createClassificationBookResponse() throws IOException {
-        ClassificationBookRequest classificationBookRequest = new ClassificationBookRequest(Faker.instance().book().genre());
-
-        specification = new RequestSpecBuilder()
-                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
-                .setBasePath("/api/v1/classification-book")
-                .setPort(TestConfigs.SERVER_PORT)
-                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-                .build();
-
-        Response response = given().spec(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .body(classificationBookRequest)
-                .when()
-                .post()
-                .then()
-                .extract()
-                .response();
-
-        Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
-
-        classificationBookResponse = objectMapper.readValue(response.body().asString(), ClassificationBookResponse.class);
     }
 }
