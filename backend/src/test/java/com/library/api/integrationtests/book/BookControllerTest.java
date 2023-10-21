@@ -419,7 +419,6 @@ public class BookControllerTest extends AbstractIntegrationTest {
         Assertions.assertEquals(publishingCompanyResponse.getCreatedAt(), bookResponse.getPublishingCompany().getUpdatedAt());
     }
 
-
     @Test
     @Order(9)
     public void testGetBookByIdWithWrongCors() {
@@ -446,7 +445,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
 
     @Test
     @Order(10)
-    public void testGetBookByIdNotFound() {
+    public void testGetBookByIdNotFound() throws IOException {
         UUID randomId = UUID.randomUUID();
         String url = String.format("/api/v1/book/%s", randomId);
 
@@ -467,6 +466,9 @@ public class BookControllerTest extends AbstractIntegrationTest {
                 .response();
 
         Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+
+        Map<String, Object> body = objectMapper.readValue(response.body().asString(), Map.class);
+        Assertions.assertEquals("book not found", body.get("message"));
     }
 
     private static BookRequest createBook(
