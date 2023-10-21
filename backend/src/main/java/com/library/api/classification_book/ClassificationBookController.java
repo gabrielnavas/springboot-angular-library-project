@@ -137,7 +137,7 @@ public class ClassificationBookController {
                             content = @Content
                     ),
                     @ApiResponse(
-                            description = "BadRequest",
+                            description = "NotFound",
                             responseCode = "404",
                             content = @Content
                     ),
@@ -186,7 +186,7 @@ public class ClassificationBookController {
                             content = @Content
                     ),
                     @ApiResponse(
-                            description = "BadRequest",
+                            description = "NotFound",
                             responseCode = "404",
                             content = @Content
                     ),
@@ -229,7 +229,7 @@ public class ClassificationBookController {
                             content = @Content
                     ),
                     @ApiResponse(
-                            description = "BadRequest",
+                            description = "NotFound",
                             responseCode = "404",
                             content = @Content
                     ),
