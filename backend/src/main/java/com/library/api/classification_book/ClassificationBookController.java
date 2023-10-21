@@ -65,8 +65,8 @@ public class ClassificationBookController {
     }
 
     @Operation(
-            summary = "Get All Classification Book",
-            description = "Endpoint to Get All an Classification Book",
+            summary = "Get All Classification Books",
+            description = "Endpoint to Get All Classification Books",
             tags = {"ClassificationBook"},
             responses = {
                     @ApiResponse(
