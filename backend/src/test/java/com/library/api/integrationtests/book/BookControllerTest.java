@@ -672,6 +672,29 @@ public class BookControllerTest extends AbstractIntegrationTest {
         Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
     }
 
+    @Test
+    @Order(15)
+    public void testRemoveBookByIdWithWrongCors() {
+        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setBasePath(url)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .when()
+                .delete()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
     private static BookRequest createBook(
             PublishingCompanyResponse publishingCompanyResponse,
             ClassificationBookResponse classificationBookResponse,
