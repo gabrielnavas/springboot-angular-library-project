@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = BookController.REQUEST_MAPPING_PATH)
@@ -36,5 +37,13 @@ public class BookController {
             put("isbn", isbn);
         }}, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(bookResponses);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Object> getBookById(
+            @PathVariable("id") UUID id
+    ) {
+        BookResponse bookResponse = bookService.findBookById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(bookResponse);
     }
 }

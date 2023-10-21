@@ -14,10 +14,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.contains;
 
@@ -87,5 +84,14 @@ public class BookService {
                 .stream()
                 .map(BookResponse::modelToResponse)
                 .toList();
+    }
+
+    public BookResponse findBookById(UUID id) {
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        if (optionalBook.isEmpty()) {
+            throw new ObjectNotFoundException("book");
+        }
+        Book book = optionalBook.get();
+        return BookResponse.modelToResponse(book);
     }
 }
