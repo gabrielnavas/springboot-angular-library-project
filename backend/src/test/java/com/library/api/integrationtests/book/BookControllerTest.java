@@ -613,6 +613,47 @@ public class BookControllerTest extends AbstractIntegrationTest {
         classificationBookResponse.setKey(classificationBookResponseOriginalId);
     }
 
+
+    @Test
+    @Order(13)
+    public void testUpdatePartialsBookByIdWithNotFoundAuthorBookResponse() throws IOException {
+        UUID authorBookResponseResponseOriginalId = authorBookResponse.getKey();
+        authorBookResponse.setKey(UUID.randomUUID());
+
+        BookRequest newBookRequest = createBook(
+                publishingCompanyResponse,
+                classificationBookResponse,
+                authorBookResponse
+        );
+        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(url)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(newBookRequest)
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+
+        Map<String, Object> body = objectMapper.readValue(response.body().asString(), Map.class);
+        Assertions.assertEquals("author book not found", body.get("message"));
+
+        authorBookResponse.setKey(authorBookResponseResponseOriginalId);
+    }
+
+
     private static BookRequest createBook(
             PublishingCompanyResponse publishingCompanyResponse,
             ClassificationBookResponse classificationBookResponse,
