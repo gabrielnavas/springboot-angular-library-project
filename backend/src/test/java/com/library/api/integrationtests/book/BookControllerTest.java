@@ -695,6 +695,30 @@ public class BookControllerTest extends AbstractIntegrationTest {
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
     }
 
+    @Test
+    @Order(16)
+    public void testRemoveBookByIdNotFound() {
+        UUID randomId = UUID.randomUUID();
+        String url = String.format("/api/v1/book/%s", randomId);
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(url)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .when()
+                .delete()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+    }
+
     private static BookRequest createBook(
             PublishingCompanyResponse publishingCompanyResponse,
             ClassificationBookResponse classificationBookResponse,
