@@ -102,7 +102,7 @@ public class BookService {
         }
 
         Optional<Book> optionalBookByTitle = bookRepository.findByTitle(bookRequest.getTitle());
-        if (optionalBookByTitle.isPresent()) {
+        if (optionalBookByTitle.isPresent() && !optionalBookByTitle.get().getId().equals(id)) {
             throw new ObjectAlreadyExistsWithException("book", "title", bookRequest.getTitle());
         }
 

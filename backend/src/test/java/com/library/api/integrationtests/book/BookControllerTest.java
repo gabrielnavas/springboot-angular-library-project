@@ -47,6 +47,8 @@ public class BookControllerTest extends AbstractIntegrationTest {
 
     private static BookResponse bookResponse;
 
+    private static BookRequest newBookRequest;
+
     @BeforeAll
     public static void setup() {
         objectMapper = new ObjectMapper();
@@ -475,7 +477,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
     @Test
     @Order(11)
     public void testUpdatePartialsBookById() {
-        BookRequest newBookRequest = createBook(
+        newBookRequest = createBook(
                 publishingCompanyResponse,
                 classificationBookResponse,
                 authorBookResponse
@@ -506,6 +508,33 @@ public class BookControllerTest extends AbstractIntegrationTest {
 
     @Test
     @Order(12)
+    public void testUpdatePartialsBookByIdWithSameTitle() {
+        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(url)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(newBookRequest)
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+    }
+
+
+    @Test
+    @Order(13)
     public void testUpdatePartialsBookByIdWithWrongCors() {
         BookRequest newBookRequest = createBook(
                 publishingCompanyResponse,
@@ -536,7 +565,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
 
 
     @Test
-    @Order(13)
+    @Order(14)
     public void testUpdatePartialsBookByIdWithNotFoundPublishingCompany() throws IOException {
         UUID publishingCompanyResponseOriginalId = publishingCompanyResponse.getKey();
         publishingCompanyResponse.setKey(UUID.randomUUID());
@@ -574,7 +603,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(13)
+    @Order(15)
     public void testUpdatePartialsBookByIdWithNotFoundClassificationBookResponse() throws IOException {
         UUID classificationBookResponseOriginalId = classificationBookResponse.getKey();
         classificationBookResponse.setKey(UUID.randomUUID());
@@ -612,7 +641,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(13)
+    @Order(16)
     public void testUpdatePartialsBookByIdWithNotFoundAuthorBookResponse() throws IOException {
         UUID authorBookResponseResponseOriginalId = authorBookResponse.getKey();
         authorBookResponse.setKey(UUID.randomUUID());
@@ -649,8 +678,9 @@ public class BookControllerTest extends AbstractIntegrationTest {
         authorBookResponse.setKey(authorBookResponseResponseOriginalId);
     }
 
+
     @Test
-    @Order(14)
+    @Order(17)
     public void testRemoveBookById() {
         String url = String.format("/api/v1/book/%s", bookResponse.getId());
 
@@ -673,7 +703,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(15)
+    @Order(18)
     public void testRemoveBookByIdWithWrongCors() {
         String url = String.format("/api/v1/book/%s", bookResponse.getId());
 
@@ -696,7 +726,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(16)
+    @Order(19)
     public void testRemoveBookByIdNotFound() {
         UUID randomId = UUID.randomUUID();
         String url = String.format("/api/v1/book/%s", randomId);
