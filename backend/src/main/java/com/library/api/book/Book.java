@@ -27,7 +27,7 @@ public class Book {
     private UUID id;
 
     @NotBlank
-    @Column(length = 200)
+    @Column(length = 200, unique = true)
     private String title;
 
     @NotBlank

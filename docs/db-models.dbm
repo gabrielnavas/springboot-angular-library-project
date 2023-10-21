@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="1.0.5" use-changelog="false" last-position="0,186" last-zoom="0.75" max-obj-count="10"
+<dbmodel pgmodeler-ver="1.0.5" use-changelog="false" last-position="70,108" last-zoom="0.75" max-obj-count="10"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -47,6 +47,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="books_pk" type="pk-constr" table="public.books">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+	<constraint name="book_unique_title" type="uq-constr" table="public.books">
+		<columns names="title" ref-type="src-columns"/>
+	</constraint>
 
 	<customidxs object-type="column">
 		<object name="id_author_books" index="10"/>
@@ -55,9 +58,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="author_books_fk" index="3"/>
-		<object name="classification_books_fk" index="2"/>
-		<object name="publishing_company_fk" index="1"/>
+		<object name="author_books_fk" index="4"/>
+		<object name="classification_books_fk" index="3"/>
+		<object name="publishing_company_fk" index="2"/>
 	</customidxs>
 </table>
 
