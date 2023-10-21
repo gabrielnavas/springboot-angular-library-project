@@ -502,6 +502,79 @@ public class BookControllerTest extends AbstractIntegrationTest {
         Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
     }
 
+
+    @Test
+    @Order(12)
+    public void testUpdatePartialsBookByIdWithWrongCors() {
+        BookRequest newBookRequest = createBook(
+                publishingCompanyResponse,
+                classificationBookResponse,
+                authorBookResponse
+        );
+        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
+                .setBasePath(url)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(newBookRequest)
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    }
+
+
+    @Test
+    @Order(13)
+    public void testUpdatePartialsBookByIdWithNotFoundPublishingCompany() throws IOException {
+        UUID publishingCompanyResponseOriginalId = publishingCompanyResponse.getKey();
+        publishingCompanyResponse.setKey(UUID.randomUUID());
+
+        BookRequest newBookRequest = createBook(
+                publishingCompanyResponse,
+                classificationBookResponse,
+                authorBookResponse
+        );
+        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(url)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(newBookRequest)
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
+
+        Map<String, Object> body = objectMapper.readValue(response.body().asString(), Map.class);
+        Assertions.assertEquals("publishing company not found", body.get("message"));
+
+        publishingCompanyResponse.setKey(publishingCompanyResponseOriginalId);
+    }
+
+
     private static BookRequest createBook(
             PublishingCompanyResponse publishingCompanyResponse,
             ClassificationBookResponse classificationBookResponse,
