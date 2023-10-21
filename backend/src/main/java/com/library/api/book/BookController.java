@@ -199,4 +199,12 @@ public class BookController {
         bookService.updatePartialsBookById(id, request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> removeBookById(
+            @PathVariable("id") UUID id
+    ) {
+        bookService.removeBookById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

@@ -137,4 +137,13 @@ public class BookService {
 
         bookRepository.save(book);
     }
+
+    public void removeBookById(UUID id) {
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        if (optionalBook.isEmpty()) {
+            throw new ObjectNotFoundException("book");
+        }
+        Book book = optionalBook.get();
+        bookRepository.delete(book);
+    }
 }
