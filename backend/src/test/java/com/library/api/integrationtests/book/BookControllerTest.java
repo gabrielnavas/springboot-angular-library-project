@@ -471,6 +471,37 @@ public class BookControllerTest extends AbstractIntegrationTest {
         Assertions.assertEquals("book not found", body.get("message"));
     }
 
+    @Test
+    @Order(11)
+    public void testUpdatePartialsBookById() {
+        BookRequest newBookRequest = createBook(
+                publishingCompanyResponse,
+                classificationBookResponse,
+                authorBookResponse
+        );
+        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath(url)
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(newBookRequest)
+                .when()
+                .patch()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+    }
+
     private static BookRequest createBook(
             PublishingCompanyResponse publishingCompanyResponse,
             ClassificationBookResponse classificationBookResponse,

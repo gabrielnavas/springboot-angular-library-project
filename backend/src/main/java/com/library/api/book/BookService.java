@@ -94,4 +94,47 @@ public class BookService {
         Book book = optionalBook.get();
         return BookResponse.modelToResponse(book);
     }
+
+    public void updatePartialsBookById(UUID id, BookRequest bookRequest) {
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        if (optionalBook.isEmpty()) {
+            throw new ObjectNotFoundException("book");
+        }
+
+        Optional<Book> optionalBookByTitle = bookRepository.findByTitle(bookRequest.getTitle());
+        if (optionalBookByTitle.isPresent()) {
+            throw new ObjectAlreadyExistsWithException("book", "title", bookRequest.getTitle());
+        }
+
+
+        Optional<PublishingCompany> optionalPublishingCompany = publishingCompanyRepository.findById(bookRequest.getPublishingCompanyId());
+        if (optionalPublishingCompany.isEmpty()) {
+            throw new ObjectNotFoundException("publishing company");
+        }
+
+        Optional<AuthorBook> optionalAuthorBook = authorBookRepository.findById(bookRequest.getAuthorBookId());
+        if (optionalAuthorBook.isEmpty()) {
+            throw new ObjectNotFoundException("author book");
+        }
+
+        Optional<ClassificationBook> optionalClassificationBook = classificationBookRepository.findById(bookRequest.getClassificationBookId());
+        if (optionalClassificationBook.isEmpty()) {
+            throw new ObjectNotFoundException("classification book");
+        }
+
+        Date now = new Date();
+
+        Book book = optionalBook.get();
+        book.setTitle(bookRequest.getTitle());
+        book.setIsbn(bookRequest.getIsbn());
+        book.setPages(bookRequest.getPages());
+        book.setKeyWords(String.join(",", bookRequest.getKeyWords()));
+        book.setPublication(bookRequest.getPublication());
+        book.setPublishingCompany(optionalPublishingCompany.get());
+        book.setAuthorBook(optionalAuthorBook.get());
+        book.setClassificationBook(optionalClassificationBook.get());
+        book.setUpdatedAt(now);
+
+        bookRepository.save(book);
+    }
 }

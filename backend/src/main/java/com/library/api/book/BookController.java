@@ -109,8 +109,8 @@ public class BookController {
             tags = {"Book"},
             responses = {
                     @ApiResponse(
-                            description = "Success",
-                            responseCode = "200",
+                            description = "NoContent",
+                            responseCode = "204",
                             content = @Content(
                                     array = @ArraySchema(
                                             schema = @Schema(implementation = BookResponse.class)
@@ -128,7 +128,7 @@ public class BookController {
                             content = @Content
                     ),
                     @ApiResponse(
-                            description = "BadRequest",
+                            description = "NotFound",
                             responseCode = "404",
                             content = @Content
                     ),
@@ -148,5 +148,55 @@ public class BookController {
     ) {
         BookResponse bookResponse = bookService.findBookById(id);
         return ResponseEntity.status(HttpStatus.OK).body(bookResponse);
+    }
+
+
+    @Operation(
+            summary = "Update Partials a Book By Id",
+            description = "Endpoint to Update Partials a Book By Id",
+            tags = {"Book"},
+            responses = {
+                    @ApiResponse(
+                            description = "NoContent",
+                            responseCode = "204",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(implementation = BookResponse.class)
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            description = "BadRequest",
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "Forbidden",
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "NotFound",
+                            responseCode = "404",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "InternalServerError",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
+    @PatchMapping(
+            value = "{id}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public ResponseEntity<Object> updatePartialsBookById(
+            @PathVariable("id") UUID id,
+            @RequestBody BookRequest request
+    ) {
+        bookService.updatePartialsBookById(id, request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
