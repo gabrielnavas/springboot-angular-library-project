@@ -99,7 +99,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="copies_books" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="100" y="600"/>
+	<position x="120" y="600"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
