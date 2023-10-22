@@ -1,0 +1,194 @@
+<mat-card class="container">
+  <mat-card-header>
+    <mat-card-title class="title">Gerenciar livros</mat-card-title>
+    <mat-card-subtitle class="subtitle">Atualizar um livro</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form>
+      <mat-form-field class="width-60 margin-bottom margin-right">
+        <mat-label>Título</mat-label>
+        <input 
+          matInput
+          type="text"
+          name="title"
+          autofocus
+          placeholder="Senhor dos Aneis - As duas torres"
+          [(ngModel)]="book.title"
+          [formControl]="titleFormControl" 
+          [errorStateMatcher]="matcher"
+          #input 
+          [maxlength]="maxLengthTitle">
+          <mat-hint align="end">{{book.title.length}}/{{ maxLengthTitle }}</mat-hint>
+          <mat-error *ngIf="titleFormControl.hasError('required')">
+            Título é <strong>obrigatório</strong>
+          </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Data de publicação</mat-label>
+        <input 
+          matInput 
+          [matDatepicker]="picker"
+          [value]="book.publication"
+          (dateChange)="changePublication($event)"
+          [max]="dateNow">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="width-40 margin-right margin-bottom">
+        <mat-label>Páginas</mat-label>
+        <input 
+          matInput
+          type="number"
+          name="pages"
+          min="1"
+          placeholder="500"
+          [formControl]="pagesFormControl" 
+          [errorStateMatcher]="matcher"
+          [(ngModel)]="book.pages">
+          <mat-error *ngIf="pagesFormControl.hasError('required')">
+            Quantidade páginas é <strong>obrigatório</strong>.
+          </mat-error>
+          <mat-error *ngIf="pagesFormControl.hasError('min') || pagesFormControl.hasError('max') ">
+            Quantidade mínima é de <strong>1</strong> página e máxima de <strong>50000</strong> páginas.
+          </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="width-40 margin-right margin-bottom">
+        <mat-label>ISBN</mat-label>
+        <input 
+          matInput
+          type="text"
+          name="isbn"
+          placeholder="1A44" 
+          [formControl]="isbnFormControl" 
+          [errorStateMatcher]="matcher"
+          [(ngModel)]="book.isbn"
+          #input 
+          [maxlength]="maxLengthIsbn">
+          <mat-hint align="end">{{book.isbn.length}}/{{ maxLengthIsbn }}</mat-hint>
+          <mat-error *ngIf="isbnFormControl.hasError('required')">
+            ISBN é <strong>obrigatório</strong>
+          </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="width-60">
+        <mat-label>Palavras-chave</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Entre com as palavras-chave">
+          <mat-chip-row *ngFor="let keyWord of book.keyWords"
+                        (removed)="removeKeyWord(keyWord)"
+                        [editable]="true"
+                        (edited)="editKeyWord(keyWord, $event)"
+                        [aria-description]="'Pressione enter para editar ' + keyWord">
+            {{ keyWord }}
+            <button matChipRemove [attr.aria-label]="'Remover ' + keyWord">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          <input placeholder="Cavalo..."
+                [matChipInputFor]="chipGrid"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur"
+                (matChipInputTokenEnd)="addKeyWord($event)"
+                #input 
+                [maxLength]="maxLengthKeyWord"/>
+          <mat-hint align="end">{{book.keyWords.length}}/{{ maxLengthKeyWord }}</mat-hint>
+        </mat-chip-grid>
+      </mat-form-field>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="title">Autor</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="input-width margin-right">
+            <mat-label>Nome do author escolhido *</mat-label>
+            <input 
+              matInput
+              type="text"
+              name="publication"
+              [value]="book.authorBookResponse?.name"
+              readonly>
+          </mat-form-field>
+          <button
+            class="margin-left button-width" 
+            mat-raised-button
+            color="primary"
+            (click)="openDialogAuthorBookFind()">
+            Buscar autor
+          </button>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="margin-top">
+        <mat-card-header>
+          <mat-card-title class="title">Classificação escolhido</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="input-width margin-right">
+            <mat-label>Nome da classificação escolhida *</mat-label>
+            <input 
+              matInput
+              type="text"
+              name="classification-book"
+              [value]="book.classificationBook?.name"
+              readonly>
+          </mat-form-field>
+          <button 
+            class="margin-left button-width" 
+            mat-raised-button
+            color="primary"
+            (click)="openDialogClassificationBookFind()">
+            Buscar Classificação
+          </button>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="margin-top">
+        <mat-card-header>
+          <mat-card-title class="title">Editora</mat-card-title>
+        </mat-card-header>
+          <mat-card-content>
+          <mat-form-field class="input-width margin-right">
+            <mat-label>Nome da editora escolhida *</mat-label>
+            <input 
+              matInput
+              type="text"
+              name="publishing-company"
+              [value]="book.publishingCompany?.name"
+              readonly>
+          </mat-form-field>
+          <button 
+            class="margin-left button-width" 
+            mat-raised-button
+            color="primary"
+            (click)="openDialogPublisherCompanyFind()">
+            Buscar Editora
+          </button>
+        </mat-card-content>
+      </mat-card>
+
+    </form>
+
+
+    <div class="margin-top">
+      <button 
+        mat-raised-button
+        color="primary"
+        (click)="updateBook()">
+        <mat-icon>note_add</mat-icon>
+        Atualizar
+      </button>
+      <button 
+        mat-raised-button
+        (click)="cancel()">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+    </div>
+  </mat-card-content>
+  
+</mat-card>

@@ -9,6 +9,15 @@ export class PublishingCompanyResponse {
     public createdAt: Date = new Date(),
     public updatedAt: Date = new Date(),
   ) { }
+
+  static fromLiteralToObject = (data: PublishingCompanyResponse): PublishingCompanyResponse => {
+    return new PublishingCompanyResponse(
+      data.id,
+      data.name,
+      new Date(data.createdAt),
+      new Date(data.updatedAt)
+    )
+  }
 }
 
 export class ClassificationBookResponse {
@@ -18,6 +27,15 @@ export class ClassificationBookResponse {
     public createdAt: Date = new Date(),
     public updatedAt: Date = new Date(),
   ) { }
+
+  static fromLiteralToObject = (data: ClassificationBookResponse): ClassificationBookResponse => {
+    return new ClassificationBookResponse(
+      data.id,
+      data.name,
+      new Date(data.createdAt),
+      new Date(data.updatedAt)
+    )
+  }
 }
 
 export class AuthorBookResponse {
@@ -27,6 +45,15 @@ export class AuthorBookResponse {
     public createdAt: Date = new Date(),
     public updatedAt: Date = new Date(),
   ) { }
+
+  static fromLiteralToObject = (data: AuthorBookResponse): AuthorBookResponse => {
+    return new AuthorBookResponse(
+      data.id,
+      data.name,
+      new Date(data.createdAt),
+      new Date(data.updatedAt)
+    )
+  }
 }
 
 export class Book {
@@ -87,5 +114,21 @@ export class Book {
     }
 
     return errors
+  }
+
+  static fromLiteralToObject = (book: Book): Book => {
+    return new Book(
+      book.id,
+      book.title,
+      book.isbn,
+      book.pages,
+      book.keyWords,
+      new Date(book.publication),
+      new Date(book.createdAt),
+      new Date(book.updatedAt),
+      PublishingCompanyResponse.fromLiteralToObject(book.publishingCompany as PublishingCompanyResponse),
+      ClassificationBookResponse.fromLiteralToObject(book.classificationBook as ClassificationBookResponse),
+      AuthorBookResponse.fromLiteralToObject(book.authorBookResponse as AuthorBookResponse)
+    )
   }
 }
