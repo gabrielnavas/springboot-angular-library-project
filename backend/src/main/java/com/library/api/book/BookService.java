@@ -9,14 +9,10 @@ import com.library.api.exceptions.ObjectNotFoundException;
 import com.library.api.publishing_company.PublishingCompany;
 import com.library.api.publishing_company.PublishingCompanyRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
-import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.contains;
 
 @Service
 @AllArgsConstructor
@@ -69,18 +65,11 @@ public class BookService {
     }
 
     public List<BookResponse> findAllBook(Map<String, String> filters, Pageable pageable) {
-        Book book = Book.builder()
-                .title(filters.get("title"))
-                .isbn(filters.get("isbn"))
-                .build();
-
-        ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-                .withMatcher("title", contains().ignoreCase())
-                .withMatcher("isbn", contains().ignoreCase());
-
-        Example<Book> bookFilterExample = Example.of(book, exampleMatcher);
-
-        return bookRepository.findAll(bookFilterExample)
+        return bookRepository.findAllBooksWithParams(
+                        filters.getOrDefault("title", ""),
+                        filters.getOrDefault("isbn", ""),
+                        pageable
+                )
                 .stream()
                 .map(BookResponse::modelToResponse)
                 .toList();
