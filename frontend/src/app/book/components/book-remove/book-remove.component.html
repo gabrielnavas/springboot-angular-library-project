@@ -1,0 +1,140 @@
+<mat-card class="container">
+  <mat-card-header>
+    <mat-card-title class="title">Gerenciar livros</mat-card-title>
+    <mat-card-subtitle class="subtitle">Adicionar novo livro</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form>
+      <mat-form-field class="width-60 margin-bottom margin-right">
+        <mat-label>Título</mat-label>
+        <input 
+          matInput
+          type="text"
+          name="title"
+          autofocus
+          placeholder="Senhor dos Aneis - As duas torres"
+          [(ngModel)]="book.title"
+          #input>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Data de publicação</mat-label>
+        <input 
+          matInput 
+          [matDatepicker]="picker"
+          [value]="book.publication">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="width-40 margin-right margin-bottom">
+        <mat-label>Páginas</mat-label>
+        <input 
+          matInput
+          type="number"
+          name="pages"
+          [value]="book.pages"
+          readonly>
+      </mat-form-field>
+
+      <mat-form-field class="width-40 margin-right margin-bottom">
+        <mat-label>ISBN</mat-label>
+        <input 
+          matInput
+          type="text"
+          name="isbn"
+          [value]="book.isbn"
+          #input
+          readonly>
+      </mat-form-field>
+
+      <mat-form-field class="width-60">
+        <mat-label>Palavras-chave</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Entre com as palavras-chave">
+          <mat-chip-row *ngFor="let keyWord of book.keyWords"
+                        [editable]="true"
+                        [aria-description]="'Pressione enter para editar ' + keyWord">
+            {{ keyWord }}
+          </mat-chip-row>
+          <input
+                [matChipInputFor]="chipGrid"
+                #input 
+                readonly/>
+        </mat-chip-grid>
+      </mat-form-field>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="title">Autor</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="input-width margin-right">
+            <mat-label>Nome do author escolhido</mat-label>
+            <input 
+              matInput
+              type="text"
+              name="publication"
+              [value]="book.authorBookResponse?.name"
+              readonly>
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="margin-top">
+        <mat-card-header>
+          <mat-card-title class="title">Classificação escolhido</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="input-width margin-right">
+            <mat-label>Nome da classificação escolhida *</mat-label>
+            <input 
+              matInput
+              type="text"
+              name="classification-book"
+              [value]="book.classificationBook?.name"
+              readonly>
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="margin-top">
+        <mat-card-header>
+          <mat-card-title class="title">Editora</mat-card-title>
+        </mat-card-header>
+          <mat-card-content>
+          <mat-form-field class="input-width margin-right">
+            <mat-label>Nome da editora escolhida</mat-label>
+            <input 
+              matInput
+              type="text"
+              name="publishing-company"
+              [value]="book.publishingCompany?.name"
+              readonly>
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+    </form>
+
+    <span class="alert-remove">
+      Tem certeza disso?
+    </span>
+
+    <div class="margin-top">
+      <button 
+        mat-raised-button
+        color="primary"
+        (click)="removeBook()">
+        <mat-icon>note_add</mat-icon>
+        Remover
+      </button>
+      <button 
+        mat-raised-button
+        (click)="cancel()">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+    </div>
+  </mat-card-content>
+  
+</mat-card>

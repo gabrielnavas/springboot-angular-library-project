@@ -23,12 +23,14 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { BookReadComponent } from './components/book-read/book-read.component';
 import { BookCreateComponent } from './components/book-create/book-create.component';
 import { BookUpdateComponent } from './components/book-update/book-update.component';
+import { BookRemoveComponent } from './components/book-remove/book-remove.component';
 
 @NgModule({
   declarations: [
     BookReadComponent,
     BookCreateComponent,
     BookUpdateComponent,
+    BookRemoveComponent,
   ],
   imports: [
     CommonModule,

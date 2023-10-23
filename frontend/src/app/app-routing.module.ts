@@ -18,6 +18,7 @@ import { AuthorBookRemoveComponent } from './author-book/components/author-book-
 import { BookReadComponent } from './book/components/book-read/book-read.component';
 import { BookCreateComponent } from './book/components/book-create/book-create.component';
 import { BookUpdateComponent } from './book/components/book-update/book-update.component';
+import { BookRemoveComponent } from './book/components/book-remove/book-remove.component';
 
 const routes: Routes = [{
   path: "publisher-company",
@@ -64,6 +65,9 @@ const routes: Routes = [{
 }, {
   path: "book/update/:id",
   component: BookUpdateComponent
+}, {
+  path: "book/remove/:id",
+  component: BookRemoveComponent
 }];
 
 @NgModule({

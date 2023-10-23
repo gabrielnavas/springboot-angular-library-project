@@ -63,4 +63,9 @@ export class BookService {
     let url = `${this.endpoint}?page=${page}&size=${size}&sort=title,ASC&title=${filters.title}&isbn=${filters.isbn}`
     return this.httpClient.get<Book[]>(url)
   }
+
+  removeBookById(bookId: string): Observable<void> {
+    const url = `${this.endpoint}/${bookId}`
+    return this.httpClient.delete<void>(url)
+  }
 }
