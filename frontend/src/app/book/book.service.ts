@@ -16,6 +16,11 @@ type BookBody = {
   | 'updatedAt'
 > 
 
+export type FindAllFilters = {
+  title: string
+  isbn: string
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -52,5 +57,10 @@ export class BookService {
   findBookById(bookId: string): Observable<Book> {
     const url = `${this.endpoint}/${bookId}`
     return this.httpClient.get<Book>(url)
+  }
+
+  findAllBooks(page: number=0, size: number = 10, filters: FindAllFilters): Observable<Book[]> {
+    let url = `${this.endpoint}?page=${page}&size=${size}&sort=title,ASC&title=${filters.title}&isbn=${filters.isbn}`
+    return this.httpClient.get<Book[]>(url)
   }
 }

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms"
@@ -13,6 +14,8 @@ import { MatListModule } from "@angular/material/list";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatIconModule } from "@angular/material/icon";
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from "@angular/material/datepicker";
@@ -30,6 +33,7 @@ import { BookUpdateComponent } from './components/book-update/book-update.compon
   imports: [
     CommonModule,
     HttpClientModule,
+    RouterModule,
     MatCardModule,
     MatButtonModule,
     FormsModule,
@@ -42,6 +46,8 @@ import { BookUpdateComponent } from './components/book-update/book-update.compon
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatTableModule,
+    MatMenuModule,
     ReactiveFormsModule, 
   ]
 })

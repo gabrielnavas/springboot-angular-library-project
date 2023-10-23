@@ -1,16 +1,140 @@
 <mat-card class="container">
-  <mat-card-header>
-    <mat-card-title class="title">Gerenciar livros</mat-card-title>
-    <mat-card-subtitle class="subtitle">Listar e buscar livros</mat-card-subtitle>
-
-  </mat-card-header>
-
+  
+  <mat-card-title class="title">
+    Gerenciar Livros
+  </mat-card-title>
+  <mat-card-subtitle class="subtitle">
+    Buscar e listar Livros
+  </mat-card-subtitle>
+  
   <mat-card-content>
-    <button 
-      mat-raised-button 
-      color="primary"
-      (click)="navigateToCreateBook()">
-      Adicionar livro
-    </button>
+    <form class="search-field-container">
+      <mat-form-field class="search-input-field">
+        <mat-label>Buscar por título ou ISBN</mat-label>
+        <input 
+          matInput
+          type="text"
+          autofocus
+          [(ngModel)]="searchInputField"
+          (keypress)="keyPressSearchInputField($event)"
+          name="input-search"
+          placeholder="John Lotty">
+      </mat-form-field>
+
+      <div class="search-field-buttons">
+        <button 
+          color="warn"
+          mat-raised-button
+          (click)="onClickButtonFindByFilter()">
+          <i class="material-icons">search</i>
+          Buscar
+        </button>
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="navigateToBookCreate()">
+          <i class="material-icons">note_add</i>
+          Novo
+        </button>
+      
+        <button 
+          mat-raised-button
+          (click)="initDataView()">
+          <i class="material-icons">cancel</i>
+          Buscar todos
+        </button>
+      </div>
+    </form>
+
+    <div class="table-container mat-elevation-z8">
+      <table [dataSource]="data" mat-table class="full-width-table" matSort aria-label="Elements">
+        <!-- Title Column -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Título</th>
+          <td mat-cell *matCellDef="let row">{{ row.title }}</td>
+        </ng-container>
+
+        <!-- ISBN Column -->
+          <ng-container matColumnDef="isbn">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ISBN</th>
+          <td mat-cell *matCellDef="let row">{{ row.isbn }}</td>
+        </ng-container>
+
+        <!-- Pages Column -->
+        <ng-container matColumnDef="pages">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ISBN</th>
+          <td mat-cell *matCellDef="let row">{{ row.pages }}</td>
+        </ng-container>
+
+        <!-- Publication At Column -->
+        <ng-container matColumnDef="publication">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Data de Publicação</th>
+          <td mat-cell *matCellDef="let row">{{ row.publication | date : "dd/MM/yy" }}</td>
+        </ng-container>
+
+        <!-- Created At Column -->
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Criado em</th>
+          <td mat-cell *matCellDef="let row">{{ row.createdAt | date : "dd/MM/yy HH:mm:ss" }}</td>
+        </ng-container>
+
+        <!-- Updated At Column -->
+        <ng-container matColumnDef="updatedAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Atualizado em</th>
+          <td mat-cell *matCellDef="let row">{{ row.updatedAt | date : "dd/MM/yy HH:mm:ss" }}</td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let row"  class="td-actions">
+            <button mat-button [matMenuTriggerFor]="menu">
+              <i class="material-icons">menu</i>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>
+                <a routerLink="/book/update/{{ row.id }}">
+                  <button mat-button>
+                    <i class="material-icons">edit</i>
+                    Alterar
+                  </button>
+                </a>
+              </button>
+              <button mat-menu-item>
+                <a routerLink="">
+                  <button mat-button>
+                    <i class="material-icons">delete</i>
+                    Remover
+                  </button>
+                </a>
+              </button>
+            </mat-menu>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <button 
+        class="button-load-more-data"
+        mat-raised-button 
+        color="primary"
+        (click)="loadMoreData()">
+          <span
+            *ngIf="!noMoreDataFromApi && !noDataFromApi">
+            Obter mais
+          </span>
+          <strong 
+            *ngIf="noMoreDataFromApi">
+            Nenhum dado a mais foi encontrado
+          </strong>
+          <strong 
+            *ngIf="noDataFromApi">
+            Nenhum dado foi encontrado
+          </strong>
+        </button>
+    </div>
   </mat-card-content>
+
 </mat-card>
