@@ -192,7 +192,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
 
         // book
         Assertions.assertDoesNotThrow(() -> {
-            UUID.fromString(bookResponse.getId().toString());
+            UUID.fromString(bookResponse.getKey().toString());
         });
         Assertions.assertEquals(bookRequest.getIsbn(), bookResponse.getIsbn());
         Assertions.assertEquals(bookRequest.getKeyWords(), bookResponse.getKeyWords());
@@ -293,7 +293,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
             for (BookResponse bookResponse : bookResponses) {
                 // book
                 Assertions.assertDoesNotThrow(() -> {
-                    UUID.fromString(bookResponse.getId().toString());
+                    UUID.fromString(bookResponse.getKey().toString());
                 });
                 Assertions.assertEquals(bookRequest.getIsbn(), bookResponse.getIsbn());
                 Assertions.assertEquals(bookRequest.getKeyWords(), bookResponse.getKeyWords());
@@ -359,7 +359,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
     @Test
     @Order(8)
     public void testGetBookById() throws IOException {
-        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+        String url = String.format("/api/v1/book/%s", bookResponse.getKey());
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
@@ -383,7 +383,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
 
         // book
         Assertions.assertDoesNotThrow(() -> {
-            UUID.fromString(bookResponse.getId().toString());
+            UUID.fromString(bookResponse.getKey().toString());
         });
         Assertions.assertEquals(bookRequest.getIsbn(), bookResponse.getIsbn());
         Assertions.assertEquals(bookRequest.getKeyWords(), bookResponse.getKeyWords());
@@ -425,7 +425,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
     @Test
     @Order(9)
     public void testGetBookByIdWithWrongCors() {
-        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+        String url = String.format("/api/v1/book/%s", bookResponse.getKey());
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
@@ -482,7 +482,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
                 classificationBookResponse,
                 authorBookResponse
         );
-        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+        String url = String.format("/api/v1/book/%s", bookResponse.getKey());
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
@@ -509,7 +509,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
     @Test
     @Order(12)
     public void testUpdatePartialsBookByIdWithSameTitle() {
-        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+        String url = String.format("/api/v1/book/%s", bookResponse.getKey());
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
@@ -541,7 +541,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
                 classificationBookResponse,
                 authorBookResponse
         );
-        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+        String url = String.format("/api/v1/book/%s", bookResponse.getKey());
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)
@@ -575,7 +575,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
                 classificationBookResponse,
                 authorBookResponse
         );
-        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+        String url = String.format("/api/v1/book/%s", bookResponse.getKey());
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
@@ -613,7 +613,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
                 classificationBookResponse,
                 authorBookResponse
         );
-        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+        String url = String.format("/api/v1/book/%s", bookResponse.getKey());
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
@@ -651,7 +651,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
                 classificationBookResponse,
                 authorBookResponse
         );
-        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+        String url = String.format("/api/v1/book/%s", bookResponse.getKey());
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
@@ -682,7 +682,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
     @Test
     @Order(17)
     public void testRemoveBookById() {
-        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+        String url = String.format("/api/v1/book/%s", bookResponse.getKey());
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
@@ -705,7 +705,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
     @Test
     @Order(18)
     public void testRemoveBookByIdWithWrongCors() {
-        String url = String.format("/api/v1/book/%s", bookResponse.getId());
+        String url = String.format("/api/v1/book/%s", bookResponse.getKey());
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_WRONG)

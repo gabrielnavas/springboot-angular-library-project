@@ -1,24 +1,29 @@
 package com.library.api.book;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.library.api.author_book.AuthorBookResponse;
 import com.library.api.classification_book.ClassificationBookResponse;
 import com.library.api.publishing_company.PublishingCompanyResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookResponse {
-    private UUID id;
+@JsonPropertyOrder(value = {"id", "title", "isbn", "pages", "keyWords", "publication",
+        "createdAt", "updatedAt", "publishingCompany", "classificationBook", "authorBookResponse"})
+public class BookResponse extends RepresentationModel<BookResponse> {
+
+    @JsonProperty(value = "id")
+    private UUID key;
     private String title;
     private String isbn;
     private Integer pages;
@@ -32,7 +37,7 @@ public class BookResponse {
 
     public static BookResponse modelToResponse(Book model) {
         return BookResponse.builder()
-                .id(model.getId())
+                .key(model.getId())
                 .title(model.getTitle())
                 .isbn(model.getIsbn())
                 .keyWords(Arrays.stream(model.getKeyWords().split(",")).toList())

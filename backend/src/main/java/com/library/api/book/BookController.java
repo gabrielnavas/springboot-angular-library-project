@@ -1,5 +1,7 @@
 package com.library.api.book;
 
+import com.library.api.book.hateoas.BookHateoasWithRel;
+import com.library.api.book.hateoas.BookMapperHateoas;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -57,6 +59,7 @@ public class BookController {
             @RequestBody BookRequest request
     ) {
         BookResponse bookResponse = bookService.createBook(request);
+        BookMapperHateoas.set(bookResponse, BookHateoasWithRel.CREATE_BOOK);
         return ResponseEntity.status(HttpStatus.CREATED).body(bookResponse);
     }
 
@@ -99,6 +102,7 @@ public class BookController {
             put("title", title);
             put("isbn", isbn);
         }}, pageable);
+        BookMapperHateoas.set(bookResponses, pageable, BookHateoasWithRel.GET_ALL_BOOKS);
         return ResponseEntity.status(HttpStatus.OK).body(bookResponses);
     }
 
@@ -147,6 +151,7 @@ public class BookController {
             @PathVariable("id") UUID id
     ) {
         BookResponse bookResponse = bookService.findBookById(id);
+        BookMapperHateoas.set(bookResponse, BookHateoasWithRel.GET_BOOK_BY_ID);
         return ResponseEntity.status(HttpStatus.OK).body(bookResponse);
     }
 
