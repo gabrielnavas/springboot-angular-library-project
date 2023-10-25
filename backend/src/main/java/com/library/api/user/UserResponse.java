@@ -1,7 +1,5 @@
-package com.library.api.user.auth;
+package com.library.api.user;
 
-import com.library.api.user.Role;
-import com.library.api.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +12,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
+public class UserResponse {
     private UUID id;
     private String email;
     private Role role;
@@ -27,8 +25,8 @@ public class AuthenticationResponse {
     private Date createdAt;
     private Date updatedAt;
 
-    public static AuthenticationResponse modelToResponse(User user, String token) {
-        return AuthenticationResponse.builder()
+    public static UserResponse modelToResponse(User user, String token) {
+        return UserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .role(user.getRole())

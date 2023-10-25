@@ -3,8 +3,8 @@ package com.library.api.integrationtests.user.auth;
 import com.github.javafaker.Faker;
 import com.library.api.TestConfigs;
 import com.library.api.integrationtests.testcontainers.AbstractIntegrationTest;
-import com.library.api.user.auth.AuthenticationRequest;
-import com.library.api.user.auth.AuthenticationResponse;
+import com.library.api.user.UserRequest;
+import com.library.api.user.UserResponse;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -32,7 +32,7 @@ public class AuthenticationControllerTest extends AbstractIntegrationTest {
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
 
-    private static AuthenticationRequest authenticationRequest;
+    private static UserRequest userRequest;
 
 
     @BeforeAll
@@ -44,7 +44,7 @@ public class AuthenticationControllerTest extends AbstractIntegrationTest {
     @Test
     @Order(1)
     public void testRegisterUser() throws IOException {
-        authenticationRequest = createAuthenticationRequest();
+        userRequest = createAuthenticationRequest();
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
@@ -57,7 +57,7 @@ public class AuthenticationControllerTest extends AbstractIntegrationTest {
         Response response = given().spec(specification)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .body(authenticationRequest)
+                .body(userRequest)
                 .when()
                 .post()
                 .then()
@@ -66,33 +66,79 @@ public class AuthenticationControllerTest extends AbstractIntegrationTest {
 
         Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
 
-        AuthenticationResponse authenticationResponse = objectMapper.readValue(response.body().asString(), AuthenticationResponse.class);
+        UserResponse userResponse = objectMapper.readValue(response.body().asString(), UserResponse.class);
 
         Assertions.assertDoesNotThrow(() -> {
-            UUID.fromString(authenticationResponse.getId().toString());
+            UUID.fromString(userResponse.getId().toString());
         });
 
-        Assertions.assertTrue(authenticationResponse.getRole().toString().length() > 0);
-        Assertions.assertTrue(authenticationResponse.getToken().length() > 0);
-        Assertions.assertEquals(3, authenticationResponse.getToken().split("\\.").length);
+        Assertions.assertTrue(userResponse.getRole().toString().length() > 0);
+        Assertions.assertTrue(userResponse.getToken().length() > 0);
+        Assertions.assertEquals(3, userResponse.getToken().split("\\.").length);
 
         long seconds = 1000 * 30;
         Date dateLater = new Date(new Date().getTime() - seconds);
 
-        Assertions.assertTrue(dateLater.before(authenticationResponse.getCreatedAt()));
-        Assertions.assertTrue(dateLater.before(authenticationResponse.getUpdatedAt()));
+        Assertions.assertTrue(dateLater.before(userResponse.getCreatedAt()));
+        Assertions.assertTrue(dateLater.before(userResponse.getUpdatedAt()));
 
-        Assertions.assertEquals(authenticationRequest.getEmail(), authenticationResponse.getEmail());
-        Assertions.assertEquals(authenticationRequest.getFirstName(), authenticationResponse.getFirstName());
-        Assertions.assertEquals(authenticationRequest.getLastName(), authenticationResponse.getLastName());
-        Assertions.assertEquals(authenticationRequest.getStreetName(), authenticationResponse.getStreetName());
-        Assertions.assertEquals(authenticationRequest.getStreetNumber(), authenticationResponse.getStreetNumber());
+        Assertions.assertEquals(userRequest.getEmail(), userResponse.getEmail());
+        Assertions.assertEquals(userRequest.getFirstName(), userResponse.getFirstName());
+        Assertions.assertEquals(userRequest.getLastName(), userResponse.getLastName());
+        Assertions.assertEquals(userRequest.getStreetName(), userResponse.getStreetName());
+        Assertions.assertEquals(userRequest.getStreetNumber(), userResponse.getStreetNumber());
     }
 
-    private AuthenticationRequest createAuthenticationRequest() {
+    @Test
+    @Order(2)
+    public void testAuthenticateUser() throws IOException {
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.CORS_VALID)
+                .setBasePath("/api/v1/auth/authenticate")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        Response response = given().spec(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(userRequest)
+                .when()
+                .post()
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+
+        UserResponse userResponse = objectMapper.readValue(response.body().asString(), UserResponse.class);
+
+        Assertions.assertDoesNotThrow(() -> {
+            UUID.fromString(userResponse.getId().toString());
+        });
+
+        Assertions.assertTrue(userResponse.getRole().toString().length() > 0);
+        Assertions.assertTrue(userResponse.getToken().length() > 0);
+        Assertions.assertEquals(3, userResponse.getToken().split("\\.").length);
+
+        long seconds = 1000 * 30;
+        Date dateLater = new Date(new Date().getTime() - seconds);
+
+        Assertions.assertTrue(dateLater.before(userResponse.getCreatedAt()));
+        Assertions.assertTrue(dateLater.before(userResponse.getUpdatedAt()));
+
+        Assertions.assertEquals(userRequest.getEmail(), userResponse.getEmail());
+        Assertions.assertEquals(userRequest.getFirstName(), userResponse.getFirstName());
+        Assertions.assertEquals(userRequest.getLastName(), userResponse.getLastName());
+        Assertions.assertEquals(userRequest.getStreetName(), userResponse.getStreetName());
+        Assertions.assertEquals(userRequest.getStreetNumber(), userResponse.getStreetNumber());
+    }
+
+    private UserRequest createAuthenticationRequest() {
         Faker faker = Faker.instance();
         String password = faker.internet().password();
-        return AuthenticationRequest.builder()
+        return UserRequest.builder()
                 .email(faker.internet().emailAddress())
                 .firstName(faker.name().firstName())
                 .lastName(faker.name().lastName())
