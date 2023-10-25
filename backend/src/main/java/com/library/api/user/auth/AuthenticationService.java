@@ -14,6 +14,8 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
 
+    private final JwtService jwtService;
+
     public AuthenticationResponse register(AuthenticationRequest request) {
         if (!request.getPassword().equals(request.getPasswordConfirmation())) {
             throw new RuntimeException("password is different from password confirmation");
@@ -37,6 +39,9 @@ public class AuthenticationService {
                 .build();
 
         user = userRepository.save(user);
-        return AuthenticationResponse.modelToResponse(user);
+
+        final String jwtToken = jwtService.generateToken(user);
+
+        return AuthenticationResponse.modelToResponse(user, jwtToken);
     }
 }

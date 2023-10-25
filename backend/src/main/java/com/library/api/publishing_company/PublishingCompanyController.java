@@ -44,7 +44,7 @@ public class PublishingCompanyController {
                     @ApiResponse(
                             description = "Success",
                             responseCode = "201",
-                            content = @Content(schema = @Schema(implementation = PublishingCompany.class))
+                            content = @Content(schema = @Schema(implementation = PublishingCompanyResponse.class))
                     ),
                     @ApiResponse(
                             description = "BadRequest",
@@ -81,7 +81,7 @@ public class PublishingCompanyController {
                             description = "Success",
                             responseCode = "200",
                             content = @Content(
-                                    array = @ArraySchema(schema = @Schema(implementation = PublishingCompany.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = PublishingCompanyResponse.class))
                             )
                     ),
                     @ApiResponse(
@@ -181,7 +181,7 @@ public class PublishingCompanyController {
                             description = "Success",
                             responseCode = "200",
                             content = @Content(
-                                    array = @ArraySchema(schema = @Schema(implementation = PublishingCompany.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = PublishingCompanyResponse.class))
                             )
                     ),
 

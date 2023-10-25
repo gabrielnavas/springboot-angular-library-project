@@ -19,6 +19,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.DeserializationF
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
@@ -71,10 +72,15 @@ public class AuthenticationControllerTest extends AbstractIntegrationTest {
             UUID.fromString(authenticationResponse.getId().toString());
         });
 
-        Assertions.assertNotNull(authenticationResponse.getRole());
-        Assertions.assertNotNull(authenticationResponse.getToken());
-        Assertions.assertNotNull(authenticationResponse.getCreatedAt());
-        Assertions.assertNotNull(authenticationResponse.getUpdatedAt());
+        Assertions.assertTrue(authenticationResponse.getRole().toString().length() > 0);
+        Assertions.assertTrue(authenticationResponse.getToken().length() > 0);
+        Assertions.assertEquals(3, authenticationResponse.getToken().split("\\.").length);
+
+        long seconds = 1000 * 30;
+        Date dateLater = new Date(new Date().getTime() - seconds);
+
+        Assertions.assertTrue(dateLater.before(authenticationResponse.getCreatedAt()));
+        Assertions.assertTrue(dateLater.before(authenticationResponse.getUpdatedAt()));
 
         Assertions.assertEquals(authenticationRequest.getEmail(), authenticationResponse.getEmail());
         Assertions.assertEquals(authenticationRequest.getFirstName(), authenticationResponse.getFirstName());

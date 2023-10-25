@@ -27,8 +27,7 @@ public class AuthenticationResponse {
     private Date createdAt;
     private Date updatedAt;
 
-    public static AuthenticationResponse modelToResponse(User user) {
-        String token = "";
+    public static AuthenticationResponse modelToResponse(User user, String token) {
         return AuthenticationResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())

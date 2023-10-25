@@ -1,6 +1,9 @@
 cors:
   originPatterns: http://localhost:4200,http://localhost:8080,http://localhost:8888,https://www.google.com.br
 
+jwt:
+  secret-key: 038bc9ba07236454625a53500231616945554efdcf05ea72a0cb8a7be1a5c7e3
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5435/postgres
